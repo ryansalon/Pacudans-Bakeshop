@@ -143,6 +143,109 @@
     </div>
 </div>
 
+<!-- Testimonials Section -->
+<div class="section-padding bg-white" style="border-radius: 80px 80px 0 0;">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h6 class="text-primary fw-bold text-uppercase mb-2 tracking-widest" style="letter-spacing: 2px;">Testimonials</h6>
+            <h2 class="display-5 mb-0 fw-bold">What Our Community Says</h2>
+            <p class="text-muted mt-3 col-lg-6 mx-auto">Real stories from our lovely customers who have made Pacudan's a part of their daily ritual.</p>
+        </div>
+
+        <div class="testimonial-grid mt-5" data-aos="fade-up">
+            <!-- Testimonial 1 -->
+            <div class="testimonial-card">
+                <div class="testimonial-header">
+                    <img src="https://ui-avatars.com/api/?name=Maria+Santos&background=3d2b1f&color=fff" class="testimonial-avatar" alt="User">
+                    <div class="testimonial-user-info">
+                        <div class="testimonial-name">Maria Santos</div>
+                        <div class="testimonial-handle">@m_santos</div>
+                    </div>
+                </div>
+                <div class="testimonial-content">
+                    Best coffee in Camiguin! ☕️ The <span class="highlight">Iced Spanish Latte</span> is a game changer. Also, their ube bread is always fresh. Highly recommend! #PacudansCoffee #CamiguinEats
+                </div>
+                <span class="testimonial-timestamp">10:24 AM · May 10, 2026</span>
+            </div>
+
+            <!-- Testimonial 2 -->
+            <div class="testimonial-card">
+                <div class="testimonial-header">
+                    <img src="https://ui-avatars.com/api/?name=James+Wilson&background=b08d57&color=fff" class="testimonial-avatar" alt="User">
+                    <div class="testimonial-user-info">
+                        <div class="testimonial-name">James Wilson</div>
+                        <div class="testimonial-handle">@jwilson_travels</div>
+                    </div>
+                </div>
+                <div class="testimonial-content">
+                    Found this hidden gem while exploring Mambajao. The aesthetic is so <span class="highlight">premium</span> and the staff are incredibly friendly. 10/10 would visit again! ✨
+                </div>
+                <span class="testimonial-timestamp">2:15 PM · May 8, 2026</span>
+            </div>
+
+            <!-- Testimonial 3 -->
+            <div class="testimonial-card">
+                <div class="testimonial-header">
+                    <img src="https://ui-avatars.com/api/?name=Liza+Dela+Cruz&background=5c4033&color=fff" class="testimonial-avatar" alt="User">
+                    <div class="testimonial-user-info">
+                        <div class="testimonial-name">Liza Dela Cruz</div>
+                        <div class="testimonial-handle">@lizadc</div>
+                    </div>
+                </div>
+                <div class="testimonial-content">
+                    Their <span class="highlight">customized cakes</span> are not just beautiful, they taste amazing too! Ordered one for my mom's birthday and she loved it. Thank you @Pacudans! 🎂❤️
+                </div>
+                <span class="testimonial-timestamp">9:45 AM · May 5, 2026</span>
+            </div>
+
+            <!-- Testimonial 4 -->
+            <div class="testimonial-card">
+                <div class="testimonial-header">
+                    <img src="https://ui-avatars.com/api/?name=David+Reyes&background=3d2b1f&color=fff" class="testimonial-avatar" alt="User">
+                    <div class="testimonial-user-info">
+                        <div class="testimonial-name">David Reyes</div>
+                        <div class="testimonial-handle">@dreyes_dev</div>
+                    </div>
+                </div>
+                <div class="testimonial-content">
+                    The perfect spot to work from home. High-speed internet, great vibes, and the <span class="highlight">Caramel Macchiato</span> keeps me going. 💻☕️
+                </div>
+                <span class="testimonial-timestamp">11:30 AM · May 3, 2026</span>
+            </div>
+
+            <!-- Testimonial 5 -->
+            <div class="testimonial-card">
+                <div class="testimonial-header">
+                    <img src="https://ui-avatars.com/api/?name=Sarah+G&background=b08d57&color=fff" class="testimonial-avatar" alt="User">
+                    <div class="testimonial-user-info">
+                        <div class="testimonial-name">Sarah G.</div>
+                        <div class="testimonial-handle">@sarah_bakes</div>
+                    </div>
+                </div>
+                <div class="testimonial-content">
+                    Honestly, I dream about their <span class="highlight">Cheese Ensaymada</span>. It's so fluffy and buttery! Best paired with their hot chocolate. 🥐🍫
+                </div>
+                <span class="testimonial-timestamp">4:20 PM · May 1, 2026</span>
+            </div>
+
+            <!-- Testimonial 6 -->
+            <div class="testimonial-card">
+                <div class="testimonial-header">
+                    <img src="https://ui-avatars.com/api/?name=Marco+Polo&background=5c4033&color=fff" class="testimonial-avatar" alt="User">
+                    <div class="testimonial-user-info">
+                        <div class="testimonial-name">Marco Polo</div>
+                        <div class="testimonial-handle">@marco_p</div>
+                    </div>
+                </div>
+                <div class="testimonial-content">
+                    The <span class="highlight">Peach Mango Smoothie</span> is so refreshing! Perfect for the Camiguin heat. 🏝️🥤 Can't wait to go back!
+                </div>
+                <span class="testimonial-timestamp">1:05 PM · Apr 28, 2026</span>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Visit Us Section -->
 <div id="location" class="section-padding bg-soft" style="border-radius: 80px 80px 0 0;">
     <div class="container">

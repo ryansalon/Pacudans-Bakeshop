@@ -231,6 +231,14 @@ class Cart extends BaseController
             $session->remove('cart');
         }
 
+        // Task: Trigger Logic - Admin Notification
+        $notifModel = new \App\Models\NotificationModel();
+        $notifModel->insert([
+            'user_id' => 2, // Admin ID from users table
+            'message' => "New Order Received! Order #$orderId is waiting for your approval.",
+            'link'    => 'admin/orders/' . $orderId
+        ]);
+
         return redirect()->to(base_url('menu'))->with('popup_msg', 'Your order has been placed! Sit back and relax while we prepare your favorite treats with love. We\'ll notify you once it\'s on the way!');
     }
 }

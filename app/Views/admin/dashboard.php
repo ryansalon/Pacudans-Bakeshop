@@ -43,6 +43,54 @@
             </div>
         </div>
 
+        <!-- Analytics Section -->
+        <div class="row g-4 mb-5 reveal">
+            <!-- Revenue Board -->
+            <div class="col-lg-6">
+                <div class="card p-4 border-0 shadow-sm bg-white h-100">
+                    <h5 class="fw-bold mb-4">Revenue Board</h5>
+                    <div class="d-flex justify-content-between mb-4">
+                        <div class="text-center p-3 border rounded-4 flex-fill me-2">
+                            <div class="small text-muted mb-1">Weekly</div>
+                            <div class="fw-bold text-primary">₱<?= number_format($revenue['weekly'], 2) ?></div>
+                        </div>
+                        <div class="text-center p-3 border rounded-4 flex-fill mx-2 bg-light">
+                            <div class="small text-muted mb-1">Monthly</div>
+                            <div class="fw-bold text-primary">₱<?= number_format($revenue['monthly'], 2) ?></div>
+                        </div>
+                        <div class="text-center p-3 border rounded-4 flex-fill ms-2">
+                            <div class="small text-muted mb-1">Yearly</div>
+                            <div class="fw-bold text-primary">₱<?= number_format($revenue['yearly'], 2) ?></div>
+                        </div>
+                    </div>
+                    <canvas id="revenueChart" height="200"></canvas>
+                </div>
+            </div>
+
+            <!-- Product Popularity -->
+            <div class="col-lg-6">
+                <div class="card p-4 border-0 shadow-sm bg-white h-100">
+                    <h5 class="fw-bold mb-4">Product Popularity</h5>
+                    <ul class="nav nav-pills nav-fill mb-4 bg-light p-1 rounded-pill" id="popularityTab" role="tablist">
+                        <li class="nav-item">
+                            <button class="nav-link active rounded-pill px-4" id="top-tab" data-bs-toggle="pill" data-bs-target="#top-5" type="button">Top 5</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link rounded-pill px-4" id="bottom-tab" data-bs-toggle="pill" data-bs-target="#bottom-5" type="button">Bottom 5</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="popularityTabContent">
+                        <div class="tab-pane fade show active" id="top-5">
+                            <canvas id="topProductsChart" height="200"></canvas>
+                        </div>
+                        <div class="tab-pane fade" id="bottom-5">
+                            <canvas id="bottomProductsChart" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row g-5">
             <!-- Quick Actions -->
             <div class="col-lg-4 reveal" style="transition-delay: 0.2s;">
@@ -71,10 +119,11 @@
                             <thead class="text-muted small text-uppercase">
                                 <tr>
                                     <th>Order ID</th>
+                                    <th>Customer Name</th>
                                     <th>Status</th>
                                     <th>Amount</th>
                                     <th>Date</th>
-                                    <th></th>
+                                    <th class="text-end">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -90,7 +139,10 @@
                                             </span>
                                         </td>
                                         <td class="fw-bold">₱<?= number_format($order['total_amount'], 2) ?></td>
-                                        <td><a href="<?= base_url('admin/orders/' . $order['order_id']) ?>" class="btn btn-light btn-sm rounded-pill px-3 shadow-sm border">Details</a></td>
+                                        <td class="small text-muted"><?= date('M d, Y h:i A', strtotime($order['created_at'])) ?></td>
+                                        <td class="text-end">
+                                            <a href="<?= base_url('admin/orders/' . $order['order_id']) ?>" class="btn btn-light btn-sm rounded-pill px-3 shadow-sm border">Details</a>
+                                        </td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -102,4 +154,99 @@
     </div>
 </div>
 
+<?= $this->endSection() ?>
+
+<?= $this->section('scripts') ?>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Revenue Chart
+    const revCtx = document.getElementById('revenueChart').getContext('2d');
+    new Chart(revCtx, {
+        type: 'line',
+        data: {
+            labels: ['Weekly', 'Monthly', 'Yearly'],
+            datasets: [{
+                label: 'Revenue (₱)',
+                data: [<?= $revenue['weekly'] ?>, <?= $revenue['monthly'] ?>, <?= $revenue['yearly'] ?>],
+                borderColor: '#b08d57',
+                backgroundColor: 'rgba(176, 141, 87, 0.1)',
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+
+    // Top Products Chart
+    const topCtx = document.getElementById('topProductsChart').getContext('2d');
+    new Chart(topCtx, {
+        type: 'bar',
+        data: {
+            labels: [<?= implode(',', array_map(fn($p) => "'".esc($p['name'])."'", $top_products)) ?>],
+            datasets: [{
+                label: 'Quantity Sold',
+                data: [<?= implode(',', array_column($top_products, 'total_sold')) ?>],
+                backgroundColor: '#3d2b1f',
+                borderRadius: 10
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            plugins: { legend: { display: false } }
+        }
+    });
+
+    // Bottom Products Chart
+    const bottomCtx = document.getElementById('bottomProductsChart').getContext('2d');
+    new Chart(bottomCtx, {
+        type: 'bar',
+        data: {
+            labels: [<?= implode(',', array_map(fn($p) => "'".esc($p['name'])."'", $bottom_products)) ?>],
+            datasets: [{
+                label: 'Quantity Sold',
+                data: [<?= implode(',', array_column($bottom_products, 'total_sold')) ?>],
+                backgroundColor: '#b08d57',
+                borderRadius: 10
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            plugins: { legend: { display: false } }
+        }
+    });
+
+    // Admin Notification (Task 2)
+    let lastAdminCheck = '<?= date('Y-m-d H:i:s') ?>';
+    setInterval(() => {
+        fetch('<?= base_url('admin/notifications') ?>?last_check=' + encodeURIComponent(lastAdminCheck))
+            .then(response => response.json())
+            .then(data => {
+                if (data.new_orders > 0) {
+                    Swal.fire({
+                        title: 'New Order Alert!',
+                        text: `You have ${data.new_orders} new order(s).`,
+                        icon: 'info',
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: true,
+                        confirmButtonText: 'Refresh Dashboard',
+                        timer: 10000,
+                        timerProgressBar: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        }
+                    });
+                    lastAdminCheck = new Date(Date.now() - (new Date().getTimezoneOffset() * 60000)).toISOString().slice(0, 19).replace('T', ' ');
+                }
+            })
+            .catch(err => console.error('Admin notification check failed', err));
+    }, 15000); // Check every 15 seconds
+</script>
 <?= $this->endSection() ?>

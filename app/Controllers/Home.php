@@ -24,4 +24,43 @@ class Home extends BaseController
 
         return view('home', $data);
     }
+
+    public function checkOrderStatus()
+    {
+        if (!session()->get('isLoggedIn')) {
+            return $this->response->setJSON(['updated' => 0]);
+        }
+
+        $userId = session()->get('user_id');
+        $lastCheck = $this->request->getGet('last_check');
+        $orderModel = new \App\Models\OrderModel();
+
+        $updatedOrders = $orderModel->where('user_id', $userId)
+                                    ->where('updated_at >', $lastCheck)
+                                    ->where('updated_at !=', 'created_at') // only actual updates
+                                    ->countAllResults();
+
+        return $this->response->setJSON(['updated' => $updatedOrders]);
+    }
+
+    public function getNotificationCount()
+    {
+        if (!session()->get('isLoggedIn')) {
+            return $this->response->setJSON(['count' => 0]);
+        }
+
+        $orderModel = new \App\Models\OrderModel();
+        
+        if (session()->get('role') === 'admin') {
+            // Count how many customers ordered (Pending orders)
+            $count = $orderModel->where('status', 'pending')->countAllResults();
+        } else {
+            // Count current active orders for user
+            $count = $orderModel->where('user_id', session()->get('user_id'))
+                                ->where('status', 'pending')
+                                ->countAllResults();
+        }
+
+        return $this->response->setJSON(['count' => $count]);
+    }
 }

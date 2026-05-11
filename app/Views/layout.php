@@ -438,6 +438,111 @@
             height: 2px !important;
             border-radius: 100px !important;
         }
+
+        /* Notification Dropdown Styling */
+        .notif-dropdown {
+            width: 350px;
+            max-height: 400px;
+            overflow-y: auto;
+            border-radius: 20px !important;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.1) !important;
+            margin-top: 10px !important;
+        }
+
+        .notif-item {
+            white-space: normal;
+            transition: background 0.2s ease;
+            cursor: pointer;
+        }
+
+        .notif-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .notif-empty {
+            padding: 40px 20px;
+            text-align: center;
+            color: #ccc;
+        }
+
+        /* Testimonial (X/Twitter Style) */
+        .testimonial-grid {
+            column-count: 3;
+            column-gap: 1.5rem;
+        }
+
+        @media (max-width: 991.98px) {
+            .testimonial-grid { column-count: 2; }
+        }
+
+        @media (max-width: 575.98px) {
+            .testimonial-grid { column-count: 1; }
+        }
+
+        .testimonial-card {
+            break-inside: avoid;
+            margin-bottom: 1.5rem;
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 20px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            border-color: var(--accent-gold);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(176, 141, 87, 0.1);
+        }
+
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 12px;
+            border: 2px solid var(--cream-foam);
+        }
+
+        .testimonial-user-info {
+            line-height: 1.2;
+        }
+
+        .testimonial-name {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-dark);
+            margin-bottom: 2px;
+        }
+
+        .testimonial-handle {
+            font-size: 0.85rem;
+            color: #657786;
+        }
+
+        .testimonial-content {
+            font-size: 1rem;
+            color: #1c1c1c;
+            line-height: 1.5;
+        }
+
+        .testimonial-content .highlight {
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+
+        .testimonial-timestamp {
+            font-size: 0.8rem;
+            color: #657786;
+            margin-top: 1rem;
+            display: block;
+        }
     </style>
 </head>
 <body class="<?= (service('request')->getUri()->getPath() == '' || service('request')->getUri()->getPath() == '/') ? 'is-home' : '' ?>">
@@ -469,7 +574,7 @@
                 <li class="nav-item"><a class="nav-link" href="<?= base_url() ?>">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="<?= base_url('menu') ?>">Menu</a></li>
                 <li class="nav-item">
-                    <a class="nav-link position-relative" href="<?= base_url('cart') ?>">
+                    <a class="nav-link position-relative me-lg-2" href="<?= base_url('cart') ?>">
                         <i class="bi bi-bag"></i>
                         <?php 
                             $cart_count = 0;
@@ -481,6 +586,25 @@
                     </a>
                 </li>
                 <?php if (session()->get('isLoggedIn')): ?>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link position-relative me-lg-2 dropdown-toggle hide-caret" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Notifications">
+                            <i class="bi bi-bell"></i>
+                            <span id="notif-counter" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none" style="font-size: 0.55rem; padding: 3px 6px; border: 2px solid #fff;">0</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end notif-dropdown border-0" aria-labelledby="notifDropdown">
+                            <div class="px-3 py-2 border-bottom d-flex justify-content-between align-items-center">
+                                <span class="fw-bold small">Notifications</span>
+                                <button class="btn btn-link btn-sm text-decoration-none p-0 small text-muted" onclick="markAllAsRead()">Mark all as read</button>
+                            </div>
+                            <div id="notif-list">
+                                <!-- Notifications will be loaded here -->
+                                <div class="notif-empty">
+                                    <i class="bi bi-bell-slash fs-2 mb-2 d-block"></i>
+                                    <span class="small">No new notifications</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle ms-lg-3" href="#" role="button" data-bs-toggle="dropdown">
                             <?= explode(' ', session()->get('name'))[0] ?>
@@ -552,22 +676,30 @@
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
     // Generate Circular Text for Preloader
-    const text = "PACUDAN'S BAKESHOP & COFFEE BAR • ";
+    const text = "PACUDAN\'S BAKESHOP & COFFEE BAR • ";
     const container = document.getElementById('rotatingText');
-    for (let i = 0; i < text.length; i++) {
-        let span = document.createElement('span');
-        span.innerHTML = text[i];
-        span.style.transform = `rotate(${i * (360 / text.length)}deg)`;
-        container.appendChild(span);
+    if (container) {
+        for (let i = 0; i < text.length; i++) {
+            let span = document.createElement('span');
+            span.innerHTML = text[i];
+            span.style.transform = `rotate(${i * (360 / text.length)}deg)`;
+            container.appendChild(span);
+        }
     }
 
     AOS.init({ duration: 800, once: true });
     
-    window.addEventListener('load', function() {
+    function hidePreloader() {
         const preloader = document.getElementById('preloader');
-        preloader.style.opacity = '0';
-        setTimeout(() => { preloader.style.visibility = 'hidden'; }, 500);
-    });
+        if (preloader) {
+            preloader.style.opacity = '0';
+            setTimeout(() => { preloader.style.visibility = 'hidden'; }, 500);
+        }
+    }
+
+    window.addEventListener('load', hidePreloader);
+    // Fallback: hide preloader after 3 seconds even if load event doesn't fire
+    setTimeout(hidePreloader, 3000);
 
     window.addEventListener('scroll', function() {
         const nav = document.getElementById('mainNav');
@@ -600,17 +732,143 @@
     <?php if (session()->getFlashdata('msg')): ?>
         Toast.fire({
             icon: 'success',
-            title: '<?= session()->getFlashdata('msg') ?>'
+            title: '<?= addslashes(session()->getFlashdata('msg')) ?>'
         });
     <?php endif; ?>
 
     <?php if (session()->getFlashdata('error')): ?>
         Toast.fire({
             icon: 'error',
-            title: '<?= session()->getFlashdata('error') ?>'
+            title: '<?= addslashes(session()->getFlashdata('error')) ?>'
         });
     <?php endif; ?>
+
+    // Success Modal (Task 3)
+    <?php if (session()->getFlashdata('popup_msg')): ?>
+        Swal.fire({
+            title: 'Order Placed Successfully!',
+            text: '<?= addslashes(session()->getFlashdata('popup_msg')) ?>',
+            icon: 'success',
+            showCancelButton: true,
+            confirmButtonText: 'Order Again',
+            cancelButtonText: 'Go to Home',
+            reverseButtons: true,
+            customClass: {
+                popup: 'premium-swal',
+                confirmButton: 'premium-confirm',
+                cancelButton: 'premium-cancel'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '<?= base_url('menu') ?>';
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                window.location.href = '<?= base_url() ?>';
+            }
+        });
+    <?php endif; ?>
+
+    // Dynamic Event-Based Notifications (Task 5)
+    <?php if (session()->get('isLoggedIn')): ?>
+        let seenNotifications = [];
+
+        function fetchNotifications() {
+            fetch('<?= base_url('api/notifications/unread') ?>')
+                .then(response => response.json())
+                .then(result => {
+                    if (result.status === 'success') {
+                        const counter = document.getElementById('notif-counter');
+                        const list = document.getElementById('notif-list');
+                        const count = result.count;
+                        
+                        if (count > 0) {
+                            counter.textContent = count;
+                            counter.classList.remove('d-none');
+                            
+                            let html = '';
+                            result.data.forEach(notif => {
+                                // Show toast for new notifications
+                                if (!seenNotifications.includes(notif.id)) {
+                                    Toast.fire({
+                                        icon: 'info',
+                                        title: notif.message,
+                                        showCloseButton: true,
+                                        timer: 10000 
+                                    });
+                                    seenNotifications.push(notif.id);
+                                }
+
+                                // Build list item
+                                html += `
+                                    <div class="dropdown-item p-3 border-bottom notif-item" onclick="handleNotifClick(event, ${notif.id}, '${notif.link || '#'}')">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div class="me-3">
+                                                <p class="mb-1 small">${notif.message}</p>
+                                                <small class="text-muted" style="font-size: 0.7rem;">${new Date(notif.created_at).toLocaleString()}</small>
+                                            </div>
+                                            <button class="btn btn-link btn-sm text-danger p-0" onclick="deleteNotif(event, ${notif.id})">
+                                                <i class="bi bi-x-lg"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                `;
+                            });
+                            list.innerHTML = html;
+                        } else {
+                            counter.classList.add('d-none');
+                            list.innerHTML = `
+                                <div class="notif-empty">
+                                    <i class="bi bi-bell-slash fs-2 mb-2 d-block"></i>
+                                    <span class="small">No new notifications</span>
+                                </div>
+                            `;
+                        }
+                    }
+                })
+                .catch(err => console.error('Error fetching notifications:', err));
+        }
+
+        function handleNotifClick(event, id, url) {
+            // Mark as read and redirect
+            fetch('<?= base_url('api/notifications/mark-read/') ?>' + id, { method: 'POST' })
+                .then(() => {
+                    if (url && url !== '#') {
+                        // If it's a relative URL, prepend base_url
+                        if (!url.startsWith('http')) {
+                            window.location.href = '<?= base_url() ?>' + url;
+                        } else {
+                            window.location.href = url;
+                        }
+                    } else {
+                        fetchNotifications();
+                    }
+                });
+        }
+
+        function deleteNotif(event, id) {
+            event.stopPropagation(); // Don't trigger the item click
+            fetch('<?= base_url('api/notifications/delete/') ?>' + id, { method: 'POST' })
+                .then(() => fetchNotifications());
+        }
+
+        function markAllAsRead() {
+            fetch('<?= base_url('api/notifications/mark-all-read') ?>', { method: 'POST' })
+                .then(() => {
+                    fetchNotifications();
+                    document.getElementById('notif-counter').classList.add('d-none');
+                });
+        }
+
+        // Clear badge when dropdown is shown
+        document.getElementById('notifDropdown').addEventListener('show.bs.dropdown', function () {
+            document.getElementById('notif-counter').classList.add('d-none');
+        });
+
+        // Initial fetch and set interval
+        fetchNotifications();
+        setInterval(fetchNotifications, 20000); // Check every 20 seconds
+    <?php endif; ?>
 </script>
+<?= $this->renderSection('scripts') ?>
 </body>
 </html>
 

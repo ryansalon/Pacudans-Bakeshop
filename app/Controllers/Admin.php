@@ -13,16 +13,53 @@ class Admin extends BaseController
     {
         $orderModel = new OrderModel();
         $productModel = new ProductModel();
+        $orderItemModel = new OrderItemModel();
         
+        // Product Popularity (Top 5)
+        $topProducts = $orderItemModel->select('products.name, SUM(order_items.quantity) as total_sold')
+                                      ->join('products', 'products.product_id = order_items.product_id')
+                                      ->groupBy('order_items.product_id')
+                                      ->orderBy('total_sold', 'DESC')
+                                      ->limit(5)
+                                      ->findAll();
+
+        // Product Popularity (Bottom 5)
+        $bottomProducts = $orderItemModel->select('products.name, SUM(order_items.quantity) as total_sold')
+                                         ->join('products', 'products.product_id = order_items.product_id')
+                                         ->groupBy('order_items.product_id')
+                                         ->orderBy('total_sold', 'ASC')
+                                         ->limit(5)
+                                         ->findAll();
+
+        // Revenue Board
+        $revenueWeekly = $orderModel->selectSum('total_amount')
+                                    ->where('created_at >=', date('Y-m-d', strtotime('-7 days')))
+                                    ->first()['total_amount'] ?? 0;
+
+        $revenueMonthly = $orderModel->selectSum('total_amount')
+                                     ->where('created_at >=', date('Y-m-d', strtotime('-30 days')))
+                                     ->first()['total_amount'] ?? 0;
+
+        $revenueYearly = $orderModel->selectSum('total_amount')
+                                    ->where('created_at >=', date('Y-m-d', strtotime('-365 days')))
+                                    ->first()['total_amount'] ?? 0;
+
         $data = [
-            'title'          => 'Admin Dashboard',
-            'total_orders'   => $orderModel->countAll(),
-            'pending_orders' => $orderModel->where('status', 'pending')->countAllResults(),
-            'total_products' => $productModel->countAll(),
-            'recent_orders'  => $orderModel->select('orders.*, users.name as customer_name')
-                                           ->join('users', 'users.user_id = orders.user_id')
-                                           ->orderBy('created_at', 'DESC')
-                                           ->limit(5)->findAll()
+            'title'           => 'Admin Dashboard',
+            'total_orders'    => $orderModel->countAll(),
+            'pending_orders'  => $orderModel->where('status', 'pending')->countAllResults(),
+            'total_products'  => $productModel->countAll(),
+            'recent_orders'   => $orderModel->select('orders.*, users.name as customer_name')
+                                            ->join('users', 'users.user_id = orders.user_id')
+                                            ->orderBy('created_at', 'DESC')
+                                            ->limit(5)->findAll(),
+            'top_products'    => $topProducts,
+            'bottom_products' => $bottomProducts,
+            'revenue'         => [
+                'weekly'  => $revenueWeekly,
+                'monthly' => $revenueMonthly,
+                'yearly'  => $revenueYearly
+            ]
         ];
 
         return view('admin/dashboard', $data);
@@ -139,6 +176,27 @@ class Admin extends BaseController
             return redirect()->back()->with('error', 'Update failed: ' . implode(', ', $errors));
         }
 
+        // Task: Trigger Logic - User Notification
+        if ($status === 'completed') {
+            $notifModel = new \App\Models\NotificationModel();
+            $notifModel->insert([
+                'user_id' => $order['user_id'],
+                'message' => "Your order is complete! Delivery is on the way. Please prepare " . number_format($order['total_amount'], 2) . " pesos.",
+                'link'    => 'profile/order/' . $orderId
+            ]);
+        }
+
         return redirect()->back()->with('msg', 'Order status updated to ' . ucfirst($status));
+    }
+
+    public function checkNewOrders()
+    {
+        $lastCheck = $this->request->getGet('last_check');
+        $orderModel = new OrderModel();
+        
+        $newOrders = $orderModel->where('created_at >', $lastCheck)
+                                ->countAllResults();
+        
+        return $this->response->setJSON(['new_orders' => $newOrders]);
     }
 }
