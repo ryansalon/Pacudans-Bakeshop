@@ -2,47 +2,37 @@
 
 <?= $this->section('content') ?>
 
-<div class="section-padding">
-    <div class="container">
-        <div class="d-flex justify-content-between align-items-end mb-5 reveal">
-            <div>
+<div class="container py-5">
+    <div class="mb-5 reveal" style="margin-top: 100px;">
                 <h6 class="text-primary fw-bold text-uppercase mb-2 tracking-widest" style="letter-spacing: 2px;">Inventory Hub</h6>
                 <h2 class="display-5 mb-0 fw-bold">Manage by Category</h2>
             </div>
-            <a href="<?= base_url('admin/products/add') ?>" class="btn btn-primary rounded-pill px-4 shadow-sm">
-                <i class="bi bi-plus-circle me-2"></i> Add New Item
-            </a>
-        </div>
 
-        <?php if (session()->getFlashdata('msg')): ?>
-            <div class="alert alert-success rounded-pill border-0 shadow-sm mb-4 px-4"><?= session()->getFlashdata('msg') ?></div>
-        <?php endif; ?>
+            <?php if (session()->getFlashdata('msg')): ?>
+                <div class="alert alert-success rounded-pill border-0 shadow-sm mb-4 px-4"><?= session()->getFlashdata('msg') ?></div>
+            <?php endif; ?>
 
-        <!-- Category "Floating Boxes" Grid -->
-        <div class="row g-4 mb-5 reveal">
-            <?php 
-            // Group products by category name for the boxes
-            $groupedProducts = [];
-            foreach ($products as $product) {
-                $groupedProducts[$product['category_name']][] = $product;
-            }
-            
-            $delay = 0;
-            foreach ($groupedProducts as $catName => $items): 
-                $delay += 0.05;
-                $icon = 'bi-cup-hot';
-                $name_lower = strtolower($catName);
-                if(strpos($name_lower, 'ice') !== false) $icon = 'bi-snow';
-                elseif(strpos($name_lower, 'frappe') !== false) $icon = 'bi-cup-straw';
-                elseif(strpos($name_lower, 'smoothie') !== false) $icon = 'bi-water';
-                elseif(strpos($name_lower, 'cake') !== false) $icon = 'bi-cake2';
-                elseif(strpos($name_lower, 'bread') !== false || strpos($name_lower, 'pastri') !== false) $icon = 'bi-egg-fried';
-                elseif(strpos($name_lower, 'sandwich') !== false || strpos($name_lower, 'savory') !== false) $icon = 'bi-egg-fill';
-            ?>
-                <div class="col-md-3">
-                    <div class="card p-4 border-0 shadow-sm text-center bg-white h-100 category-box" 
+            <!-- Category "Floating Boxes" Grid -->
+            <div class="row g-4 mb-5 reveal">
+                <?php 
+                $groupedProducts = [];
+                foreach ($products as $product) {
+                    $groupedProducts[$product['category_name']][] = $product;
+                }
+
+                foreach ($groupedProducts as $catName => $items): 
+                    $icon = 'bi-cup-hot';
+                    $name_lower = strtolower($catName);
+                    if(strpos($name_lower, 'ice') !== false) $icon = 'bi-snow';
+                    elseif(strpos($name_lower, 'frappe') !== false) $icon = 'bi-cup-straw';
+                    elseif(strpos($name_lower, 'smoothie') !== false) $icon = 'bi-water';
+                    elseif(strpos($name_lower, 'cake') !== false) $icon = 'bi-cake2';
+                    elseif(strpos($name_lower, 'bread') !== false || strpos($name_lower, 'pastri') !== false) $icon = 'bi-egg-fried';
+                    elseif(strpos($name_lower, 'sandwich') !== false || strpos($name_lower, 'savory') !== false) $icon = 'bi-egg-fill';
+                ?>                <div class="col-md-3">
+                    <div class="card p-4 border-0 shadow-sm text-center h-100 category-card" 
                          onclick="showCategory('<?= url_title($catName) ?>')" 
-                         style="cursor: pointer; transition: all 0.3s ease; transition-delay: <?= $delay ?>s;">
+                         style="cursor: pointer;">
                         <div class="bg-soft rounded-4 mx-auto mb-3 d-flex align-items-center justify-content-center shadow-sm" style="width: 70px; height: 70px; background: var(--bg-soft);">
                             <i class="bi <?= $icon ?> fs-2 text-primary"></i>
                         </div>
@@ -54,25 +44,20 @@
             <?php endforeach; ?>
         </div>
 
-        <!-- Product Lists (Hidden until clicked) -->
+        <!-- Product Lists -->
         <div id="category-details">
-            <?php foreach ($groupedProducts as $catName => $items): 
-                $icon = 'bi-cup-hot';
-                $name_lower = strtolower($catName);
-                if(strpos($name_lower, 'ice') !== false) $icon = 'bi-snow';
-                elseif(strpos($name_lower, 'frappe') !== false) $icon = 'bi-cup-straw';
-                elseif(strpos($name_lower, 'smoothie') !== false) $icon = 'bi-water';
-                elseif(strpos($name_lower, 'cake') !== false) $icon = 'bi-cake2';
-                elseif(strpos($name_lower, 'bread') !== false || strpos($name_lower, 'pastri') !== false) $icon = 'bi-egg-fried';
-                elseif(strpos($name_lower, 'sandwich') !== false || strpos($name_lower, 'savory') !== false) $icon = 'bi-egg-fill';
-            ?>
+            <?php foreach ($groupedProducts as $catName => $items): ?>
                 <div class="category-section d-none" id="cat-<?= url_title($catName) ?>">
                     <div class="card p-5 border-0 shadow-lg rounded-5 bg-white reveal">
                         <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h3 class="fw-bold mb-0 text-primary"><i class="bi <?= $icon ?> me-2"></i><?= esc($catName) ?></h3>
-                            <button class="btn btn-light btn-sm rounded-pill px-3" onclick="hideAll()">Close <i class="bi bi-x"></i></button>
+                            <h3 class="fw-bold mb-0 text-primary"><?= esc($catName) ?></h3>
+                            <div class="d-flex align-items-center gap-3">
+                                <a href="<?= base_url('admin/products/add') ?>" class="btn btn-primary rounded-pill px-4 shadow-sm">
+                                    <i class="bi bi-plus-circle me-2"></i> Add New Item
+                                </a>
+                                <button class="btn btn-light btn-sm rounded-pill px-3" onclick="hideAll()">Close <i class="bi bi-x"></i></button>
+                            </div>
                         </div>
-                        
                         <div class="table-responsive">
                             <table class="table table-hover align-middle">
                                 <thead class="text-muted small text-uppercase">
@@ -110,56 +95,17 @@
                     </div>
                 </div>
             <?php endforeach; ?>
-
-            <!-- Default Empty State -->
-            <div id="empty-state" class="text-center py-5 bg-white rounded-5 shadow-sm border border-dashed reveal">
-                <i class="bi bi-hand-index display-4 text-muted opacity-25"></i>
-                <h4 class="mt-3 text-muted">Select a category above to manage its products</h4>
-                <p class="text-muted small">Choose a "floating box" to view and edit menu items.</p>
-            </div>
         </div>
     </div>
 </div>
 
-<style>
-    .category-box:hover {
-        background: var(--primary-mocha) !important;
-        color: white !important;
-    }
-    .category-box:hover .bg-soft {
-        background: rgba(255,255,255,0.1) !important;
-    }
-    .category-box:hover i, .category-box:hover p, .category-box:hover .text-primary {
-        color: white !important;
-    }
-    .category-box.active-box {
-        background: var(--primary-mocha) !important;
-        color: white !important;
-        box-shadow: 0 15px 30px rgba(93, 64, 55, 0.3) !important;
-    }
-    .border-dashed {
-        border: 2px dashed rgba(0,0,0,0.05) !important;
-    }
-</style>
-
 <script>
     function showCategory(id) {
-        // Hide empty state
-        document.getElementById('empty-state').classList.add('d-none');
-        
-        // Hide all sections first
         const sections = document.querySelectorAll('.category-section');
         sections.forEach(s => s.classList.add('d-none'));
-        
-        // Reset all boxes
-        const boxes = document.querySelectorAll('.category-box');
-        boxes.forEach(b => b.classList.remove('active-box'));
-
-        // Show specific category
         const selected = document.getElementById('cat-' + id);
         if (selected) {
             selected.classList.remove('d-none');
-            // Scroll to details
             selected.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     }
@@ -167,8 +113,22 @@
     function hideAll() {
         const sections = document.querySelectorAll('.category-section');
         sections.forEach(s => s.classList.add('d-none'));
-        document.getElementById('empty-state').classList.remove('d-none');
     }
 </script>
+
+<style>
+    .category-card { 
+        background: #FDF9F3; 
+        transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1); 
+    }
+    .category-card:hover { 
+        background: transparent; 
+        transform: scale(1.05); 
+        box-shadow: 0 15px 30px rgba(74, 49, 33, 0.15) !important;
+    }
+    .category-card:hover h5, .category-card:hover p, .category-card:hover .text-primary { 
+        color: var(--accent-color) !important; 
+    }
+</style>
 
 <?= $this->endSection() ?>

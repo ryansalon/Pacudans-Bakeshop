@@ -2,110 +2,160 @@
 
 <?= $this->section('content') ?>
 
-<div class="section-padding">
-    <div class="container">
-        <div class="row g-5">
-            <!-- Professional Sidebar Navigation -->
-            <div class="col-lg-3">
-                <div class="sidebar-card sticky-top" style="top: 100px;" data-aos="fade-right">
-                    <h6 class="text-uppercase tracking-widest fw-800 text-primary mb-4" style="font-size: 0.7rem; letter-spacing: 2px;">Menu Categories</h6>
-                    <div class="nav flex-column">
-                        <a href="<?= base_url('menu') ?>" class="sidebar-link <?= !isset($category) ? 'active' : '' ?>">
-                            <i class="bi bi-grid-fill"></i>
-                            <span>All Delights</span>
-                        </a>
-                        <?php foreach ($categories as $cat): ?>
-                            <?php 
-                                $icon = 'bi-cup-hot';
-                                if(strpos(strtolower($cat['name']), 'ice') !== false) $icon = 'bi-snow';
-                                elseif(strpos(strtolower($cat['name']), 'frappe') !== false) $icon = 'bi-cup-straw';
-                                elseif(strpos(strtolower($cat['name']), 'smoothie') !== false) $icon = 'bi-water';
-                                elseif(strpos(strtolower($cat['name']), 'cake') !== false) $icon = 'bi-cake2';
-                                elseif(strpos(strtolower($cat['name']), 'bread') !== false) $icon = 'bi-egg-fried';
-                            ?>
-                            <a href="<?= base_url('category/' . $cat['category_id']) ?>" 
-                               class="sidebar-link <?= (isset($category) && $category['category_id'] == $cat['category_id']) ? 'active' : '' ?>">
-                                <i class="bi <?= $icon ?>"></i>
-                                <span><?= esc($cat['name']) ?></span>
-                            </a>
-                        <?php endforeach; ?>
-                    </div>
-                    
-                    <div class="mt-5 p-4 rounded-4 text-center" style="background: var(--bg-soft); border: 1px dashed var(--accent-gold);">
-                        <i class="bi bi-clock text-primary mb-2 d-block fs-4"></i>
-                        <span class="d-block fw-bold small">Open Daily</span>
-                        <span class="text-muted" style="font-size: 0.75rem;">8:00 AM - 9:00 PM</span>
-                    </div>
-                </div>
-            </div>
+<div id="menu-grid" class="container py-5">
+    <!-- Header & Menu Toggle -->
+    <div class="d-flex align-items-center mb-5" style="position: relative; z-index: 500; margin-top: 100px;">
+        <button class="btn p-0 border-0 me-4 d-flex align-items-center justify-content-center hamburger-trigger" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuSidebar" aria-controls="menuSidebar" style="width: 48px; height: 48px; z-index: 1100;">
+            <i class="bi bi-list fs-1" style="color: var(--accent-color);"></i>
+        </button>
+        <div class="d-flex flex-column justify-content-center">
+            <h2 class="display-5 mb-0 fw-bold" style="font-family: 'Playfair Display', serif; line-height: 1.2;"><?= esc($title) ?></h2>
+            <p class="text-muted mb-0 small text-uppercase tracking-widest">Explore our handcrafted delights</p>
+        </div>
+        <div class="ms-auto d-none d-md-block">
+            <span class="badge bg-white text-dark shadow-sm border rounded-pill px-4 py-2 small fw-bold" style="color: var(--accent-color) !important;">
+                <?= count($products) ?> items
+            </span>
+        </div>
+    </div>
 
-            <!-- Product Grid -->
-            <div class="col-lg-9">
-                <div class="mb-5">
-                    <a href="<?= base_url() ?>" class="btn btn-outline-primary rounded-pill px-4 fw-bold shadow-sm">
-                        <i class="bi bi-arrow-left me-2"></i> Back to Home
+    <!-- Off-canvas Sidebar -->
+    <div class="offcanvas offcanvas-start border-0 shadow-lg" tabindex="-1" id="menuSidebar" aria-labelledby="menuSidebarLabel" style="background-color: var(--accent-color); width: 320px;">
+        <div class="offcanvas-header p-4 border-bottom border-white border-opacity-10">
+            <h5 class="offcanvas-title text-white fw-bold" id="menuSidebarLabel" style="font-family: 'Playfair Display', serif; letter-spacing: 1px;">MENU CATEGORIES</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body p-0">
+            <div class="nav flex-column py-3">
+                <a href="<?= base_url('menu') ?>" class="nav-link px-4 py-3 text-white border-bottom border-white border-opacity-5 d-flex align-items-center justify-content-between <?= !isset($category) ? 'active-drawer-link' : '' ?>">
+                    <span>All Delights</span>
+                    <i class="bi bi-chevron-right small opacity-50"></i>
+                </a>
+                <?php foreach ($categories as $cat): ?>
+                    <a href="<?= base_url('category/' . $cat['category_id']) ?>" 
+                       class="nav-link px-4 py-3 text-white border-bottom border-white border-opacity-5 d-flex align-items-center justify-content-between <?= (isset($category) && $category['category_id'] == $cat['category_id']) ? 'active-drawer-link' : '' ?>">
+                        <span><?= esc($cat['name']) ?></span>
+                        <i class="bi bi-chevron-right small opacity-50"></i>
                     </a>
-                </div>
-                <div class="d-flex justify-content-between align-items-center mb-5" data-aos="fade-down">
-                    <div>
-                        <h2 class="display-6 mb-1 fw-bold"><?= esc($title) ?></h2>
-                        <p class="text-muted mb-0 small text-uppercase tracking-widest">Handcrafted with love</p>
-                    </div>
-                    <span class="badge bg-white text-dark shadow-sm border rounded-pill px-3 py-2 small fw-bold">
-                        <?= count($products) ?> items
-                    </span>
-                </div>
-                
-                <?php if (empty($products)): ?>
-                    <div class="text-center py-5 bg-white rounded-5 shadow-sm" data-aos="zoom-in">
-                        <i class="bi bi-search fs-1 opacity-25"></i>
-                        <h4 class="mt-4">No products found</h4>
-                        <p class="text-muted">Check back later for fresh batches!</p>
-                    </div>
-                <?php else: ?>
-                    <div class="row row-cols-1 row-cols-md-3 g-4">
-                        <?php foreach ($products as $index => $product): ?>
-                            <div class="col" data-aos="fade-up" data-aos-delay="<?= ($index % 3) * 100 ?>">
-                                <div class="card h-100 p-2 border-0 shadow-sm hover-up">
-                                    <div class="position-relative overflow-hidden rounded-4">
-                                        <?php if ($product['image_url']): ?>
-                                            <img src="<?= base_url($product['image_url']) ?>" class="card-img-top w-100 object-fit-cover transition-transform" alt="<?= esc($product['name']) ?>" style="height: 240px;">
-                                        <?php else: ?>
-                                            <div class="bg-light text-muted text-center py-5 h-100 d-flex flex-column justify-content-center" style="min-height: 240px;">
-                                                <i class="bi bi-image fs-1 opacity-25"></i>
-                                            </div>
-                                        <?php endif; ?>
-                                        <div class="position-absolute top-0 end-0 m-3">
-                                            <span class="badge bg-white text-dark shadow-sm rounded-pill px-3 py-2 fw-800">
-                                                ₱<?= number_format($product['min_price'] ?? $product['price'], 2) ?>
-                                                <?php if($product['min_price'] > 0): ?><small class="opacity-50">+</small><?php endif; ?>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="card-body px-2 pt-3">
-                                        <h6 class="fw-800 mb-2 text-truncate"><?= esc($product['name']) ?></h6>
-                                        <p class="text-muted small mb-4 line-clamp-2" style="font-size: 0.75rem; height: 35px;"><?= esc($product['description']) ?></p>
-                                        <a href="<?= base_url('menu/' . $product['product_id']) ?>" class="btn btn-primary w-100 rounded-pill py-2 shadow-sm text-uppercase fw-bold" style="font-size: 0.7rem; letter-spacing: 1px;">
-                                            Customize & Order
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                <?php endif; ?>
+                <?php endforeach; ?>
+            </div>
+            
+            <div class="mt-auto p-4 opacity-50 text-white small">
+                <p class="mb-1"><i class="bi bi-geo-alt me-2"></i> Mambajao, Camiguin</p>
+                <p class="mb-0"><i class="bi bi-clock me-2"></i> 8:00 AM - 9:00 PM</p>
             </div>
         </div>
     </div>
+
+    <!-- Full-Width Product Grid -->
+    <?php if (empty($products)): ?>
+        <div class="text-center py-5 bg-white rounded-5 shadow-sm" data-aos="zoom-in">
+            <i class="bi bi-search fs-1 opacity-25"></i>
+            <h4 class="mt-4">No products found</h4>
+            <p class="text-muted">Check back later for fresh batches!</p>
+        </div>
+    <?php else: ?>
+        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4">
+            <?php foreach ($products as $index => $product): ?>
+                <div class="col" data-aos="fade-up" data-aos-delay="<?= ($index % 4) * 100 ?>">
+                    <div class="card h-100 p-0 border-0 shadow-sm overflow-hidden product-card-interactive" style="border-radius: 20px;">
+                        <div class="position-relative overflow-hidden">
+                            <?php if ($product['image_url']): ?>
+                                <img src="<?= base_url($product['image_url']) ?>" class="card-img-top w-100 object-fit-cover" alt="<?= esc($product['name']) ?>" style="aspect-ratio: 1/1;">
+                            <?php else: ?>
+                                <div class="bg-light text-muted text-center d-flex align-items-center justify-content-center" style="aspect-ratio: 1/1;">
+                                    <i class="bi bi-image fs-1 opacity-10"></i>
+                                </div>
+                            <?php endif; ?>
+                            <div class="position-absolute top-0 end-0 m-3 px-3 py-1 fw-bold rounded-pill price-badge-glass">
+                                ₱<?= number_format($product['price'], 2) ?>
+                            </div>
+                        </div>
+                        <div class="card-body p-4 text-center">
+                            <h6 class="fw-bold mb-1 text-truncate" style="font-family: 'Playfair Display', serif; color: var(--text-main);"><?= esc($product['name']) ?></h6>
+                            <p class="text-muted small mb-0">Local Camiguin Specialty</p>
+                            
+                            <!-- Interaction View Footer -->
+                            <div class="interaction-overlay p-4">
+                                <div class="d-grid gap-2">
+                                    <?php if ($product['stock_quantity'] > 0): ?>
+                                        <form action="<?= base_url('cart/add') ?>" method="post" class="direct-add-form">
+                                            <?= csrf_field() ?>
+                                            <input type="hidden" name="product_id" value="<?= $product['product_id'] ?>">
+                                            <button type="submit" class="btn btn-primary rounded-pill btn-sm fw-bold action-btn w-100">ADD TO CART</button>
+                                        </form>
+                                    <?php else: ?>
+                                        <button class="btn btn-secondary rounded-pill btn-sm fw-bold action-btn" disabled>OUT OF STOCK</button>
+                                    <?php endif; ?>
+                                    <a href="<?= base_url('menu/' . $product['product_id']) ?>" class="text-decoration-none small fw-bold mt-2" style="color: var(--accent-color);">LEARN MORE</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
 </div>
 
+<script>
+    document.querySelectorAll('.direct-add-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            const btn = this.querySelector('.action-btn');
+            if (btn) {
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>PROCEEDING...';
+                btn.disabled = true;
+            }
+        });
+    });
+</script>
+
 <style>
-    .hover-up { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-    .hover-up:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important; }
-    .transition-transform { transition: transform 0.6s ease; }
-    .card:hover .transition-transform { transform: scale(1.1); }
-    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .fw-800 { font-weight: 800; }
+    .active-drawer-link {
+        background: rgba(255, 255, 255, 0.1);
+        font-weight: bold;
+    }
+
+    .price-badge-glass {
+        background: rgba(253, 249, 243, 0.85);
+        backdrop-filter: blur(10px);
+        color: var(--accent-color);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .product-card-interactive {
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .product-card-interactive:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(74, 49, 33, 0.12) !important;
+    }
+
+    .interaction-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(253, 249, 243, 0.98);
+        backdrop-filter: blur(10px);
+        transform: translateY(100%);
+        transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        border-top: 1px solid rgba(74, 49, 33, 0.05);
+    }
+
+    .product-card-interactive:hover .interaction-overlay {
+        transform: translateY(0);
+    }
+
+    .action-btn {
+        letter-spacing: 1px;
+    }
+
+    @media (max-width: 767.98px) {
+        .display-5 { font-size: 2rem !important; }
+    }
 </style>
 
 <?= $this->endSection() ?>

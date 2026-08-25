@@ -61,39 +61,41 @@
 </div>
 
 <!-- Daily Recommendations (Random) -->
-<div class="section-padding bg-white position-relative" style="border-radius: 80px 80px 0 0;">
+<div class="section-padding position-relative">
     <div class="container">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-5" data-aos="fade-right">
             <div>
-                <h6 class="text-primary fw-bold text-uppercase mb-2 tracking-widest" style="letter-spacing: 2px;">Daily Surprises</h6>
-                <h2 class="display-5 mb-0 fw-bold">Today is <?= $current_day ?>, <br><span class="text-primary">the go-to for today!</span></h2>
+                <h6 class="text-uppercase mb-2" style="letter-spacing: 2px; color: var(--secondary-accent); font-weight: 600;">Daily Surprises</h6>
+                <h2 class="display-5 mb-0 fw-bold" style="font-family: 'Playfair Display', serif;">Today is <?= $current_day ?>, <br><span style="color: var(--secondary-accent);">the go-to for today!</span></h2>
             </div>
-            <a href="<?= base_url('menu') ?>" class="btn btn-outline-primary rounded-pill px-4 mt-3 mt-md-0">View Full Menu <i class="bi bi-arrow-right ms-2"></i></a>
+            <a href="<?= base_url('menu') ?>" class="btn btn-outline-primary rounded-pill px-4 mt-3 mt-md-0" style="border-color: var(--accent-color); color: var(--accent-color);">View Full Menu <i class="bi bi-arrow-right ms-2"></i></a>
         </div>
         
         <?php if (empty($featured_products)): ?>
-            <div class="text-center py-5 bg-soft rounded-5" data-aos="zoom-in">
+            <div class="text-center py-5 rounded-5" data-aos="zoom-in" style="background-color: var(--primary-bg);">
                 <i class="bi bi-cup-straw display-1 opacity-10"></i>
                 <p class="mt-4 text-muted">Our kitchen is busy preparing... check back soon!</p>
             </div>
         <?php else: ?>
-            <div class="row row-cols-1 row-cols-md-4 g-4">
+            <div class="row row-cols-2 row-cols-md-4 g-4">
                 <?php foreach ($featured_products as $index => $product): ?>
                     <div class="col" data-aos="fade-up" data-aos-delay="<?= $index * 100 ?>">
-                        <div class="card h-100 p-3 border-0 shadow-sm">
-                            <div class="position-relative overflow-hidden rounded-4">
+                        <div class="card h-100 p-0 border-0 shadow-sm overflow-hidden" style="border-radius: 20px; background-color: var(--primary-bg);">
+                            <div class="position-relative">
                                 <?php if ($product['image_url']): ?>
-                                    <img src="<?= base_url($product['image_url']) ?>" class="card-img-top w-100 object-fit-cover transition-transform" alt="<?= esc($product['name']) ?>" style="height: 240px;">
+                                    <img src="<?= base_url($product['image_url']) ?>" class="card-img-top w-100 object-fit-cover" alt="<?= esc($product['name']) ?>" style="aspect-ratio: 1/1;">
                                 <?php else: ?>
-                                    <div class="bg-soft text-muted text-center py-5 h-100 d-flex flex-column justify-content-center" style="min-height: 240px;">
+                                    <div class="text-muted text-center d-flex align-items-center justify-content-center" style="aspect-ratio: 1/1;">
                                         <i class="bi bi-image fs-1 opacity-10"></i>
                                     </div>
                                 <?php endif; ?>
-                                <span class="badge bg-white text-dark position-absolute top-0 end-0 m-3 shadow-sm px-3 py-2 fw-bold">₱<?= number_format($product['price'], 2) ?></span>
+                                <div class="position-absolute top-0 end-0 m-3 px-3 py-1 fw-bold rounded-pill" style="background: rgba(253, 249, 243, 0.8); backdrop-filter: blur(10px); color: var(--accent-color);">
+                                    ₱<?= number_format($product['price'], 2) ?>
+                                </div>
                             </div>
-                            <div class="card-body px-2 pt-4 text-center">
-                                <h5 class="card-title fw-bold mb-2 text-truncate"><?= esc($product['name']) ?></h5>
-                                <a href="<?= base_url('menu/' . $product['product_id']) ?>" class="btn btn-primary rounded-pill w-100 shadow-sm mt-3">Order Now</a>
+                            <div class="card-body p-3 text-center" style="background-color: var(--primary-bg);">
+                                <h5 class="card-title fw-bold mb-2 text-truncate" style="font-family: 'Playfair Display', serif; color: var(--text-main);"><?= esc($product['name']) ?></h5>
+                                <a href="<?= base_url('menu/' . $product['product_id']) ?>" class="btn w-100 shadow-sm mt-3 fw-bold" style="background: var(--accent-color); color: #ffffff; border-radius: 12px;">Customize</a>
                             </div>
                         </div>
                     </div>
@@ -104,51 +106,51 @@
 </div>
 
 <!-- About Section -->
-<div id="about" class="section-padding bg-white pb-5">
+<div id="about" class="section-padding pb-5">
     <div class="container">
         <div class="row align-items-center g-5">
             <div class="col-lg-6" data-aos="fade-right">
                 <div class="position-relative">
                     <img src="<?= base_url('assets/images/logo_and_bg/pacudan_bg.jpg') ?>" class="img-fluid rounded-5 shadow-2xl" alt="About Us" style="border-radius: 60px; height: 500px; width: 100%; object-fit: cover;">
                     <div class="position-absolute top-50 start-100 translate-middle d-none d-lg-block" data-aos="zoom-in" data-aos-delay="300">
-                        <div class="card p-4 shadow-lg border-0 bg-white rounded-4 text-center" style="width: 200px;">
-                            <h2 class="fw-bold text-primary mb-0">100%</h2>
+                        <div class="card p-4 shadow-lg border-0 rounded-4 text-center" style="width: 200px; background-color: var(--primary-bg);">
+                            <h2 class="fw-bold mb-0" style="color: var(--accent-color);">100%</h2>
                             <p class="small text-muted mb-0">Made WIth Love</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-lg-6 ps-lg-5" data-aos="fade-left">
-                <h6 class="text-primary fw-bold text-uppercase mb-2 tracking-widest" style="letter-spacing: 2px;">Our Story</h6>
-                <h2 class="display-4 mb-4 fw-bold">Baked with Passion, <br>Served with Love</h2>
+                <h6 class="fw-bold text-uppercase mb-2 tracking-widest" style="letter-spacing: 2px; color: var(--secondary-accent);">Our Story</h6>
+                <h2 class="display-4 mb-4 fw-bold" style="font-family: 'Playfair Display', serif;">Baked with Passion, <br>Served with Love</h2>
                 <p class="lead text-muted mb-4">Pacudan's Bakeshop & Coffee Bar started as a small family dream. Today, we are proud to be your favorite neighborhood spot for morning coffee and sweet celebrations.</p>
                 
                 <div class="row g-4 mb-5">
                     <div class="col-sm-6">
                         <div class="d-flex align-items-center">
-                            <div class="bg-primary text-white rounded-circle p-2 me-3"><i class="bi bi-heart-fill"></i></div>
+                            <div class="text-white rounded-circle p-2 me-3" style="background-color: var(--accent-color);"><i class="bi bi-heart-fill"></i></div>
                             <span class="fw-bold">Family Recipes</span>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="d-flex align-items-center">
-                            <div class="bg-primary text-white rounded-circle p-2 me-3"><i class="bi bi-star-fill"></i></div>
+                            <div class="text-white rounded-circle p-2 me-3" style="background-color: var(--accent-color);"><i class="bi bi-star-fill"></i></div>
                             <span class="fw-bold">Top Rated</span>
                         </div>
                     </div>
                 </div>
-                <a href="#" class="btn btn-outline-primary btn-lg rounded-pill px-5">Learn More</a>
+                <a href="#" class="btn btn-outline-primary btn-lg rounded-pill px-5" style="border-color: var(--accent-color); color: var(--accent-color);">Learn More</a>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Testimonials Section -->
-<div class="section-padding bg-white" style="border-radius: 80px 80px 0 0;">
+<div class="section-padding" style="border-radius: 80px 80px 0 0;">
     <div class="container">
         <div class="text-center mb-5" data-aos="fade-up">
-            <h6 class="text-primary fw-bold text-uppercase mb-2 tracking-widest" style="letter-spacing: 2px;">Testimonials</h6>
-            <h2 class="display-5 mb-0 fw-bold">What Our Community Says</h2>
+            <h6 class="fw-bold text-uppercase mb-2 tracking-widest" style="letter-spacing: 2px; color: var(--secondary-accent);">Testimonials</h6>
+            <h2 class="display-5 mb-0 fw-bold" style="font-family: 'Playfair Display', serif;">What Our Community Says</h2>
             <p class="text-muted mt-3 col-lg-6 mx-auto">Real stories from our lovely customers who have made Pacudan's a part of their daily ritual.</p>
         </div>
 

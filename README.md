@@ -1,61 +1,149 @@
-# CodeIgniter 4 Framework
+# Pacudan's Bakeshop — Online Ordering & Management System
 
-## What is CodeIgniter?
+A full-featured web application built for **Pacudan's Bakeshop & Coffee Bar**. It provides a customer-facing online storefront for browsing products, managing a cart, and placing orders, along with a complete **admin panel** for managing products, inventory, orders, categories, users, and notifications.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+## 📋 What It Is
 
-This repository holds the distributable version of the framework.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+Pacudan's Bakeshop is an e-commerce / point-of-order system tailored for a local bakeshop and coffee bar. Customers can:
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+- Browse the product catalog (breads, pastries, coffee, etc.)
+- View product details, variants, and availability
+- Add items to a cart and place orders
+- Save favorite products
+- Receive notifications about their orders
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+Staff/Administrators can:
 
-## Important Change with index.php
+- Manage products, product variants, and categories
+- Track stock levels with an inventory log system
+- Process and update customer orders
+- Manage user accounts
+- Send/receive in-app notifications
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+## 🛠️ Tech Stack
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+| Layer | Technology |
+|---|---|
+| Language | PHP 8.2+ |
+| Framework | CodeIgniter 4 |
+| Database | MySQL / MariaDB (via XAMPP) |
+| Frontend | HTML5, CSS3, Vanilla JavaScript |
+| CSS Framework | Bootstrap 5.3 + Bootstrap Icons |
+| Fonts | Google Fonts (Playfair Display, Inter) |
+| UI Enhancements | AOS (Animate On Scroll), SweetAlert2 |
+| Dev Tooling | PHPUnit, PHP CS Fixer, Kint Debug Bar, Faker |
+| Server | Apache (XAMPP) |
 
-**Please** read the user guide for a better explanation of how CI4 works!
+## 🏗️ Architecture
 
-## Repository Management
+The project follows the classic **MVC (Model–View–Controller)** architecture enforced by CodeIgniter 4:
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+```
+TEST/
+├── app/
+│   ├── Config/          # Application configuration (App, Routes, Database, etc.)
+│   ├── Controllers/     # Request handling & business logic
+│   │   ├── Auth.php     # Authentication (login/register)
+│   │   ├── Home.php     # Landing page
+│   │   ├── Product.php  # Product catalog (public)
+│   │   ├── Cart.php     # Shopping cart
+│   │   ├── Favorites.php# Customer favorites
+│   │   ├── Admin.php    # Admin dashboard (products, orders, users)
+│   │   └── NotificationController.php
+│   ├── Models/          # Data access layer
+│   │   ├── UserModel, ProductModel, CategoryModel
+│   │   ├── OrderModel, OrderItemModel
+│   │   ├── ProductVariantModel, InventoryLogModel
+│   │   └── FavoritesModel, NotificationModel
+│   ├── Views/           # Presentation layer
+│   │   ├── layout.php   # Global layout/template
+│   │   ├── auth/, cart/, home.php, products/
+│   │   └── admin/       # Admin views (orders/, products/)
+│   ├── Database/
+│   │   ├── Migrations/  # Schema definitions
+│   │   └── Seeds/       # Test/sample data
+│   └── Filters/         # Request filters (auth guards)
+├── public/              # Web root (index.php, assets/css, js, images)
+├── writable/            # Runtime storage (logs, sessions, cache, uploads)
+├── tests/               # PHPUnit test suite
+└── spark                # CodeIgniter CLI tool
+```
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+**Request flow:** Browser → `public/index.php` → Routing (`Config/Routes`) → Filters (auth/session checks) → Controller → Model (MySQL) → View → Response.
 
-## Contributing
+### Database Schema (via migrations)
 
-We welcome contributions from the community.
+- `users` — accounts & authentication
+- `categories` — product groupings
+- `products` — catalog items
+- `product_variants` — size/price variants per product
+- `orders` — customer orders
+- `order_items` — line items per order
+- `inventory_logs` — stock movement history
+- `notifications` — in-app notifications (with links)
 
-Please read the [*Contributing to CodeIgniter*](https://github.com/codeigniter4/CodeIgniter4/blob/develop/CONTRIBUTING.md) section in the development repository.
+## ✨ Features
 
-## Server Requirements
+### Customer Side
+- 🏠 Landing/home page with animated sections (AOS)
+- 🧁 Product catalog with category browsing
+- 🔍 Product detail view with variants
+- 🛒 Shopping cart management
+- ❤️ Favorites / wishlist
+- 📦 Order placement & order tracking
+- 🔔 In-app notifications
+- 🔐 User registration & login (session-based)
 
-PHP version 8.2 or higher is required, with the following extensions installed:
+### Admin Panel
+- 📊 Admin dashboard
+- 🧾 Product CRUD with image uploads
+- 🏷️ Category & variant management
+- 📥 Order management & status updates
+- 📦 Inventory tracking with logs
+- 👤 User management
+- 🔔 Notification system
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+## 🚀 Getting Started
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - The end of life date for PHP 8.1 was December 31, 2025.
-> - If you are still using below PHP 8.2, you should upgrade immediately.
-> - The end of life date for PHP 8.2 will be December 31, 2026.
+### Prerequisites
+- [XAMPP](https://www.apachefriends.org/) (Apache + MySQL + PHP 8.2+)
+- Composer
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+### Installation
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+1. Clone the repository into your XAMPP `htdocs` folder:
+   ```bash
+   cd C:\xampp\htdocs
+   git clone https://github.com/Novicedev123/Pacudans-Bakeshop.git
+   ```
+
+2. Install dependencies:
+   ```bash
+   composer install
+   ```
+
+3. Create a database in MySQL (e.g., via phpMyAdmin) and configure `.env`:
+   ```env
+   database.default.hostname = localhost
+   database.default.database = your_db_name
+   database.default.username = root
+   database.default.password =
+   ```
+
+4. Run migrations:
+   ```bash
+   php spark migrate
+   ```
+
+5. Serve the app:
+   ```
+   http://localhost/cdi4/TEST/public/
+   ```
+   or use the built-in server:
+   ```bash
+   php spark serve
+   ```
+
+## 📄 License
+
+This project is released under the [MIT License](LICENSE).

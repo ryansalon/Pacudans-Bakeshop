@@ -28,7 +28,7 @@
     </script>
     <title><?= $title ?? 'Pacudan\'s Bakeshop & Coffee Bar' ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -36,21 +36,25 @@
     
     <style>
         :root {
-            --primary-mocha: #3d2b1f; /* Deep Espresso */
-            --secondary-mocha: #5c4033; /* Rich Cocoa */
-            --accent-gold: #b08d57; /* Sophisticated Muted Gold */
-            --cream-foam: #fdfaf7; /* Elegant Off-white */
-            --text-dark: #2a1b12; /* Warm Dark Brown */
-            --bg-soft: #fcf9f6; 
+            --primary-bg: #FDF9F3;
+            --accent-color: #4A3121;
+            --secondary-accent: #A67C52;
+            --text-main: #2D1B10;
+            --text-muted: #7A6A5E;
             --glass-white: rgba(255, 255, 255, 0.92);
         }
 
         body { 
-            background-color: var(--bg-soft); 
-            color: var(--text-dark); 
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--primary-bg); 
+            color: var(--text-main); 
+            font-family: 'Inter', sans-serif;
             overflow-x: hidden;
             line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6, .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
         }
 
         /* Premium Smooth Shadows */
@@ -124,6 +128,7 @@
             padding: 1.8rem 0; 
             transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1); 
             background: transparent !important;
+            z-index: 1000;
         }
         
         .navbar.scrolled {
@@ -134,7 +139,14 @@
             border-bottom: 1px solid rgba(176, 141, 87, 0.1);
         }
 
-        /* Adjust link colors for transparency over dark backgrounds (Home Page) */
+        .navbar .nav-link,
+        .navbar .navbar-brand,
+        .navbar .navbar-brand small,
+        .navbar .bi-bag,
+        .navbar .bi-list {
+            color: var(--accent-color) !important;
+        }
+
         body.is-home .navbar:not(.scrolled) .nav-link,
         body.is-home .navbar:not(.scrolled) .navbar-brand,
         body.is-home .navbar:not(.scrolled) .navbar-brand small,
@@ -142,6 +154,9 @@
         body.is-home .navbar:not(.scrolled) .bi-list {
             color: #fff !important;
         }
+
+        .main-content { min-height: 80vh; padding-top: 200px; padding-bottom: 100px; }
+        body.is-home .main-content { padding-top: 0; }
 
         .nav-link {
             font-weight: 600;
@@ -161,52 +176,56 @@
         }
 
         .btn-primary { 
-            background: var(--primary-mocha); 
-            color: #fff;
+            background: var(--accent-color); 
+            color: #FDF9F3 !important;
             border: none; 
             padding: 14px 32px; 
             border-radius: 100px; 
             font-weight: 700;
             letter-spacing: 0.5px;
             box-shadow: 0 10px 25px rgba(61, 43, 31, 0.15);
-            transition: all 0.4s ease;
+            transition: all 0.3s ease-in-out;
         }
 
-        .btn-primary:hover {
-            background: var(--accent-gold);
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(176, 141, 87, 0.25);
-            color: #fff;
+        .btn-primary:hover, .btn-primary:active, .btn-primary:focus {
+            background: var(--secondary-accent) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15) !important;
+            color: #ffffff !important;
+        }
+
+        .badge {
+            transition: all 0.3s ease-in-out;
+        }
+
+        .badge:hover {
+            background: var(--secondary-accent) !important;
+            color: #ffffff !important;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
         }
 
         .btn-outline-primary {
-            border: 2px solid var(--primary-mocha);
-            color: var(--primary-mocha);
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
             border-radius: 100px;
             font-weight: 700;
             padding: 12px 30px;
-            transition: all 0.3s ease;
-            box-shadow: none;
+            transition: all 0.3s ease-in-out;
         }
 
-        .btn-primary:hover, .btn-outline-primary:hover, 
-        .btn-primary:active, .btn-outline-primary:active,
-        .btn-primary:focus, .btn-outline-primary:focus {
-            background: var(--accent-gold) !important;
-            border-color: var(--accent-gold) !important;
-            color: #fff !important;
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(176, 141, 87, 0.25) !important;
+        .btn-outline-primary:hover {
+            background: var(--secondary-accent) !important;
+            border-color: var(--secondary-accent) !important;
+            color: #ffffff !important;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15) !important;
         }
 
         /* Fix Bootstrap Focus Outline */
         .btn:focus, .btn-check:focus + .btn {
-            box-shadow: 0 0 0 0.25rem rgba(176, 141, 87, 0.25) !important;
+            box-shadow: 0 0 0 0.25rem rgba(166, 124, 82, 0.25) !important;
             outline: none !important;
-        }
-
-        .btn-primary:focus {
-            box-shadow: 0 0 0 0.25rem rgba(61, 43, 31, 0.25) !important;
         }
 
         .card { 
@@ -218,7 +237,7 @@
 
         .main-content { min-height: 80vh; padding-top: 0; padding-bottom: 100px; }
         .footer { 
-            background: var(--primary-mocha); 
+            background: var(--accent-color); 
             border-radius: 80px 80px 0 0; 
             padding: 100px 0 60px; 
             color: #fff; 
@@ -226,7 +245,7 @@
         }
         .section-padding { padding: 120px 0; }
         #cart-counter { 
-            background: var(--accent-gold); 
+            background: var(--secondary-accent); 
             color: #fff; 
             font-size: 0.65rem; 
             padding: 3px 7px; 
@@ -235,7 +254,7 @@
             font-weight: 800;
         }
 
-        .text-primary { color: var(--accent-gold) !important; }
+        .text-primary { color: var(--secondary-accent) !important; }
         
         .sidebar-card { 
             border-radius: 30px; 
@@ -247,18 +266,20 @@
 
         .sidebar-link {
             display: flex; align-items: center; padding: 15px 25px; margin-bottom: 10px; border-radius: 20px;
-            text-decoration: none; color: var(--text-dark); font-weight: 600; transition: all 0.3s ease;
+            text-decoration: none; color: var(--text-main); font-weight: bold; transition: all 0.3s ease-in-out;
             border: 1px solid transparent;
         }
 
         .sidebar-link:hover {
-            background: rgba(176, 141, 87, 0.05);
-            color: var(--accent-gold);
+            background: var(--secondary-accent);
+            color: #ffffff !important;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
         }
 
         .sidebar-link.active { 
-            background: var(--primary-mocha); 
-            color: #fff !important; 
+            background: var(--accent-color); 
+            color: #ffffff !important; 
             box-shadow: 0 10px 25px rgba(61, 43, 31, 0.2); 
         }
 
@@ -320,7 +341,7 @@
         }
 
         .swal2-confirm.premium-confirm {
-            background: var(--primary-mocha) !important;
+            background: var(--accent-color) !important;
             color: #ffffff !important;
             border-radius: 100px !important;
             padding: 14px 40px !important;
@@ -332,24 +353,26 @@
         }
 
         .swal2-confirm.premium-confirm:hover {
-            background: var(--accent-gold) !important;
+            background: var(--secondary-accent) !important;
             transform: translateY(-2px) !important;
             box-shadow: 0 8px 20px rgba(176, 141, 87, 0.2) !important;
+            color: #ffffff !important;
         }
 
         .swal2-cancel.premium-cancel {
             background: #f1f1f1 !important;
-            color: #444 !important;
+            color: var(--accent-color) !important;
             border-radius: 100px !important;
             padding: 14px 40px !important;
             font-weight: 700 !important;
             font-size: 1rem !important;
             transition: all 0.3s ease !important;
-            border: none !important;
+            border: 2px solid var(--accent-color) !important;
         }
 
         .swal2-cancel.premium-cancel:hover {
             background: #e5e5e5 !important;
+            color: var(--accent-color) !important;
         }
 
         /* Sileo-Inspired Premium Notification - Glassmorphism & Pill Shape */

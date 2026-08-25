@@ -2,14 +2,13 @@
 
 <?= $this->section('content') ?>
 
-<div class="section-padding">
-    <div class="container">
-        <div class="mb-5">
-            <a href="<?= base_url('menu') ?>" class="btn btn-outline-primary rounded-pill px-4 fw-bold shadow-sm">
-                <i class="bi bi-arrow-left me-2"></i> Back to Menu
-            </a>
-        </div>
-        <h2 class="display-6 mb-5"><i class="bi bi-cart3 me-3 text-primary"></i>Your Shopping Cart</h2>
+<div class="container py-5">
+    <div class="mb-5" style="margin-top: 100px;">
+        <a href="<?= base_url('menu#menu-grid') ?>" class="btn btn-outline-primary rounded-pill px-4 fw-bold shadow-sm">
+            <i class="bi bi-arrow-left me-2"></i> Back to Menu
+        </a>
+    </div>
+    <h2 class="display-6 mb-5" style="font-family: 'Playfair Display', serif;"><i class="bi bi-cart3 me-3 text-primary"></i>Your Shopping Cart</h2>
 
         <?php if (empty($cart)): ?>
             <div class="text-center py-5 bg-white rounded-5 shadow-sm">
@@ -77,7 +76,7 @@
                         </div>
 
                         <div class="mt-4 d-flex justify-content-between align-items-center">
-                            <a href="<?= base_url('menu') ?>" class="btn btn-outline-primary rounded-pill px-4 shadow-sm fw-bold">
+                            <a href="<?= base_url('menu#menu-grid') ?>" class="btn btn-outline-primary rounded-pill px-4 shadow-sm fw-bold">
                                 <i class="bi bi-arrow-left me-2"></i>Continue Shopping
                             </a>
                             <button type="submit" class="btn btn-outline-primary rounded-pill px-4 shadow-sm fw-bold">
