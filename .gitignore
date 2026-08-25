@@ -1,0 +1,25 @@
+# Environment / secrets
+.env
+*.env
+!env
+
+# CodeIgniter runtime files
+writable/logs/*
+!writable/logs/index.html
+writable/session/*
+!writable/session/index.html
+writable/cache/*
+!writable/cache/index.html
+writable/debugbar/*
+!writable/debugbar/index.html
+writable/uploads/*
+!writable/uploads/index.html
+
+# Dependencies
+vendor/
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
