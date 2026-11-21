@@ -13,10 +13,12 @@ class Product extends BaseController
         $productModel = new ProductModel();
         $categoryModel = new CategoryModel();
 
-        // Fetch products with their minimum variant price if available
-        $products = $productModel->select('products.*, MIN(product_variants.price) as min_price')
+        $products = $productModel->select('products.*, categories.name as category_name, MIN(product_variants.price) as min_price, COUNT(product_variants.variant_id) as variant_count')
+                                 ->join('categories', 'categories.category_id = products.category_id', 'left')
                                  ->join('product_variants', 'product_variants.product_id = products.product_id', 'left')
                                  ->groupBy('products.product_id')
+                                 ->orderBy('categories.category_id', 'ASC')
+                                 ->orderBy('products.name', 'ASC')
                                  ->findAll();
 
         $data = [
@@ -32,8 +34,10 @@ class Product extends BaseController
     {
         $productModel = new ProductModel();
         $variantModel = new ProductVariantModel();
-        
-        $product = $productModel->find($id);
+
+        $product = $productModel->select('products.*, categories.name as category_name')
+                                ->join('categories', 'categories.category_id = products.category_id', 'left')
+                                ->find($id);
 
         if (!$product) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
@@ -60,17 +64,19 @@ class Product extends BaseController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
-        $products = $productModel->select('products.*, MIN(product_variants.price) as min_price')
+        $products = $productModel->select('products.*, categories.name as category_name, MIN(product_variants.price) as min_price, COUNT(product_variants.variant_id) as variant_count')
+                                 ->join('categories', 'categories.category_id = products.category_id', 'left')
                                  ->join('product_variants', 'product_variants.product_id = products.product_id', 'left')
-                                 ->where('category_id', $id)
+                                 ->where('products.category_id', $id)
                                  ->groupBy('products.product_id')
+                                 ->orderBy('products.name', 'ASC')
                                  ->findAll();
 
         $data = [
             'products'   => $products,
             'categories' => $categoryModel->findAll(),
             'category'   => $category,
-            'title'      => 'Menu: ' . $category['name']
+            'title'      => $category['name']
         ];
 
         return view('products/index', $data);
