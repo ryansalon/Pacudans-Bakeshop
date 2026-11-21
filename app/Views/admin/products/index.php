@@ -131,77 +131,101 @@
                             <label for="edit-name" class="form-label small fw-bold text-uppercase">Product Name</label>
                             <input type="text" id="edit-name" name="name" class="form-control bg-soft border-0 rounded-pill py-2 px-3" required>
                         </div>
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle">
-                                <thead class="text-muted small text-uppercase">
-                                    <tr>
-                                        <th>Product Name</th>
-                                        <th>Price</th>
-                                        <th class="text-end">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($items as $product): ?>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="bg-light rounded-3 me-3 d-flex align-items-center justify-content-center border" style="width: 45px; height: 45px; overflow: hidden;">
-                                                        <?php if ($product['image_url']): ?>
-                                                            <img src="<?= base_url($product['image_url']) ?>" class="h-100 w-100 object-fit-cover">
-                                                        <?php else: ?>
-                                                            <i class="bi bi-image opacity-10"></i>
-                                                        <?php endif; ?>
-                                                    </div>
-                                                    <span class="fw-bold"><?= esc($product['name']) ?></span>
-                                                </div>
-                                            </td>
-                                            <td class="fw-bold">₱<?= number_format($product['price'], 2) ?></td>
-                                            <td class="text-end">
-                                                <button class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-primary shadow-sm border"><i class="bi bi-pencil-square"></i></button>
-                                                <button class="btn btn-light btn-sm rounded-circle p-2 mx-1 text-danger shadow-sm border"><i class="bi bi-trash"></i></button>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
+                        <div class="col-md-6">
+                            <label for="edit-category" class="form-label small fw-bold text-uppercase">Category</label>
+                            <select id="edit-category" name="category_id" class="form-select bg-soft border-0 rounded-pill py-2 px-3" required>
+                                <?php foreach ($categories as $cat): ?>
+                                    <option value="<?= $cat['category_id'] ?>"><?= esc($cat['name']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="edit-price" class="form-label small fw-bold text-uppercase">Price (₱)</label>
+                            <input type="number" id="edit-price" name="price" class="form-control bg-soft border-0 rounded-pill py-2 px-3 tabular-nums" step="0.01" min="0" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="edit-stock" class="form-label small fw-bold text-uppercase">Stock Quantity</label>
+                            <input type="number" id="edit-stock" name="stock_quantity" class="form-control bg-soft border-0 rounded-pill py-2 px-3 tabular-nums" min="0" required>
+                        </div>
+                        <div class="col-12">
+                            <label for="edit-description" class="form-label small fw-bold text-uppercase">Description</label>
+                            <textarea id="edit-description" name="description" class="form-control bg-soft border-0 rounded-4 py-2 px-3" rows="3"></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="edit-image-file" class="form-label small fw-bold text-uppercase">Upload New Image (Optional)</label>
+                            <input type="file" id="edit-image-file" name="image_file" class="form-control bg-soft border-0 rounded-pill py-2 px-3" accept="image/*">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="edit-image-url" class="form-label small fw-bold text-uppercase">Or Asset Path</label>
+                            <input type="text" id="edit-image-url" name="image_url" class="form-control bg-soft border-0 rounded-pill py-2 px-3" placeholder="assets/images/...">
                         </div>
                     </div>
                 </div>
-            <?php endforeach; ?>
+                <div class="modal-footer border-top px-4 py-3">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">Save Changes</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
 <script>
-    function showCategory(id) {
-        const sections = document.querySelectorAll('.category-section');
-        sections.forEach(s => s.classList.add('d-none'));
-        const selected = document.getElementById('cat-' + id);
-        if (selected) {
-            selected.classList.remove('d-none');
-            selected.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-    }
+    // Filter rows by category pill
+    document.querySelectorAll('.inv-cat-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const cat = this.getAttribute('data-cat');
+            document.querySelectorAll('.inv-cat-btn').forEach(b => {
+                b.classList.remove('btn-primary');
+                b.classList.add('btn-outline-primary');
+            });
+            this.classList.remove('btn-outline-primary');
+            this.classList.add('btn-primary');
 
-    function hideAll() {
-        const sections = document.querySelectorAll('.category-section');
-        sections.forEach(s => s.classList.add('d-none'));
-    }
+            document.querySelectorAll('.inv-row').forEach(row => {
+                row.classList.toggle('d-none', cat !== 'all' && row.getAttribute('data-cat') !== cat);
+            });
+        });
+    });
+
+    // Populate Edit Product modal
+    document.querySelectorAll('.edit-product-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.getElementById('edit-product-id').value = this.getAttribute('data-id');
+            document.getElementById('edit-name').value = this.getAttribute('data-name');
+            document.getElementById('edit-category').value = this.getAttribute('data-category');
+            document.getElementById('edit-price').value = this.getAttribute('data-price');
+            document.getElementById('edit-stock').value = this.getAttribute('data-stock');
+            document.getElementById('edit-description').value = this.getAttribute('data-description');
+            document.getElementById('edit-image-url').value = this.getAttribute('data-image');
+        });
+    });
+
+    // Confirm before deleting product
+    document.querySelectorAll('.delete-product-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = this.getAttribute('data-name');
+            Swal.fire({
+                title: 'Delete Product?',
+                text: `Permanently remove "${name}" from the menu?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete',
+                cancelButtonText: 'Cancel',
+                customClass: {
+                    popup: 'premium-swal',
+                    confirmButton: 'premium-confirm',
+                    cancelButton: 'premium-cancel'
+                },
+                buttonsStyling: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
 </script>
-
-<style>
-    .category-card { 
-        background: #FDF9F3; 
-        transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1); 
-    }
-    .category-card:hover { 
-        background: transparent; 
-        transform: scale(1.05); 
-        box-shadow: 0 15px 30px rgba(74, 49, 33, 0.15) !important;
-    }
-    .category-card:hover h5, .category-card:hover p, .category-card:hover .text-primary { 
-        color: var(--accent-color) !important; 
-    }
-</style>
 
 <?= $this->endSection() ?>
