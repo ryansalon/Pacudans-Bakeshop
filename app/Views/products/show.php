@@ -124,78 +124,66 @@ document.getElementById('addToCartForm').addEventListener('submit', function(e) 
     if (document.getElementById('buy_now_flag').value === '1') {
         return;
     }
-    
+
     e.preventDefault();
-    
+
     const form = this;
-    const formData = new FormData(form);
     const submitBtn = document.getElementById('addBtn');
     const originalText = submitBtn.innerHTML;
-    
+
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Adding...';
-    
+
     fetch(form.action, {
         method: 'POST',
-        body: formData,
+        body: new FormData(form),
         headers: { 'X-Requested-With': 'XMLHttpRequest' }
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            const counter = document.getElementById('cart-counter');
-            counter.innerText = data.cart_count;
-            counter.classList.remove('d-none');
-            
-            Toast.fire({
-                icon: 'success',
-                title: 'Added to Cart!',
-                text: data.message
-            });
-            
+            updateBagCounters(data.cart_count);
+            Toast.fire({ icon: 'success', title: data.message || 'Added to Bag!' });
             submitBtn.innerHTML = '<i class="bi bi-check2 me-2"></i>Added!';
-            submitBtn.classList.replace('btn-outline-primary', 'btn-success');
-            submitBtn.classList.add('text-white');
-            
             setTimeout(() => {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalText;
-                submitBtn.classList.replace('btn-success', 'btn-outline-primary');
-                submitBtn.classList.remove('text-white');
-            }, 2000);
+            }, 1500);
+        } else {
+            Toast.fire({ icon: 'error', title: data.message || 'Unable to add item.' });
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
         }
     })
-    .catch(error => {
-        console.error('Error:', error);
+    .catch(() => {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;
     });
 });
 
-// Check Favorite Status on Load
+function syncFavoriteButton(isFav, favCount) {
+    const favBtn = document.getElementById('favBtn');
+    if (favBtn) {
+        if (isFav) {
+            favBtn.innerHTML = '<i class="bi bi-heart-fill me-1"></i><span>Saved</span>';
+            favBtn.classList.add('active');
+        } else {
+            favBtn.innerHTML = '<i class="bi bi-heart me-1"></i><span>Favorite</span>';
+            favBtn.classList.remove('active');
+        }
+    }
+    const favCounter = document.getElementById('fav-counter');
+    if (favCounter && favCount !== undefined) {
+        favCounter.textContent = favCount;
+        favCounter.classList.toggle('d-none', Number(favCount) <= 0);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     <?php if (session()->get('isLoggedIn')): ?>
-    fetch('<?= base_url('favorites/check/') ?><?= $product['product_id'] ?>')
+    fetch('<?= base_url('favorites/check/' . $product['product_id']) ?>')
         .then(response => response.json())
-        .then(data => {
-            const favBtn = document.getElementById('favBtn');
-            if (data.isFavorite) {
-                favBtn.innerHTML = '<i class="bi bi-heart-fill"></i>';
-                favBtn.classList.replace('btn-outline-secondary', 'btn-primary');
-                favBtn.classList.add('text-white');
-            }
-            
-            // Also sync navbar counter on load
-            const favCounter = document.getElementById('fav-counter');
-            if (favCounter && data.fav_count !== undefined) {
-                favCounter.innerText = data.fav_count;
-                if (data.fav_count > 0) favCounter.classList.remove('d-none');
-                else favCounter.classList.add('d-none');
-                
-                const innerBadge = document.querySelector('.fav-badge-inner');
-                if (innerBadge) innerBadge.innerText = data.fav_count;
-            }
-        });
+        .then(data => syncFavoriteButton(Boolean(data.isFavorite), data.fav_count));
     <?php endif; ?>
 });
 
@@ -207,57 +195,25 @@ function toggleFavorite(productId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            Toast.fire({
-                icon: 'success',
-                title: data.action === 'added' ? 'Saved to Favorites!' : 'Removed from Favorites',
-                text: data.message
+            Toast.fire({ icon: 'success', title: data.message });
+            syncFavoriteButton(data.action === 'added', data.fav_count);
+        } else if (data.redirect) {
+            Swal.fire({
+                title: 'Sign In Required',
+                text: 'Please sign in to save your favorite treats.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sign In Now',
+                cancelButtonText: 'Not Now',
+                customClass: {
+                    popup: 'premium-swal',
+                    confirmButton: 'premium-confirm',
+                    cancelButton: 'premium-cancel'
+                },
+                buttonsStyling: false
+            }).then((result) => {
+                if (result.isConfirmed) window.location.href = data.redirect;
             });
-            
-            // Sync Favorites Counter in Navbar
-            const favCounter = document.getElementById('fav-counter');
-            if (favCounter) {
-                favCounter.innerText = data.fav_count;
-                if (data.fav_count > 0) favCounter.classList.remove('d-none');
-                else favCounter.classList.add('d-none');
-                
-                // Also update the inner badge in the dropdown if it exists
-                const innerBadge = document.querySelector('.fav-badge-inner');
-                if (innerBadge) innerBadge.innerText = data.fav_count;
-            }
-            
-            const favBtn = document.getElementById('favBtn');
-            if (data.action === 'added') {
-                favBtn.innerHTML = '<i class="bi bi-heart-fill"></i>';
-                favBtn.classList.replace('btn-outline-secondary', 'btn-primary');
-                favBtn.classList.add('text-white');
-            } else {
-                favBtn.innerHTML = '<i class="bi bi-heart"></i>';
-                favBtn.classList.replace('btn-primary', 'btn-outline-secondary');
-                favBtn.classList.remove('text-white');
-            }
-        } else {
-            if (data.redirect) {
-                Swal.fire({
-                    title: 'Login Required',
-                    text: 'Please sign in to save your favorite treats!',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Sign In Now',
-                    cancelButtonText: 'Maybe Later',
-                    customClass: {
-                        popup: 'premium-swal',
-                        confirmButton: 'premium-confirm',
-                        cancelButton: 'premium-cancel'
-                    },
-                    buttonsStyling: false
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = data.redirect;
-                    }
-                });
-            } else {
-                Swal.fire('Error', data.message, 'error');
-            }
         }
     });
 }
