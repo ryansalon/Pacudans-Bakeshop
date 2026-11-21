@@ -2,51 +2,73 @@
 
 <?= $this->section('content') ?>
 
-<div class="container py-5">
-    <!-- Dashboard Header & Filters -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 reveal" style="margin-top: 100px;">
+<?php
+    // Precompute daily totals in a single O(N) pass, excluding cancelled orders
+    $dailyTotals = [];
+    foreach ($orders as $o) {
+        $d = date('Y-m-d', strtotime($o['created_at']));
+        if (!isset($dailyTotals[$d])) {
+            $dailyTotals[$d] = 0.0;
+        }
+        if (strtolower($o['status']) !== 'cancelled') {
+            $dailyTotals[$d] += (float) $o['total_amount'];
+        }
+    }
+?>
+
+<div class="container py-4">
+    <?= $this->include('admin/_nav') ?>
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
         <div>
-            <h6 class="text-primary fw-bold text-uppercase mb-2 tracking-widest" style="letter-spacing: 2px;">Transactions</h6>
-            <h2 class="display-5 mb-0 fw-bold">Customer Orders</h2>
-        </div>
-            
-            <!-- Date Filter & Badge -->
-            <div class="d-flex align-items-center gap-3 mt-4 mt-md-0">
-                <input type="date" class="form-control rounded-pill border-0 shadow-sm px-4" id="dateFilter" placeholder="Filter by Date">
-                <span class="badge bg-white text-dark shadow-sm border rounded-pill px-4 py-3">Total Orders: <?= count($orders) ?></span>
-            </div>
+            <h1 class="display-5 mb-1 fw-bold">Customer Orders</h1>
+            <p class="text-muted mb-0">Filter orders by date and open any transaction to approve or update status.</p>
         </div>
 
-        <div class="card p-4 border-0 shadow-lg rounded-5 bg-white reveal mb-5" style="min-height: 450px; padding-bottom: 100px !important;">
-            <div class="table-responsive" style="overflow: visible;">
+        <div class="d-flex flex-wrap align-items-center gap-2">
+            <input type="date" class="form-control rounded-pill px-3" id="dateFilter" aria-label="Filter orders by date" style="width: auto;">
+            <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3 d-none" id="clearDateFilter">Clear Date</button>
+            <span class="badge bg-soft text-dark border rounded-pill px-3 py-2 tabular-nums">
+                Total: <?= count($orders) ?>
+            </span>
+        </div>
+    </div>
+
+    <div class="surface-panel p-3 p-md-4">
+        <?php if (empty($orders)): ?>
+            <div class="text-center py-5">
+                <i class="bi bi-receipt fs-1 text-muted"></i>
+                <h2 class="h5 mt-3">No customer orders yet</h2>
+                <p class="text-muted mx-auto mb-0">Orders placed by customers will appear here grouped by date.</p>
+            </div>
+        <?php else: ?>
+            <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
                     <thead class="text-muted small text-uppercase">
                         <tr>
                             <th>Order ID</th>
-                            <th>Customer Name</th>
-                            <th>Date & Time</th>
-                            <th>Total Amount</th>
+                            <th>Customer</th>
+                            <th>Time</th>
+                            <th>Total</th>
                             <th>Status</th>
                             <th class="text-end">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php 
+                        <?php
                             $currentDate = null;
-                            foreach ($orders as $order): 
+                            foreach ($orders as $order):
                                 $orderDate = date('Y-m-d', strtotime($order['created_at']));
-                                if ($orderDate !== $currentDate): 
+                                if ($orderDate !== $currentDate):
                                     $currentDate = $orderDate;
-                                    $dailyTotal = 0;
-                                    foreach ($orders as $o) {
-                                        if (date('Y-m-d', strtotime($o['created_at'])) === $orderDate) $dailyTotal += $o['total_amount'];
-                                    }
                         ?>
                             <tr class="date-group-header" data-date="<?= $orderDate ?>">
-                                <td colspan="6" class="bg-light fw-bold text-primary py-3">
-                                    <div class="d-flex justify-content-between">
+                                <td colspan="6" class="bg-soft fw-bold text-primary py-3">
+                                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
                                         <span><?= date('F d, Y', strtotime($orderDate)) ?></span>
-                                        <span class="badge bg-secondary">Daily Revenue: ₱<?= number_format($dailyTotal, 2) ?></span>
+                                        <span class="badge bg-white text-dark border rounded-pill px-3 py-2 tabular-nums">
+                                            Daily Revenue: ₱<?= number_format($dailyTotals[$orderDate] ?? 0, 2) ?>
+                                        </span>
                                     </div>
                                 </td>
                             </tr>
