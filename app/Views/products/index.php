@@ -43,51 +43,73 @@
     </div>
 </div>
 
-    <!-- Full-Width Product Grid -->
+<div class="container pb-4">
+    <!-- Product Grid -->
     <?php if (empty($products)): ?>
-        <div class="text-center py-5 bg-white rounded-5 shadow-sm" data-aos="zoom-in">
-            <i class="bi bi-search fs-1 opacity-25"></i>
-            <h4 class="mt-4">No products found</h4>
-            <p class="text-muted">Check back later for fresh batches!</p>
+        <div class="text-center py-5 surface-panel">
+            <i class="bi bi-cup-hot fs-1 text-muted"></i>
+            <h2 class="h4 mt-3">No items in this category yet</h2>
+            <p class="text-muted mx-auto mb-4">We are preparing fresh batches. Browse all available items below.</p>
+            <a href="<?= base_url('menu') ?>" class="btn btn-primary rounded-pill px-4">View Full Menu</a>
         </div>
     <?php else: ?>
-        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4">
-            <?php foreach ($products as $index => $product): ?>
-                <div class="col" data-aos="fade-up" data-aos-delay="<?= ($index % 4) * 100 ?>">
-                    <div class="card h-100 p-0 border-0 shadow-sm overflow-hidden product-card-interactive" style="border-radius: 20px;">
-                        <div class="position-relative overflow-hidden">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4" id="productGridContainer">
+            <?php foreach ($products as $product): ?>
+                <?php
+                    $hasVariants = !empty($product['variant_count']) && (int) $product['variant_count'] > 0;
+                    $displayPrice = ($hasVariants && $product['min_price'] !== null)
+                        ? (float) $product['min_price']
+                        : (float) $product['price'];
+                    $inStock = (int) $product['stock_quantity'] > 0;
+                ?>
+                <div class="col menu-item-col" data-name="<?= esc(strtolower($product['name'] . ' ' . ($product['category_name'] ?? '') . ' ' . ($product['description'] ?? ''))) ?>">
+                    <article class="card h-100 p-3 d-flex flex-column product-card">
+                        <a href="<?= base_url('menu/' . $product['product_id']) ?>" class="position-relative d-block overflow-hidden rounded-3 mb-3 text-decoration-none">
                             <?php if ($product['image_url']): ?>
-                                <img src="<?= base_url($product['image_url']) ?>" class="card-img-top w-100 object-fit-cover" alt="<?= esc($product['name']) ?>" style="aspect-ratio: 1/1;">
+                                <img src="<?= base_url($product['image_url']) ?>" class="w-100 object-fit-cover product-img" alt="<?= esc($product['name']) ?>" style="aspect-ratio: 1/1;">
                             <?php else: ?>
-                                <div class="bg-light text-muted text-center d-flex align-items-center justify-content-center" style="aspect-ratio: 1/1;">
-                                    <i class="bi bi-image fs-1 opacity-10"></i>
+                                <div class="bg-soft text-muted d-flex align-items-center justify-content-center" style="aspect-ratio: 1/1;">
+                                    <i class="bi bi-image fs-1"></i>
                                 </div>
                             <?php endif; ?>
-                            <div class="position-absolute top-0 end-0 m-3 px-3 py-1 fw-bold rounded-pill price-badge-glass">
-                                ₱<?= number_format($product['price'], 2) ?>
+                            <?php if (!$inStock): ?>
+                                <span class="position-absolute bottom-0 start-0 m-2 badge bg-danger rounded-pill px-3 py-1">Out of Stock</span>
+                            <?php endif; ?>
+                        </a>
+
+                        <div class="d-flex flex-column flex-grow-1">
+                            <h2 class="h5 fw-bold mb-1">
+                                <a href="<?= base_url('menu/' . $product['product_id']) ?>" class="text-decoration-none text-dark"><?= esc(rtrim((string) $product['name'], '*')) ?></a>
+                            </h2>
+                            <p class="text-muted small mb-3 flex-grow-1">
+                                <?= esc($product['description'] ?: 'Handcrafted fresh daily at Pacudan\'s.') ?>
+                                <?php if (!empty($product['category_name'])): ?>
+                                    <span class="d-block text-amber fw-semibold mt-1"><?= esc($product['category_name']) ?></span>
+                                <?php endif; ?>
+                            </p>
+
+                            <div class="d-flex align-items-center justify-content-between pt-3 mb-3 border-top" style="border-color: var(--border-tile) !important;">
+                                <span class="h5 fw-bold text-primary mb-0 tabular-nums">
+                                    <?= $hasVariants ? 'From ' : '' ?>₱<?= number_format($displayPrice, 2) ?>
+                                </span>
+                                <a href="<?= base_url('menu/' . $product['product_id']) ?>" class="small fw-bold text-primary text-decoration-none">
+                                    Customize <i class="bi bi-chevron-right"></i>
+                                </a>
                             </div>
+
+                            <?php if ($inStock): ?>
+                                <form action="<?= base_url('cart/add') ?>" method="post" class="direct-add-form">
+                                    <?= csrf_field() ?>
+                                    <input type="hidden" name="product_id" value="<?= $product['product_id'] ?>">
+                                    <button type="submit" class="btn btn-primary rounded-pill btn-sm fw-bold w-100 py-2 action-btn">
+                                        <i class="bi bi-bag-plus me-1"></i>Add to Bag
+                                    </button>
+                                </form>
+                            <?php else: ?>
+                                <button type="button" class="btn btn-secondary rounded-pill btn-sm fw-bold w-100 py-2" disabled>Out of Stock</button>
+                            <?php endif; ?>
                         </div>
-                        <div class="card-body p-4 text-center">
-                            <h6 class="fw-bold mb-1 text-truncate" style="font-family: 'Playfair Display', serif; color: var(--text-main);"><?= esc($product['name']) ?></h6>
-                            <p class="text-muted small mb-0">Local Camiguin Specialty</p>
-                            
-                            <!-- Interaction View Footer -->
-                            <div class="interaction-overlay p-4">
-                                <div class="d-grid gap-2">
-                                    <?php if ($product['stock_quantity'] > 0): ?>
-                                        <form action="<?= base_url('cart/add') ?>" method="post" class="direct-add-form">
-                                            <?= csrf_field() ?>
-                                            <input type="hidden" name="product_id" value="<?= $product['product_id'] ?>">
-                                            <button type="submit" class="btn btn-primary rounded-pill btn-sm fw-bold action-btn w-100">ADD TO CART</button>
-                                        </form>
-                                    <?php else: ?>
-                                        <button class="btn btn-secondary rounded-pill btn-sm fw-bold action-btn" disabled>OUT OF STOCK</button>
-                                    <?php endif; ?>
-                                    <a href="<?= base_url('menu/' . $product['product_id']) ?>" class="text-decoration-none small fw-bold mt-2" style="color: var(--accent-color);">LEARN MORE</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </article>
                 </div>
             <?php endforeach; ?>
         </div>
