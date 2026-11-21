@@ -2,50 +2,46 @@
 
 <?= $this->section('content') ?>
 
-<div id="menu-grid" class="container py-5">
-    <!-- Header & Menu Toggle -->
-    <div class="d-flex align-items-center mb-5" style="position: relative; z-index: 500; margin-top: 100px;">
-        <button class="btn p-0 border-0 me-4 d-flex align-items-center justify-content-center hamburger-trigger" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuSidebar" aria-controls="menuSidebar" style="width: 48px; height: 48px; z-index: 1100;">
-            <i class="bi bi-list fs-1" style="color: var(--accent-color);"></i>
-        </button>
-        <div class="d-flex flex-column justify-content-center">
-            <h2 class="display-5 mb-0 fw-bold" style="font-family: 'Playfair Display', serif; line-height: 1.2;"><?= esc($title) ?></h2>
-            <p class="text-muted mb-0 small text-uppercase tracking-widest">Explore our handcrafted delights</p>
+<div id="menu-grid" class="container pt-4 pb-2">
+    <!-- Menu Header & Live Search -->
+    <div class="row align-items-end g-3 mb-2">
+        <div class="col-lg-7">
+            <h1 class="display-5 mb-2 fw-bold"><?= esc($title) ?></h1>
+            <p class="text-muted mb-0">
+                <?= isset($category) && !empty($category['description']) ? esc($category['description']) : 'Handcrafted espresso, blended drinks, and freshly baked Camiguin pastries.' ?>
+            </p>
         </div>
-        <div class="ms-auto d-none d-md-block">
-            <span class="badge bg-white text-dark shadow-sm border rounded-pill px-4 py-2 small fw-bold" style="color: var(--accent-color) !important;">
-                <?= count($products) ?> items
-            </span>
+        <div class="col-lg-5">
+            <div class="input-group surface-panel p-1 rounded-pill">
+                <span class="input-group-text bg-transparent border-0 ps-3 text-muted"><i class="bi bi-search"></i></span>
+                <input type="search" id="menuSearchInput" class="form-control border-0 bg-transparent shadow-none" placeholder="Search coffee, cakes, pastries..." aria-label="Search menu items">
+                <span class="badge bg-soft text-dark rounded-pill px-3 py-2 align-self-center me-2 tabular-nums" id="menuItemCount">
+                    <?= count($products) ?> items
+                </span>
+            </div>
         </div>
     </div>
+</div>
 
-    <!-- Off-canvas Sidebar -->
-    <div class="offcanvas offcanvas-start border-0 shadow-lg" tabindex="-1" id="menuSidebar" aria-labelledby="menuSidebarLabel" style="background-color: var(--accent-color); width: 320px;">
-        <div class="offcanvas-header p-4 border-bottom border-white border-opacity-10">
-            <h5 class="offcanvas-title text-white fw-bold" id="menuSidebarLabel" style="font-family: 'Playfair Display', serif; letter-spacing: 1px;">MENU CATEGORIES</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body p-0">
-            <div class="nav flex-column py-3">
-                <a href="<?= base_url('menu') ?>" class="nav-link px-4 py-3 text-white border-bottom border-white border-opacity-5 d-flex align-items-center justify-content-between <?= !isset($category) ? 'active-drawer-link' : '' ?>">
-                    <span>All Delights</span>
-                    <i class="bi bi-chevron-right small opacity-50"></i>
+<!-- Sticky Horizontal Category Bar (stays visible while scrolling products) -->
+<div class="sticky-category-bar mb-4" id="stickyCategoryBar">
+    <div class="container">
+        <div class="cat-strip-wrap">
+            <nav class="d-flex align-items-center gap-2 overflow-auto py-3 pe-4" aria-label="Menu categories">
+                <a href="<?= base_url('menu') ?>" class="btn <?= !isset($category) ? 'btn-primary' : 'btn-outline-primary' ?> rounded-pill px-4 py-2 flex-shrink-0">
+                    All Delights
                 </a>
                 <?php foreach ($categories as $cat): ?>
-                    <a href="<?= base_url('category/' . $cat['category_id']) ?>" 
-                       class="nav-link px-4 py-3 text-white border-bottom border-white border-opacity-5 d-flex align-items-center justify-content-between <?= (isset($category) && $category['category_id'] == $cat['category_id']) ? 'active-drawer-link' : '' ?>">
-                        <span><?= esc($cat['name']) ?></span>
-                        <i class="bi bi-chevron-right small opacity-50"></i>
+                    <?php $isActiveCat = isset($category) && (int) $category['category_id'] === (int) $cat['category_id']; ?>
+                    <a href="<?= base_url('category/' . $cat['category_id']) ?>"
+                       class="btn <?= $isActiveCat ? 'btn-primary' : 'btn-outline-primary' ?> rounded-pill px-4 py-2 flex-shrink-0">
+                        <?= esc($cat['name']) ?>
                     </a>
                 <?php endforeach; ?>
-            </div>
-            
-            <div class="mt-auto p-4 opacity-50 text-white small">
-                <p class="mb-1"><i class="bi bi-geo-alt me-2"></i> Mambajao, Camiguin</p>
-                <p class="mb-0"><i class="bi bi-clock me-2"></i> 8:00 AM - 9:00 PM</p>
-            </div>
+            </nav>
         </div>
     </div>
+</div>
 
     <!-- Full-Width Product Grid -->
     <?php if (empty($products)): ?>
