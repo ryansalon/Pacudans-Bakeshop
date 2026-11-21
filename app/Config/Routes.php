@@ -31,8 +31,7 @@ $routes->get('favorites', 'Favorites::index');
 $routes->post('favorites/toggle/(:num)', 'Favorites::toggle/$1');
 $routes->get('favorites/remove/(:num)', 'Favorites::remove/$1');
 $routes->get('favorites/check/(:num)', 'Favorites::check/$1');
-$routes->get('api/notifications/user', 'Home::checkOrderStatus');
-$routes->get('api/notifications/count', 'Home::getNotificationCount');
+
 $routes->get('api/notifications/unread', 'NotificationController::fetchUnread');
 $routes->post('api/notifications/mark-read/(:num)', 'NotificationController::markAsRead/$1');
 $routes->post('api/notifications/mark-all-read', 'NotificationController::markAllAsRead');
@@ -44,7 +43,8 @@ $routes->group('admin', ['filter' => 'adminAuth'], function($routes) {
     $routes->get('products', 'Admin::products');
     $routes->get('products/add', 'Admin::addProduct');
     $routes->post('products/store', 'Admin::storeProduct');
-    $routes->get('categories', 'Admin::categories');
+    $routes->post('products/update', 'Admin::updateProduct');
+    $routes->post('products/delete/(:num)', 'Admin::deleteProduct/$1');
     $routes->get('orders', 'Admin::orders');
     $routes->get('orders/(:num)', 'Admin::viewOrder/$1');
     $routes->post('orders/update-status', 'Admin::updateOrderStatus');
