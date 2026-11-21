@@ -87,10 +87,9 @@ class Cart extends BaseController
             return redirect()->to(base_url('checkout?direct=1'));
         }
 
-        // "Add to Cart" accumulates as normal
         $cart = $session->get('cart') ?? [];
         if (isset($cart[$cartKey])) {
-            $cart[$cartKey]['quantity'] += $quantity;
+            $cart[$cartKey]['quantity'] = min((int) $product['stock_quantity'], $cart[$cartKey]['quantity'] + $quantity);
         } else {
             $cart[$cartKey] = [
                 'id'         => $product['product_id'],
@@ -99,7 +98,7 @@ class Cart extends BaseController
                 'size'       => $sizeName,
                 'price'      => $cartPrice,
                 'image'      => $product['image_url'],
-                'quantity'   => $quantity
+                'quantity'   => min($quantity, (int) $product['stock_quantity'])
             ];
         }
 
@@ -110,29 +109,31 @@ class Cart extends BaseController
             $totalCount += $item['quantity'];
         }
 
+        $addedMsg = 'Added ' . $product['name'] . ($sizeName ? " ($sizeName)" : '') . ' to cart.';
+
         if ($this->request->isAJAX()) {
             return $this->response->setJSON([
-                'success' => true, 
-                'message' => 'Added ' . $product['name'] . ($sizeName ? " ($sizeName)" : "") . ' to cart!',
+                'success'    => true,
+                'message'    => $addedMsg,
                 'cart_count' => $totalCount
             ]);
         }
 
-        return redirect()->to(base_url('cart'));
+        return redirect()->to(base_url('cart'))->with('msg', $addedMsg);
     }
 
     public function remove($key)
     {
         $session = session();
         $cart = $session->get('cart') ?? [];
-        
+
         if (isset($cart[$key])) {
             $productName = $cart[$key]['name'];
             unset($cart[$key]);
             $session->set('cart', $cart);
             return redirect()->to(base_url('cart'))->with('msg', $productName . ' removed from cart.');
         }
-        
+
         return redirect()->to(base_url('cart'));
     }
 
@@ -140,10 +141,11 @@ class Cart extends BaseController
     {
         $session = session();
         $cart = $session->get('cart') ?? [];
-        $quantities = $this->request->getPost('quantity');
+        $quantities = $this->request->getPost('quantity') ?? [];
         $removedCount = 0;
 
         foreach ($quantities as $key => $qty) {
+            $qty = (int) $qty;
             if (isset($cart[$key])) {
                 if ($qty <= 0) {
                     unset($cart[$key]);
@@ -155,14 +157,14 @@ class Cart extends BaseController
         }
 
         $session->set('cart', $cart);
-        $message = ($removedCount > 0) ? 'Cart updated and items removed.' : 'Cart updated successfully.';
+        $message = ($removedCount > 0) ? 'Cart updated and items removed.' : 'Cart quantities updated.';
         return redirect()->to(base_url('cart'))->with('msg', $message);
     }
 
     public function checkout()
     {
         if (!session()->get('isLoggedIn')) {
-            return redirect()->to(base_url('login'))->with('error', 'Please login to checkout.');
+            return redirect()->to(base_url('login'))->with('error', 'Please sign in to proceed to checkout.');
         }
 
         $isDirect = $this->request->getGet('direct') === '1';
