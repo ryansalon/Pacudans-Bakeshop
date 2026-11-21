@@ -59,18 +59,19 @@ class Auth extends BaseController
         ];
 
         if ($this->validate($rules)) {
-            $data = [
-                'name'     => $this->request->getVar('name'),
-                'email'    => $this->request->getVar('email'),
-                'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
+            $model->save([
+                'name'     => trim((string) $this->request->getVar('name')),
+                'email'    => trim((string) $this->request->getVar('email')),
+                'password' => password_hash((string) $this->request->getVar('password'), PASSWORD_DEFAULT),
                 'role'     => 'customer'
-            ];
-            $model->save($data);
-            return redirect()->to(base_url('login'))->with('registration_success', 'Your account has been created successfully! You can now log in to start ordering your favorite treats.');
-        } else {
-            $data['validation'] = $this->validator;
-            echo view('auth/register', $data);
+            ]);
+            return redirect()->to(base_url('login'))->with('msg', 'Account created! You can now sign in and start ordering.');
         }
+
+        return view('auth/register', [
+            'title'      => 'Create Account',
+            'validation' => $this->validator
+        ]);
     }
 
     public function profile()
@@ -91,6 +92,32 @@ class Auth extends BaseController
         return view('profile', $data);
     }
 
+    public function updateProfile()
+    {
+        if (!session()->get('isLoggedIn')) {
+            return redirect()->to(base_url('login'));
+        }
+
+        $userId = session()->get('user_id');
+        $name = trim((string) $this->request->getPost('name'));
+        $phone = trim((string) $this->request->getPost('phone'));
+        $address = trim((string) $this->request->getPost('address'));
+
+        if (strlen($name) < 3) {
+            return redirect()->back()->with('error', 'Name must be at least 3 characters.');
+        }
+
+        $userModel = new UserModel();
+        $userModel->update($userId, [
+            'name'    => $name,
+            'phone'   => $phone,
+            'address' => $address
+        ]);
+
+        session()->set('name', $name);
+        return redirect()->to(base_url('profile'))->with('msg', 'Profile details updated.');
+    }
+
     public function orderDetail($id)
     {
         if (!session()->get('isLoggedIn')) {
@@ -98,7 +125,7 @@ class Auth extends BaseController
         }
 
         $orderModel = new OrderModel();
-        $orderItemModel = new \App\Models\OrderItemModel();
+        $orderItemModel = new OrderItemModel();
 
         $order = $orderModel->where('order_id', $id)
                             ->where('user_id', session()->get('user_id'))
@@ -113,13 +140,11 @@ class Auth extends BaseController
                                 ->where('order_id', $id)
                                 ->findAll();
 
-        $data = [
+        return view('order_detail', [
             'title' => 'Order Details #' . $id,
             'order' => $order,
             'items' => $items
-        ];
-
-        return view('order_detail', $data);
+        ]);
     }
 
     public function logout()
