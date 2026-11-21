@@ -73,71 +73,75 @@
                                 </td>
                             </tr>
                         <?php endif; ?>
+                            <?php
+                                $st = strtolower($order['status']);
+                                $badgeClass = $st === 'pending' ? 'bg-warning text-dark' : ($st === 'completed' ? 'bg-success' : 'bg-danger');
+                            ?>
                             <tr class="date-group" data-date="<?= $orderDate ?>">
-                                <td class="fw-bold text-primary">#<?= $order['order_id'] ?></td>
-                                <td><?= esc($order['customer_name']) ?></td>
-                                <td class="text-muted small"><?= date('h:i A', strtotime($order['created_at'])) ?></td>
-                                <td class="fw-bold">₱<?= number_format($order['total_amount'], 2) ?></td>
+                                <td class="fw-bold text-primary tabular-nums">#<?= $order['order_id'] ?></td>
+                                <td class="fw-semibold"><?= esc($order['customer_name']) ?></td>
+                                <td class="text-muted small tabular-nums"><?= date('h:i A', strtotime($order['created_at'])) ?></td>
+                                <td class="fw-bold tabular-nums">₱<?= number_format($order['total_amount'], 2) ?></td>
                                 <td>
-                                    <span class="badge rounded-pill px-3 py-2 bg-<?= strtolower($order['status']) == 'pending' ? 'warning text-dark' : 'success' ?>">
-                                        <?= ucfirst($order['status']) ?>
+                                    <span class="badge rounded-pill px-3 py-2 <?= $badgeClass ?>">
+                                        <?= esc(ucfirst($order['status'])) ?>
                                     </span>
                                 </td>
                                 <td class="text-end">
-                                    <div class="dropdown">
-                                        <button class="btn btn-primary btn-sm rounded-pill px-4 dropdown-toggle" type="button" data-bs-toggle="dropdown">Manage</button>
-                                        <ul class="dropdown-menu dropdown-menu-end p-2">
-                                            <li><a class="dropdown-item" href="<?= base_url('admin/orders/' . $order['order_id']) ?>">View Details</a></li>
-                                        </ul>
-                                    </div>
+                                    <a href="<?= base_url('admin/orders/' . $order['order_id']) ?>" class="btn btn-primary btn-sm rounded-pill px-3">
+                                        View Order
+                                    </a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
-        </div>
+
+            <div id="noSalesMsg" class="text-center py-5 d-none">
+                <i class="bi bi-calendar-x fs-1 text-muted"></i>
+                <h2 class="h5 mt-3">No orders on this date</h2>
+                <p class="text-muted mx-auto mb-0">Try selecting another day or clear the date filter.</p>
+            </div>
+        <?php endif; ?>
     </div>
 </div>
+
 <script>
-    document.getElementById('dateFilter').addEventListener('change', function() {
-        const selectedDate = this.value;
+    const dateFilter = document.getElementById('dateFilter');
+    const clearBtn = document.getElementById('clearDateFilter');
+    const noSalesMsg = document.getElementById('noSalesMsg');
+
+    function applyDateFilter() {
+        const selectedDate = dateFilter ? dateFilter.value : '';
         const headers = document.querySelectorAll('.date-group-header');
         const rows = document.querySelectorAll('.date-group');
         let hasMatches = false;
 
-        // Reset visibility
-        document.querySelectorAll('tr').forEach(el => el.style.display = "");
+        if (clearBtn) clearBtn.classList.toggle('d-none', !selectedDate);
 
-        if (selectedDate !== "") {
-            headers.forEach(h => {
-                if (h.getAttribute('data-date') !== selectedDate) {
-                    h.style.display = "none";
-                }
-            });
-            rows.forEach(r => {
-                if (r.getAttribute('data-date') !== selectedDate) {
-                    r.style.display = "none";
-                } else {
-                    hasMatches = true;
-                }
-            });
-        }
+        headers.forEach(h => {
+            h.style.display = (!selectedDate || h.getAttribute('data-date') === selectedDate) ? '' : 'none';
+        });
 
-        let emptyMsg = document.getElementById('noSalesMsg');
-        if (!emptyMsg) {
-            emptyMsg = document.createElement('div');
-            emptyMsg.id = 'noSalesMsg';
-            emptyMsg.className = 'text-center py-5';
-            emptyMsg.innerHTML = '<i class="bi bi-cart-x fs-1 text-muted"></i><h4 class="mt-3">No sales for this date.</h4>';
-            document.querySelector('.card').appendChild(emptyMsg);
+        rows.forEach(r => {
+            const match = !selectedDate || r.getAttribute('data-date') === selectedDate;
+            r.style.display = match ? '' : 'none';
+            if (match) hasMatches = true;
+        });
+
+        if (noSalesMsg) {
+            noSalesMsg.classList.toggle('d-none', !(selectedDate && !hasMatches));
         }
-        emptyMsg.style.display = (selectedDate !== "" && !hasMatches) ? '' : 'none';
-    });
+    }
+
+    if (dateFilter) dateFilter.addEventListener('change', applyDateFilter);
+    if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+            dateFilter.value = '';
+            applyDateFilter();
+        });
+    }
 </script>
-<style>
-    .table-responsive { overflow: visible !important; }
-    .dropdown-item:active { background-color: var(--primary-mocha) !important; }
-</style>
 
 <?= $this->endSection() ?>
