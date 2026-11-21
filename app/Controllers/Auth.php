@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\UserModel;
 use App\Models\OrderModel;
+use App\Models\OrderItemModel;
 
 class Auth extends BaseController
 {
@@ -12,37 +13,39 @@ class Auth extends BaseController
         if (session()->get('isLoggedIn')) {
             return redirect()->to(base_url());
         }
-        return view('auth/login', ['title' => 'Login']);
+        return view('auth/login', ['title' => 'Sign In']);
     }
 
     public function attemptLogin()
     {
         $session = session();
         $model = new UserModel();
-        $email = $this->request->getVar('email');
-        $password = $this->request->getVar('password');
-        
+        $email = trim((string) $this->request->getVar('email'));
+        $password = (string) $this->request->getVar('password');
+
         $user = $model->where('email', $email)->first();
 
         if ($user && password_verify($password, $user['password'])) {
-            $sessionData = [
+            $session->set([
                 'user_id'    => $user['user_id'],
                 'name'       => $user['name'],
                 'email'      => $user['email'],
                 'role'       => $user['role'],
                 'isLoggedIn' => true,
-            ];
-            $session->set($sessionData);
-            return redirect()->to(base_url());
-        } else {
-            $session->setFlashdata('error', 'Invalid Email or Password');
-            return redirect()->to(base_url('login'));
+            ]);
+            return redirect()->to(base_url())->with('msg', 'Welcome back, ' . explode(' ', $user['name'])[0] . '!');
         }
+
+        $session->setFlashdata('error', 'Invalid email address or password.');
+        return redirect()->to(base_url('login'));
     }
 
     public function register()
     {
-        return view('auth/register', ['title' => 'Register']);
+        if (session()->get('isLoggedIn')) {
+            return redirect()->to(base_url());
+        }
+        return view('auth/register', ['title' => 'Create Account']);
     }
 
     public function attemptRegister()
