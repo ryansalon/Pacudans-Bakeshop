@@ -6,6 +6,9 @@ use App\Models\ProductModel;
 use App\Models\OrderModel;
 use App\Models\OrderItemModel;
 use App\Models\ProductVariantModel;
+use App\Models\InventoryLogModel;
+use App\Models\UserModel;
+use App\Models\NotificationModel;
 
 class Cart extends BaseController
 {
@@ -13,13 +16,11 @@ class Cart extends BaseController
     {
         $session = session();
         $cart = $session->get('cart') ?? [];
-        
-        $data = [
+
+        return view('cart/index', [
             'cart'  => $cart,
             'title' => 'Shopping Cart'
-        ];
-
-        return view('cart/index', $data);
+        ]);
     }
 
     public function add()
@@ -27,15 +28,25 @@ class Cart extends BaseController
         $session = session();
         $productModel = new ProductModel();
         $variantModel = new ProductVariantModel();
-        
+
         $productId = $this->request->getPost('product_id');
         $variantId = $this->request->getPost('variant_id');
-        $quantity = (int)($this->request->getPost('quantity') ?? 1);
-        $isBuyNow = (string)$this->request->getPost('buy_now') === '1';
-        
+        $quantity = max(1, (int) ($this->request->getPost('quantity') ?? 1));
+        $isBuyNow = (string) $this->request->getPost('buy_now') === '1';
+
         $product = $productModel->find($productId);
         if (!$product) {
-            return $this->response->setJSON(['success' => false, 'message' => 'Product not found.']);
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON(['success' => false, 'message' => 'Product not found.']);
+            }
+            return redirect()->back()->with('error', 'Product not found.');
+        }
+
+        if ((int) $product['stock_quantity'] <= 0) {
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON(['success' => false, 'message' => 'This item is currently out of stock.']);
+            }
+            return redirect()->back()->with('error', 'This item is currently out of stock.');
         }
 
         $cartPrice = $product['price'];
@@ -43,19 +54,25 @@ class Cart extends BaseController
         $cartKey = 'p' . $productId;
 
         if ($variantId) {
-            $variant = $variantModel->find($variantId);
+            $variant = $variantModel->where('product_id', $productId)->find($variantId);
             if ($variant) {
                 $cartPrice = $variant['price'];
                 $sizeName = $variant['size_name'];
                 $cartKey = 'v' . $variantId;
             }
+        } else {
+            // If added from grid and variants exist, default to the lowest-priced variant
+            $defaultVariant = $variantModel->where('product_id', $productId)->orderBy('price', 'ASC')->first();
+            if ($defaultVariant) {
+                $variantId = $defaultVariant['variant_id'];
+                $cartPrice = $defaultVariant['price'];
+                $sizeName = $defaultVariant['size_name'];
+                $cartKey = 'v' . $variantId;
+            }
         }
 
         if ($isBuyNow) {
-            // Completely clear the main cart to ensure "Direct Order" 
-            // only includes this specific item.
-            $session->remove('cart');
-            
+            // Store direct_order separately without destroying the user's main cart
             $directItem = [
                 'id'         => $product['product_id'],
                 'variant_id' => $variantId,
@@ -63,9 +80,9 @@ class Cart extends BaseController
                 'size'       => $sizeName,
                 'price'      => $cartPrice,
                 'image'      => $product['image_url'],
-                'quantity'   => $quantity
+                'quantity'   => min($quantity, (int) $product['stock_quantity'])
             ];
-            
+
             $session->set('direct_order', $directItem);
             return redirect()->to(base_url('checkout?direct=1'));
         }
