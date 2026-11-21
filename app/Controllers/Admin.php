@@ -230,9 +230,7 @@ class Admin extends BaseController
             'title' => 'Order Details #' . $id,
             'order' => $order,
             'items' => $items
-        ];
-
-        return view('admin/orders/view', $data);
+        ]);
     }
 
     public function updateOrderStatus()
@@ -242,12 +240,11 @@ class Admin extends BaseController
         $status = $this->request->getPost('status');
 
         $order = $orderModel->find($orderId);
-        
+
         if (!$order) {
             return redirect()->back()->with('error', 'Order not found.');
         }
 
-        // Allow update only if currently pending OR if status is somehow empty
         $currentStatus = strtolower($order['status']);
         if ($currentStatus !== 'pending' && !empty($currentStatus)) {
             return redirect()->back()->with('error', 'Only pending orders can be updated.');
@@ -258,27 +255,33 @@ class Admin extends BaseController
             return redirect()->back()->with('error', 'Update failed: ' . implode(', ', $errors));
         }
 
-        // Task: Trigger Logic - User Notification
         if ($status === 'completed') {
-            $notifModel = new \App\Models\NotificationModel();
+            $notifModel = new NotificationModel();
             $notifModel->insert([
                 'user_id' => $order['user_id'],
-                'message' => "Your order is complete! Delivery is on the way. Please prepare " . number_format($order['total_amount'], 2) . " pesos.",
+                'message' => "Your order #$orderId is complete! Delivery is on the way. Please prepare ₱" . number_format($order['total_amount'], 2) . ".",
+                'link'    => 'profile/order/' . $orderId
+            ]);
+        } elseif ($status === 'cancelled') {
+            $notifModel = new NotificationModel();
+            $notifModel->insert([
+                'user_id' => $order['user_id'],
+                'message' => "Your order #$orderId has been cancelled. Contact us if you need assistance.",
                 'link'    => 'profile/order/' . $orderId
             ]);
         }
 
-        return redirect()->back()->with('msg', 'Order status updated to ' . ucfirst($status));
+        return redirect()->back()->with('msg', 'Order status updated to ' . ucfirst($status) . '.');
     }
 
     public function checkNewOrders()
     {
         $lastCheck = $this->request->getGet('last_check');
         $orderModel = new OrderModel();
-        
+
         $newOrders = $orderModel->where('created_at >', $lastCheck)
                                 ->countAllResults();
-        
+
         return $this->response->setJSON(['new_orders' => $newOrders]);
     }
 }
