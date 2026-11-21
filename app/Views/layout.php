@@ -212,246 +212,259 @@
             background-color: rgba(246, 242, 233, 0.1);
         }
 
-        .sidebar-link:hover {
-            background: var(--secondary-accent);
-            color: #ffffff !important;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        .nav-icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--jade-tint) !important;
         }
 
-        .sidebar-link.active { 
-            background: var(--accent-color); 
-            color: #ffffff !important; 
-            box-shadow: 0 10px 25px rgba(61, 43, 31, 0.2); 
-        }
-
-        /* Mobile Optimization */
-        @media (max-width: 991.98px) {
-            .navbar { padding: 1rem 0 !important; background: #fff !important; box-shadow: 0 5px 20px rgba(0,0,0,0.05) !important; }
-            body.is-home .navbar:not(.scrolled) .nav-link,
-            body.is-home .navbar:not(.scrolled) .navbar-brand,
-            body.is-home .navbar:not(.scrolled) .bi-bag,
-            body.is-home .navbar:not(.scrolled) .bi-list { color: var(--primary-mocha) !important; }
-            .navbar-collapse { background: #fff; margin-top: 15px; border-radius: 24px; padding: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.1); border: 1px solid rgba(176, 141, 87, 0.1); }
-            .section-padding { padding: 60px 0; }
-            .display-1 { font-size: 3rem !important; }
-            .display-4 { font-size: 2.2rem !important; }
-            .display-5 { font-size: 1.8rem !important; }
-            .footer { border-radius: 40px 40px 0 0; padding: 60px 0 40px; }
-            .main-content { padding-top: 80px; }
-            body.is-home .main-content { padding-top: 0; }
-        }
-
-        @media (max-width: 575.98px) {
-            .container { padding-left: 25px; padding-right: 25px; }
-            .btn-lg { width: 100%; margin-bottom: 10px; }
-            .card { border-radius: 24px; }
-        }
-
-        /* Modernized SweetAlert2 Styling */
-        .swal2-popup.premium-swal {
-            border-radius: 24px !important;
-            padding: 2.5rem 1.5rem !important;
-            background: #ffffff !important;
-            border: none !important;
-            box-shadow: 0 25px 80px rgba(61, 43, 31, 0.18) !important;
-        }
-
-        .swal2-title {
-            font-family: 'Outfit', sans-serif !important;
-            font-weight: 800 !important;
-            color: var(--primary-mocha) !important;
-            font-size: 1.75rem !important;
-            margin-bottom: 0.5rem !important;
-        }
-
-        .swal2-html-container {
-            font-family: 'Plus Jakarta Sans', sans-serif !important;
-            color: #555 !important;
-            font-size: 1.05rem !important;
-            line-height: 1.6 !important;
-        }
-
-        .swal2-icon {
-            border-width: 3px !important;
-            margin: 0 auto 1.5rem !important;
-        }
-
-        .swal2-actions {
-            margin-top: 2rem !important;
-            gap: 12px !important;
-        }
-
-        .swal2-confirm.premium-confirm {
-            background: var(--accent-color) !important;
-            color: #ffffff !important;
-            border-radius: 100px !important;
-            padding: 14px 40px !important;
-            font-weight: 700 !important;
-            font-size: 1rem !important;
-            letter-spacing: 0.5px !important;
-            transition: all 0.3s ease !important;
-            border: none !important;
-        }
-
-        .swal2-confirm.premium-confirm:hover {
-            background: var(--secondary-accent) !important;
-            transform: translateY(-2px) !important;
-            box-shadow: 0 8px 20px rgba(176, 141, 87, 0.2) !important;
+        .nav-icon-btn:hover {
+            background-color: rgba(246, 242, 233, 0.14);
             color: #ffffff !important;
         }
 
-        .swal2-cancel.premium-cancel {
-            background: #f1f1f1 !important;
-            color: var(--accent-color) !important;
-            border-radius: 100px !important;
-            padding: 14px 40px !important;
-            font-weight: 700 !important;
-            font-size: 1rem !important;
-            transition: all 0.3s ease !important;
-            border: 2px solid var(--accent-color) !important;
+        .nav-bag-pill {
+            background-color: var(--amber-cta);
+            color: var(--ink-main) !important;
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 0.5rem 1.1rem;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            text-decoration: none;
+            transition: background-color 0.2s ease, transform 0.2s ease;
         }
 
-        .swal2-cancel.premium-cancel:hover {
-            background: #e5e5e5 !important;
-            color: var(--accent-color) !important;
+        .nav-bag-pill:hover {
+            background-color: #F59E0B;
+            color: var(--ink-main) !important;
+            transform: translateY(-1px);
         }
 
-        /* Sileo-Inspired Premium Notification - Glassmorphism & Pill Shape */
-        .swal2-popup.swal2-toast.premium-toast {
-            background: rgba(255, 255, 255, 0.9) !important;
-            backdrop-filter: blur(20px) saturate(180%) !important;
-            -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-            border-radius: 100px !important;
-            padding: 10px 24px !important;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08) !important;
-            border: 1px solid rgba(255, 255, 255, 0.5) !important;
-            margin-top: 15px !important;
-            min-width: 300px !important;
-            display: flex !important;
-            align-items: center !important;
-            overflow: visible !important;
+        .counter-badge {
+            background: var(--amber-cta);
+            color: var(--ink-main);
+            font-size: 0.68rem;
+            padding: 2px 6px;
+            border-radius: 999px;
+            border: 2px solid var(--jade-deep);
+            font-weight: 800;
+            line-height: 1.1;
         }
 
-        /* Physics-based entry animation that doesn't break SweetAlert's exit */
-        div:where(.swal2-container).swal2-backdrop-show .premium-toast {
-            animation: sileo-bounce 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.1) forwards;
+        /* Layout Spacing */
+        .main-content {
+            min-height: 78vh;
+            padding-top: 96px;
+            padding-bottom: 72px;
         }
 
-        @keyframes sileo-bounce {
-            0% { transform: translateY(-20px) scale(0.9); opacity: 0; }
-            100% { transform: translateY(0) scale(1); opacity: 1; }
+        body.is-home .main-content {
+            padding-top: 0;
         }
 
-        .swal2-toast .swal2-title {
-            color: #1d1d1f !important;
-            font-size: 0.95rem !important;
-            font-weight: 600 !important;
-            margin: 0 10px !important;
-            font-family: 'Plus Jakarta Sans', sans-serif !important;
-            letter-spacing: -0.2px !important;
-            padding: 0 !important;
+        /* Buttons & Controls */
+        .btn-primary {
+            background-color: var(--jade-deep);
+            color: var(--plaster-bg) !important;
+            border: 2px solid var(--jade-deep);
+            padding: 11px 26px;
+            border-radius: 999px;
+            font-weight: 700;
+            transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        /* Fix broken icon animations & alignment */
-        .swal2-toast .swal2-icon {
-            margin: 0 !important;
-            min-width: 24px !important;
-            height: 24px !important;
-            width: 24px !important;
-            border: none !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            overflow: visible !important;
+        .btn-primary:hover,
+        .btn-primary:active,
+        .btn-primary:focus {
+            background-color: var(--jade-hover) !important;
+            border-color: var(--jade-hover) !important;
+            color: #ffffff !important;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 18px rgba(20, 59, 49, 0.22) !important;
         }
 
-        /* High-Definition SVG Success Icon (Sileo/iOS Style) */
-        .swal2-toast .swal2-icon.swal2-success {
-            background-color: #34c759 !important; /* iOS Green */
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23ffffff' viewBox='0 0 16 16'%3E%3Cpath d='M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.446z'/%3E%3C/svg%3E") !important;
-            background-repeat: no-repeat !important;
-            background-position: center !important;
-            background-size: 60% !important;
-            border-radius: 50% !important;
-            border: none !important;
+        .btn-amber {
+            background-color: var(--amber-cta);
+            color: var(--ink-main) !important;
+            border: 2px solid var(--amber-cta);
+            padding: 12px 28px;
+            border-radius: 999px;
+            font-weight: 800;
+            transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
         }
 
-        /* High-Definition SVG Error Icon (Sileo/iOS Style) */
-        .swal2-toast .swal2-icon.swal2-error {
-            background-color: #ff3b30 !important; /* iOS Red */
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23ffffff' viewBox='0 0 16 16'%3E%3Cpath d='M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z'/%3E%3C/svg%3E") !important;
-            background-repeat: no-repeat !important;
-            background-position: center !important;
-            background-size: 50% !important;
-            border-radius: 50% !important;
-            border: none !important;
+        .btn-amber:hover,
+        .btn-amber:focus {
+            background-color: #F59E0B !important;
+            border-color: #F59E0B !important;
+            color: var(--ink-main) !important;
+            transform: translateY(-1px);
         }
 
-        /* Disable all SWAL default icon junk and pseudo-elements */
-        .swal2-toast .swal2-icon::before,
-        .swal2-toast .swal2-icon::after,
-        .swal2-toast .swal2-icon *,
-        .swal2-toast .swal2-icon *::before,
-        .swal2-toast .swal2-icon *::after {
-            display: none !important;
-            content: none !important;
+        .btn-outline-primary {
+            border: 1.5px solid var(--jade-deep);
+            color: var(--jade-deep);
+            background-color: transparent;
+            border-radius: 999px;
+            font-weight: 700;
+            padding: 10px 24px;
+            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
         }
 
-        .swal2-timer-progress-bar {
-            background: rgba(0, 0, 0, 0.05) !important;
-            height: 2px !important;
-            border-radius: 100px !important;
+        .btn-outline-primary:hover,
+        .btn-outline-primary:active,
+        .btn-outline-primary.active,
+        .btn-check:checked + .btn-outline-primary {
+            background-color: var(--jade-deep) !important;
+            border-color: var(--jade-deep) !important;
+            color: var(--plaster-bg) !important;
         }
 
-        /* Notification Dropdown Styling */
+        .btn-ghost-jade {
+            border: 1.5px solid rgba(203, 224, 216, 0.55);
+            color: var(--plaster-bg) !important;
+            background: transparent;
+            border-radius: 999px;
+            font-weight: 600;
+            padding: 11px 24px;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .btn-ghost-jade:hover {
+            background-color: rgba(246, 242, 233, 0.12);
+            border-color: var(--plaster-bg);
+            color: #ffffff !important;
+        }
+
+        .btn:focus,
+        .btn-check:focus + .btn,
+        .form-control:focus,
+        .form-select:focus {
+            box-shadow: 0 0 0 0.22rem rgba(217, 119, 6, 0.25) !important;
+            border-color: var(--amber-cta) !important;
+        }
+
+        .card {
+            border: 1px solid var(--border-tile);
+            border-radius: 18px;
+            background: var(--card-bg);
+            box-shadow: 0 6px 20px rgba(20, 59, 49, 0.05);
+            transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+
+        .card:hover {
+            border-color: var(--border-tile-strong);
+        }
+
+        /* Admin Sub-Navigation */
+        .admin-subnav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            padding: 0.45rem;
+            background: var(--stone-soft);
+            border: 1px solid var(--border-tile);
+            border-radius: 999px;
+            margin-bottom: 2rem;
+        }
+
+        .admin-subnav a {
+            text-decoration: none;
+            color: var(--ink-main);
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 0.5rem 1.15rem;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .admin-subnav a:hover {
+            background: rgba(20, 59, 49, 0.1);
+            color: var(--jade-deep);
+        }
+
+        .admin-subnav a.active {
+            background: var(--jade-deep);
+            color: var(--plaster-bg);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--jade-deep);
+            border-top: 6px solid var(--amber-cta);
+            padding: 68px 0 42px;
+            color: var(--plaster-bg);
+            margin-top: 64px;
+        }
+
+        .footer h5,
+        .footer .brand-title {
+            color: var(--plaster-bg);
+        }
+
+        .footer p,
+        .footer li,
+        .footer a,
+        .footer small {
+            color: var(--jade-tint);
+        }
+
+        .footer a:hover {
+            color: var(--amber-light);
+        }
+
+        /* Notifications Dropdown */
         .notif-dropdown {
-            width: 350px;
+            width: 340px;
             max-height: 400px;
             overflow-y: auto;
-            border-radius: 20px !important;
-            box-shadow: 0 15px 45px rgba(0,0,0,0.1) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 18px 42px rgba(20, 59, 49, 0.18) !important;
+            border: 1px solid var(--border-tile) !important;
             margin-top: 10px !important;
+            background: #ffffff;
         }
 
         .notif-item {
             white-space: normal;
-            transition: background 0.2s ease;
+            transition: background-color 0.15s ease;
             cursor: pointer;
         }
 
         .notif-item:hover {
-            background-color: #f8f9fa;
+            background-color: var(--plaster-bg);
         }
 
         .notif-empty {
-            padding: 40px 20px;
+            padding: 32px 20px;
             text-align: center;
-            color: #ccc;
+            color: var(--ink-muted);
         }
 
-        /* Testimonial (X/Twitter Style) */
-        .testimonial-grid {
-            column-count: 3;
-            column-gap: 1.5rem;
+        /* SweetAlert2 Styling */
+        .swal2-popup.premium-swal {
+            border-radius: 20px !important;
+            padding: 2rem 1.5rem !important;
+            background: #ffffff !important;
+            border: 1px solid var(--border-tile) !important;
+            box-shadow: 0 24px 64px rgba(20, 59, 49, 0.2) !important;
         }
 
-        @media (max-width: 991.98px) {
-            .testimonial-grid { column-count: 2; }
-        }
-
-        @media (max-width: 575.98px) {
-            .testimonial-grid { column-count: 1; }
-        }
-
-        .testimonial-card {
-            break-inside: avoid;
-            margin-bottom: 1.5rem;
-            background: #fff;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            border-radius: 20px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
+        .swal2-title {
+            font-family: 'Bricolage Grotesque', sans-serif !important;
+            font-weight: 800 !important;
+            color: var(--ink-main) !important;
+            font-size: 1.55rem !important;
         }
 
         .testimonial-card:hover {
