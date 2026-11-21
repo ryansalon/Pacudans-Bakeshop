@@ -194,135 +194,69 @@
             <div class="col-lg-7">
                 <div class="row g-4 h-100">
                     <div class="col-sm-6">
-                        <div class="d-flex align-items-center">
-                            <div class="text-white rounded-circle p-2 me-3" style="background-color: var(--accent-color);"><i class="bi bi-heart-fill"></i></div>
-                            <span class="fw-bold">Family Recipes</span>
+                        <div class="surface-panel p-4 h-100 d-flex flex-column">
+                            <img src="<?= base_url('assets/images/ice_coffee/iced_caramel_machiato.jpg') ?>" alt="Iced Caramel Macchiato at Pacudan's" class="w-100 object-fit-cover rounded-3 mb-3" style="height: 170px;">
+                            <h3 class="h5 fw-bold mb-2">Hot, Iced &amp; Blended Bar</h3>
+                            <p class="small text-muted mb-3 flex-grow-1">Single &amp; double espresso shots, matcha lattes, iced white mochas, oreo frappes, and fresh mango shakes made to order.</p>
+                            <a href="<?= $drinksCatUrl ?>" class="fw-bold text-primary text-decoration-none small">Order drinks <i class="bi bi-arrow-right ms-1"></i></a>
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <div class="d-flex align-items-center">
-                            <div class="text-white rounded-circle p-2 me-3" style="background-color: var(--accent-color);"><i class="bi bi-star-fill"></i></div>
-                            <span class="fw-bold">Top Rated</span>
+                        <div class="surface-panel p-4 h-100 d-flex flex-column">
+                            <img src="<?= base_url('assets/images/cakes/ube_custard.png') ?>" alt="Ube Custard Cake at Pacudan's" class="w-100 object-fit-cover rounded-3 mb-3" style="height: 170px;">
+                            <h3 class="h5 fw-bold mb-2">Celebration Cakes &amp; Breads</h3>
+                            <p class="small text-muted mb-3 flex-grow-1">Ube Custard, Choco Moist, Red Velvet, Brazo Cupcakes, fluffy Cheese Ensaymada, and toasted sandwiches baked fresh daily.</p>
+                            <a href="<?= $cakesCatUrl ?>" class="fw-bold text-primary text-decoration-none small">Order cakes &amp; bakes <i class="bi bi-arrow-right ms-1"></i></a>
                         </div>
                     </div>
                 </div>
-                <a href="#" class="btn btn-outline-primary btn-lg rounded-pill px-5" style="border-color: var(--accent-color); color: var(--accent-color);">Learn More</a>
             </div>
         </div>
     </div>
-</div>
+</section>
 
-<!-- Testimonials Section -->
-<div class="section-padding" style="border-radius: 80px 80px 0 0;">
+<!-- Our Story -->
+<section id="about" class="py-5">
     <div class="container">
-        <div class="text-center mb-5" data-aos="fade-up">
-            <h6 class="fw-bold text-uppercase mb-2 tracking-widest" style="letter-spacing: 2px; color: var(--secondary-accent);">Testimonials</h6>
-            <h2 class="display-5 mb-0 fw-bold" style="font-family: 'Playfair Display', serif;">What Our Community Says</h2>
-            <p class="text-muted mt-3 col-lg-6 mx-auto">Real stories from our lovely customers who have made Pacudan's a part of their daily ritual.</p>
-        </div>
-
-        <div class="testimonial-grid mt-5" data-aos="fade-up">
-            <!-- Testimonial 1 -->
-            <div class="testimonial-card">
-                <div class="testimonial-header">
-                    <img src="https://ui-avatars.com/api/?name=Maria+Santos&background=3d2b1f&color=fff" class="testimonial-avatar" alt="User">
-                    <div class="testimonial-user-info">
-                        <div class="testimonial-name">Maria Santos</div>
-                        <div class="testimonial-handle">@m_santos</div>
-                    </div>
+        <div class="surface-subtle p-4 p-lg-5">
+            <div class="row align-items-center g-4 g-lg-5">
+                <div class="col-lg-6">
+                    <img src="<?= base_url('assets/images/logo_and_bg/cafe-bg.jpg') ?>" class="img-fluid w-100 object-fit-cover rounded-4 shadow-sm" alt="Warm wooden counter at Pacudan's Bakeshop & Coffee Bar in Mambajao" style="height: 360px;">
                 </div>
-                <div class="testimonial-content">
-                    Best coffee in Camiguin! ☕️ The <span class="highlight">Iced Spanish Latte</span> is a game changer. Also, their ube bread is always fresh. Highly recommend! #PacudansCoffee #CamiguinEats
+                <div class="col-lg-6">
+                    <h2 class="display-6 fw-bold mb-3">A family kitchen turned neighborhood coffee bar.</h2>
+                    <p class="lead text-muted mb-4">
+                        Pacudan's Bakeshop &amp; Coffee Bar began as a small family dream right here in Mambajao. Every morning starts with warm trays of brioche ensaymada, layered custard cakes, and freshly pulled espresso for island neighbors and travelers.
+                    </p>
+                    <ul class="list-unstyled small border-top mb-4" style="border-color: var(--border-tile) !important;">
+                        <li class="py-2 border-bottom d-flex align-items-center gap-2" style="border-color: var(--border-tile) !important;">
+                            <i class="bi bi-check2 text-primary fw-bold"></i>
+                            <span>Small-batch breads, cupcakes, and custard cakes baked every morning</span>
+                        </li>
+                        <li class="py-2 border-bottom d-flex align-items-center gap-2" style="border-color: var(--border-tile) !important;">
+                            <i class="bi bi-check2 text-primary fw-bold"></i>
+                            <span>Custom celebration cakes available for birthdays and family gatherings</span>
+                        </li>
+                        <li class="py-2 border-bottom d-flex align-items-center gap-2" style="border-color: var(--border-tile) !important;">
+                            <i class="bi bi-check2 text-primary fw-bold"></i>
+                            <span>Direct Cash on Delivery across Mambajao with counter status alerts</span>
+                        </li>
+                    </ul>
+                    <a href="<?= base_url('menu') ?>" class="btn btn-primary px-4">Start Your Order</a>
                 </div>
-                <span class="testimonial-timestamp">10:24 AM · May 10, 2026</span>
-            </div>
-
-            <!-- Testimonial 2 -->
-            <div class="testimonial-card">
-                <div class="testimonial-header">
-                    <img src="https://ui-avatars.com/api/?name=James+Wilson&background=b08d57&color=fff" class="testimonial-avatar" alt="User">
-                    <div class="testimonial-user-info">
-                        <div class="testimonial-name">James Wilson</div>
-                        <div class="testimonial-handle">@jwilson_travels</div>
-                    </div>
-                </div>
-                <div class="testimonial-content">
-                    Found this hidden gem while exploring Mambajao. The aesthetic is so <span class="highlight">premium</span> and the staff are incredibly friendly. 10/10 would visit again! ✨
-                </div>
-                <span class="testimonial-timestamp">2:15 PM · May 8, 2026</span>
-            </div>
-
-            <!-- Testimonial 3 -->
-            <div class="testimonial-card">
-                <div class="testimonial-header">
-                    <img src="https://ui-avatars.com/api/?name=Liza+Dela+Cruz&background=5c4033&color=fff" class="testimonial-avatar" alt="User">
-                    <div class="testimonial-user-info">
-                        <div class="testimonial-name">Liza Dela Cruz</div>
-                        <div class="testimonial-handle">@lizadc</div>
-                    </div>
-                </div>
-                <div class="testimonial-content">
-                    Their <span class="highlight">customized cakes</span> are not just beautiful, they taste amazing too! Ordered one for my mom's birthday and she loved it. Thank you @Pacudans! 🎂❤️
-                </div>
-                <span class="testimonial-timestamp">9:45 AM · May 5, 2026</span>
-            </div>
-
-            <!-- Testimonial 4 -->
-            <div class="testimonial-card">
-                <div class="testimonial-header">
-                    <img src="https://ui-avatars.com/api/?name=David+Reyes&background=3d2b1f&color=fff" class="testimonial-avatar" alt="User">
-                    <div class="testimonial-user-info">
-                        <div class="testimonial-name">David Reyes</div>
-                        <div class="testimonial-handle">@dreyes_dev</div>
-                    </div>
-                </div>
-                <div class="testimonial-content">
-                    The perfect spot to work from home. High-speed internet, great vibes, and the <span class="highlight">Caramel Macchiato</span> keeps me going. 💻☕️
-                </div>
-                <span class="testimonial-timestamp">11:30 AM · May 3, 2026</span>
-            </div>
-
-            <!-- Testimonial 5 -->
-            <div class="testimonial-card">
-                <div class="testimonial-header">
-                    <img src="https://ui-avatars.com/api/?name=Sarah+G&background=b08d57&color=fff" class="testimonial-avatar" alt="User">
-                    <div class="testimonial-user-info">
-                        <div class="testimonial-name">Sarah G.</div>
-                        <div class="testimonial-handle">@sarah_bakes</div>
-                    </div>
-                </div>
-                <div class="testimonial-content">
-                    Honestly, I dream about their <span class="highlight">Cheese Ensaymada</span>. It's so fluffy and buttery! Best paired with their hot chocolate. 🥐🍫
-                </div>
-                <span class="testimonial-timestamp">4:20 PM · May 1, 2026</span>
-            </div>
-
-            <!-- Testimonial 6 -->
-            <div class="testimonial-card">
-                <div class="testimonial-header">
-                    <img src="https://ui-avatars.com/api/?name=Marco+Polo&background=5c4033&color=fff" class="testimonial-avatar" alt="User">
-                    <div class="testimonial-user-info">
-                        <div class="testimonial-name">Marco Polo</div>
-                        <div class="testimonial-handle">@marco_p</div>
-                    </div>
-                </div>
-                <div class="testimonial-content">
-                    The <span class="highlight">Peach Mango Smoothie</span> is so refreshing! Perfect for the Camiguin heat. 🏝️🥤 Can't wait to go back!
-                </div>
-                <span class="testimonial-timestamp">1:05 PM · Apr 28, 2026</span>
             </div>
         </div>
     </div>
-</div>
+</section>
 
-<!-- Visit Us Section -->
-<div id="location" class="section-padding bg-soft" style="border-radius: 80px 80px 0 0;">
+<!-- Visit Our Shop -->
+<section id="location" class="py-5">
     <div class="container">
-        <div class="text-center mb-5 reveal" data-aos="fade-up">
-            <h6 class="text-primary fw-bold text-uppercase mb-2 tracking-widest" style="letter-spacing: 2px;">Find Us</h6>
-            <h2 class="display-5 mb-0 fw-bold">Visit Our Shop</h2>
-            <p class="text-muted mt-3 col-lg-6 mx-auto">Come and experience the aroma of fresh coffee and newly baked pastries in person.</p>
-        </div>
+        <div class="surface-panel p-4 p-lg-5">
+            <div class="row g-4 g-lg-5 align-items-center">
+                <div class="col-lg-5">
+                    <h2 class="display-6 fw-bold mb-3">Visit Our Shop in Mambajao</h2>
+                    <p class="text-muted mb-4">Dine in for fresh espresso and warm pastries, pick up a celebration cake, or call the counter directly.</p>
 
         <div class="row g-5 align-items-center mt-4">
             <div class="col-lg-5 reveal" data-aos="fade-right">
