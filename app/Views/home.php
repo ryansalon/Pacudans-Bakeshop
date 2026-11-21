@@ -88,55 +88,111 @@
                 <p class="mt-3 text-muted mx-auto mb-0">Our ovens and espresso machine are warming up—check back shortly.</p>
             </div>
         <?php else: ?>
-            <div class="row row-cols-2 row-cols-md-4 g-4">
-                <?php foreach ($featured_products as $index => $product): ?>
-                    <div class="col" data-aos="fade-up" data-aos-delay="<?= $index * 100 ?>">
-                        <div class="card h-100 p-0 border-0 shadow-sm overflow-hidden" style="border-radius: 20px; background-color: var(--primary-bg);">
-                            <div class="position-relative">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3">
+                <?php foreach ($featured_products as $product): ?>
+                    <?php
+                        $cleanName = rtrim((string) $product['name'], '*');
+                        $hasVariants = !empty($product['variant_count']) && (int) $product['variant_count'] > 0;
+                        $displayPrice = ($hasVariants && $product['min_price'] !== null)
+                            ? (float) $product['min_price']
+                            : (float) $product['price'];
+                        $inStock = (int) ($product['stock_quantity'] ?? 1) > 0;
+                    ?>
+                    <div class="col">
+                        <article class="card h-100 p-3 d-flex flex-column counter-card">
+                            <a href="<?= base_url('menu/' . $product['product_id']) ?>" class="d-block overflow-hidden rounded-3 mb-2 position-relative">
                                 <?php if ($product['image_url']): ?>
-                                    <img src="<?= base_url($product['image_url']) ?>" class="card-img-top w-100 object-fit-cover" alt="<?= esc($product['name']) ?>" style="aspect-ratio: 1/1;">
+                                    <img src="<?= base_url($product['image_url']) ?>" alt="<?= esc($cleanName) ?>" class="w-100 object-fit-cover counter-thumb">
                                 <?php else: ?>
-                                    <div class="text-muted text-center d-flex align-items-center justify-content-center" style="aspect-ratio: 1/1;">
-                                        <i class="bi bi-image fs-1 opacity-10"></i>
+                                    <div class="bg-soft d-flex align-items-center justify-content-center text-muted counter-thumb">
+                                        <i class="bi bi-image fs-2"></i>
                                     </div>
                                 <?php endif; ?>
-                                <div class="position-absolute top-0 end-0 m-3 px-3 py-1 fw-bold rounded-pill" style="background: rgba(253, 249, 243, 0.8); backdrop-filter: blur(10px); color: var(--accent-color);">
-                                    ₱<?= number_format($product['price'], 2) ?>
+                            </a>
+
+                            <div class="d-flex flex-column flex-grow-1">
+                                <h3 class="h5 fw-bold mb-1">
+                                    <a href="<?= base_url('menu/' . $product['product_id']) ?>" class="text-decoration-none text-dark"><?= esc($cleanName) ?></a>
+                                </h3>
+                                <p class="small text-muted mb-2 flex-grow-1">
+                                    <?= esc($product['description'] ?: 'Made fresh daily at Pacudan\'s Bakeshop.') ?>
+                                    <?php if (!empty($product['category_name'])): ?>
+                                        <span class="d-block fw-semibold text-amber mt-1"><?= esc($product['category_name']) ?></span>
+                                    <?php endif; ?>
+                                </p>
+
+                                <div class="d-flex align-items-center justify-content-between gap-2 pt-2 border-top" style="border-color: var(--border-tile) !important;">
+                                    <span class="h6 fw-bold text-primary mb-0 tabular-nums">
+                                        <?= $hasVariants ? 'From ' : '' ?>₱<?= number_format($displayPrice, 2) ?>
+                                    </span>
+                                    <?php if ($inStock): ?>
+                                        <form action="<?= base_url('cart/add') ?>" method="post" class="home-quick-add">
+                                            <?= csrf_field() ?>
+                                            <input type="hidden" name="product_id" value="<?= $product['product_id'] ?>">
+                                            <button type="submit" class="btn btn-primary btn-sm px-3 py-1 quick-add-btn">
+                                                <i class="bi bi-plus-lg me-1"></i>Add
+                                            </button>
+                                        </form>
+                                    <?php else: ?>
+                                        <span class="badge bg-danger rounded-pill">Sold Out</span>
+                                    <?php endif; ?>
                                 </div>
                             </div>
-                            <div class="card-body p-3 text-center" style="background-color: var(--primary-bg);">
-                                <h5 class="card-title fw-bold mb-2 text-truncate" style="font-family: 'Playfair Display', serif; color: var(--text-main);"><?= esc($product['name']) ?></h5>
-                                <a href="<?= base_url('menu/' . $product['product_id']) ?>" class="btn w-100 shadow-sm mt-3 fw-bold" style="background: var(--accent-color); color: #ffffff; border-radius: 12px;">Customize</a>
-                            </div>
-                        </div>
+                        </article>
                     </div>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
     </div>
-</div>
+</section>
 
-<!-- About Section -->
-<div id="about" class="section-padding pb-5">
+<!-- Authentic Café Specialties (Grounded Counter Facts — Zero Fabricated Quotes or Stat Templates) -->
+<section class="py-5">
     <div class="container">
-        <div class="row align-items-center g-5">
-            <div class="col-lg-6" data-aos="fade-right">
-                <div class="position-relative">
-                    <img src="<?= base_url('assets/images/logo_and_bg/pacudan_bg.jpg') ?>" class="img-fluid rounded-5 shadow-2xl" alt="About Us" style="border-radius: 60px; height: 500px; width: 100%; object-fit: cover;">
-                    <div class="position-absolute top-50 start-100 translate-middle d-none d-lg-block" data-aos="zoom-in" data-aos-delay="300">
-                        <div class="card p-4 shadow-lg border-0 rounded-4 text-center" style="width: 200px; background-color: var(--primary-bg);">
-                            <h2 class="fw-bold mb-0" style="color: var(--accent-color);">100%</h2>
-                            <p class="small text-muted mb-0">Made WIth Love</p>
-                        </div>
+        <div class="row g-4 align-items-stretch">
+            <div class="col-lg-5">
+                <div class="bg-jade rounded-4 p-4 p-lg-5 h-100 d-flex flex-column justify-content-between jade-tile-surface">
+                    <div>
+                        <h2 class="h2 fw-bold text-white mb-3">Built for Camiguin mornings &amp; celebrations.</h2>
+                        <p class="mb-4" style="color: var(--jade-tint);">
+                            Everything on our online menu comes straight from our Mambajao kitchen and espresso bar—transparent Peso pricing from ₱<?= number_format($min_price ?? 25, 0) ?> to ₱<?= number_format($max_price ?? 500, 0) ?>, free town delivery, and live counter status updates.
+                        </p>
                     </div>
+
+                    <dl class="mb-0 small border-top pt-3" style="border-color: rgba(203, 224, 216, 0.22) !important;">
+                        <div class="d-flex justify-content-between py-2 border-bottom" style="border-color: rgba(203, 224, 216, 0.14) !important;">
+                            <dt class="fw-normal" style="color: var(--jade-tint);">Counter Hours</dt>
+                            <dd class="mb-0 fw-bold tabular-nums" style="color: var(--amber-light);">Daily, 8:00 AM – 9:00 PM</dd>
+                        </div>
+                        <div class="d-flex justify-content-between py-2 border-bottom" style="border-color: rgba(203, 224, 216, 0.14) !important;">
+                            <dt class="fw-normal" style="color: var(--jade-tint);">Delivery Terms</dt>
+                            <dd class="mb-0 fw-bold text-white">Free Mambajao COD</dd>
+                        </div>
+                        <div class="d-flex justify-content-between pt-2">
+                            <dt class="fw-normal" style="color: var(--jade-tint);">Direct Line</dt>
+                            <dd class="mb-0 fw-bold tabular-nums"><a href="tel:09639216585" class="text-decoration-none text-white">0963 921 6585</a></dd>
+                        </div>
+                    </dl>
                 </div>
             </div>
-            <div class="col-lg-6 ps-lg-5" data-aos="fade-left">
-                <h6 class="fw-bold text-uppercase mb-2 tracking-widest" style="letter-spacing: 2px; color: var(--secondary-accent);">Our Story</h6>
-                <h2 class="display-4 mb-4 fw-bold" style="font-family: 'Playfair Display', serif;">Baked with Passion, <br>Served with Love</h2>
-                <p class="lead text-muted mb-4">Pacudan's Bakeshop & Coffee Bar started as a small family dream. Today, we are proud to be your favorite neighborhood spot for morning coffee and sweet celebrations.</p>
-                
-                <div class="row g-4 mb-5">
+
+            <?php
+                $drinksCatUrl = base_url('menu');
+                $cakesCatUrl  = base_url('menu');
+                foreach (($categories ?? []) as $c) {
+                    $cname = strtolower((string) $c['name']);
+                    if (strpos($cname, 'iced') !== false || strpos($cname, 'hot') !== false) {
+                        if ($drinksCatUrl === base_url('menu')) {
+                            $drinksCatUrl = base_url('category/' . $c['category_id']);
+                        }
+                    }
+                    if (strpos($cname, 'cake') !== false) {
+                        $cakesCatUrl = base_url('category/' . $c['category_id']);
+                    }
+                }
+            ?>
+            <div class="col-lg-7">
+                <div class="row g-4 h-100">
                     <div class="col-sm-6">
                         <div class="d-flex align-items-center">
                             <div class="text-white rounded-circle p-2 me-3" style="background-color: var(--accent-color);"><i class="bi bi-heart-fill"></i></div>
