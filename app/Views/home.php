@@ -2,79 +2,90 @@
 
 <?= $this->section('content') ?>
 
-<!-- Hero Section -->
-<div class="position-relative overflow-hidden p-5 text-center bg-light" style="background: url('<?= base_url('assets/images/logo_and_bg/cafe-bg.jpg') ?>') no-repeat center center; background-size: cover; min-height: 90vh; display: flex; align-items: center; border-radius: 0 0 80px 80px; position: relative;">
-    <!-- Darker Overlay for better text readability -->
-    <div style="position: absolute; top:0; left:0; right:0; bottom:0; background: linear-gradient(to bottom, rgba(78, 52, 46, 0.85), rgba(78, 52, 46, 0.4));"></div>
-    
-    <div class="container py-5 position-relative text-white" style="z-index: 2;">
-        <div data-aos="fade-down" data-aos-duration="1000">
-            <h6 class="text-uppercase fw-bold mb-3 tracking-widest text-warning" style="letter-spacing: 4px;">Welcome to</h6>
-            <h1 class="display-1 fw-bold mb-4">Pacudan's <br><span class="text-warning">Bakeshop & Coffee Bar</span></h1>
-        </div>
-        
-        <p class="lead mb-5 col-lg-8 mx-auto opacity-90 fw-light" data-aos="fade-up" data-aos-delay="200">
-            Your chill coffee place in Mambajao, Camiguin. Savor our handcrafted Coffee, Tea, Frappes, and Smoothies, or indulge in our fresh Breads, Cakes, and specially Customized Cakes made just for your celebrations.
-        </p>
-        
-        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center" data-aos="fade-up" data-aos-delay="400">
-            <a href="<?= base_url('menu') ?>" class="btn btn-primary btn-lg px-5 shadow-lg rounded-pill text-white">Explore Our Menu</a>
-            <a href="#about" class="btn btn-outline-light btn-lg px-5 rounded-pill border-2">Our Story</a>
-            <a href="#location" class="btn btn-outline-light btn-lg px-5 rounded-pill border-2">Find Us</a>
-        </div>
-    </div>
-</div>
-
-<!-- Features Section -->
-<div class="section-padding">
+<!-- Deep Volcanic-Jade Architectural Masthead -->
+<section class="jade-masthead">
     <div class="container">
-        <div class="row g-5 text-center">
-            <div class="col-md-4" data-aos="fade-up" data-aos-delay="0">
-                <div class="card p-5 h-100 border-0 shadow-sm hover-scale">
-                    <div class="bg-soft rounded-circle d-inline-flex align-items-center justify-content-center mb-4 mx-auto shadow-sm text-primary" style="width: 90px; height: 90px; background: #fff;">
-                        <i class="bi bi-award fs-1"></i>
-                    </div>
-                    <h4 class="fw-bold">Premium Quality</h4>
-                    <p class="text-muted mb-0">We use only the finest organic ingredients sourced from local farmers to ensure every bite is perfect.</p>
+        <div class="row g-4 align-items-end">
+            <div class="col-lg-7">
+                <h1 class="masthead-title mb-3">
+                    Mambajao's warm coffee bar &amp; bakeshop.
+                </h1>
+                <p class="masthead-sub mb-3">
+                    Fresh morning breads, custom Camiguin celebration cakes, and dialed-in hot &amp; iced espresso—delivered free across Mambajao with Cash on Delivery.
+                </p>
+                <div class="d-flex flex-wrap align-items-center gap-3">
+                    <a href="<?= base_url('menu') ?>" class="btn btn-amber px-4 py-2">
+                        Browse <?= (int) ($total_products ?? 38) ?> Menu Items
+                    </a>
+                    <a href="#location" class="btn btn-ghost-jade px-4 py-2">
+                        <i class="bi bi-clock me-2"></i>Open 8AM – 9PM Daily
+                    </a>
                 </div>
             </div>
-            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-                <div class="card p-5 h-100 border-0 shadow-sm hover-scale">
-                    <div class="bg-soft rounded-circle d-inline-flex align-items-center justify-content-center mb-4 mx-auto shadow-sm text-primary" style="width: 90px; height: 90px; background: #fff;">
-                        <i class="bi bi-cup-hot fs-1"></i>
-                    </div>
-                    <h4 class="fw-bold">Expert Baristas</h4>
-                    <p class="text-muted mb-0">Our coffee is brewed by professionals who understand the art of the perfect roast and pour.</p>
-                </div>
-            </div>
-            <div class="col-md-4" data-aos="fade-up" data-aos-delay="400">
-                <div class="card p-5 h-100 border-0 shadow-sm hover-scale">
-                    <div class="bg-soft rounded-circle d-inline-flex align-items-center justify-content-center mb-4 mx-auto shadow-sm text-primary" style="width: 90px; height: 90px; background: #fff;">
-                        <i class="bi bi-truck fs-1"></i>
-                    </div>
-                    <h4 class="fw-bold">Fast Delivery</h4>
-                    <p class="text-muted mb-0">Order online and enjoy our fresh treats delivered straight to your doorstep within minutes.</p>
-                </div>
+
+            <div class="col-lg-5">
+                <?php if (!empty($signature_product)): ?>
+                    <article class="signature-tile">
+                        <a href="<?= base_url('menu/' . $signature_product['product_id']) ?>" class="signature-thumb-wrap flex-shrink-0">
+                            <?php if (!empty($signature_product['image_url'])): ?>
+                                <img src="<?= base_url($signature_product['image_url']) ?>" alt="<?= esc(rtrim((string) $signature_product['name'], '*')) ?>" class="signature-thumb">
+                            <?php else: ?>
+                                <div class="signature-thumb d-flex align-items-center justify-content-center bg-dark text-white">
+                                    <i class="bi bi-cake2 fs-1"></i>
+                                </div>
+                            <?php endif; ?>
+                        </a>
+                        <div class="flex-grow-1 min-w-0">
+                            <h2 class="h4 fw-bold text-white mb-1"><?= esc(rtrim((string) $signature_product['name'], '*')) ?></h2>
+                            <p class="small mb-3" style="color: var(--jade-tint);">
+                                <?= esc($signature_product['description'] ?: 'House-baked specialty prepared fresh daily in Mambajao.') ?>
+                            </p>
+                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                                <span class="h5 fw-bold mb-0 tabular-nums" style="color: var(--amber-light);">
+                                    ₱<?= number_format($signature_product['price'], 2) ?>
+                                </span>
+                                <a href="<?= base_url('menu/' . $signature_product['product_id']) ?>" class="btn btn-amber btn-sm px-3 py-1">
+                                    Order Direct <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                <?php endif; ?>
             </div>
         </div>
     </div>
-</div>
+</section>
 
-<!-- Daily Recommendations (Random) -->
-<div class="section-padding position-relative">
+<!-- Sun-Washed Plaster Counter Shelf: Live Categories & Today's Picks inside the first viewport -->
+<section class="plaster-shelf py-4">
     <div class="container">
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-5" data-aos="fade-right">
+        <?php if (!empty($categories)): ?>
+            <div class="cat-strip-wrap mb-3">
+                <nav class="d-flex align-items-center gap-2 overflow-auto pb-2 pe-4" aria-label="Browse menu categories">
+                    <a href="<?= base_url('menu') ?>" class="btn btn-primary btn-sm rounded-pill px-3 py-2 flex-shrink-0">All Delights</a>
+                    <?php foreach ($categories as $cat): ?>
+                        <a href="<?= base_url('category/' . $cat['category_id']) ?>" class="btn btn-outline-primary btn-sm rounded-pill px-3 py-2 flex-shrink-0">
+                            <?= esc($cat['name']) ?>
+                        </a>
+                    <?php endforeach; ?>
+                </nav>
+            </div>
+        <?php endif; ?>
+
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-2 mb-3">
             <div>
-                <h6 class="text-uppercase mb-2" style="letter-spacing: 2px; color: var(--secondary-accent); font-weight: 600;">Daily Surprises</h6>
-                <h2 class="display-5 mb-0 fw-bold" style="font-family: 'Playfair Display', serif;">Today is <?= $current_day ?>, <br><span style="color: var(--secondary-accent);">the go-to for today!</span></h2>
+                <h2 class="h3 fw-bold mb-0">Fresh Counter Picks for <?= esc($current_day) ?></h2>
+                <p class="text-muted small mb-0">Add straight to your bag or tap any treat to pick your cup size.</p>
             </div>
-            <a href="<?= base_url('menu') ?>" class="btn btn-outline-primary rounded-pill px-4 mt-3 mt-md-0" style="border-color: var(--accent-color); color: var(--accent-color);">View Full Menu <i class="bi bi-arrow-right ms-2"></i></a>
+            <a href="<?= base_url('menu') ?>" class="fw-bold text-primary text-decoration-none small">
+                See full menu <i class="bi bi-arrow-right ms-1"></i>
+            </a>
         </div>
-        
+
         <?php if (empty($featured_products)): ?>
-            <div class="text-center py-5 rounded-5" data-aos="zoom-in" style="background-color: var(--primary-bg);">
-                <i class="bi bi-cup-straw display-1 opacity-10"></i>
-                <p class="mt-4 text-muted">Our kitchen is busy preparing... check back soon!</p>
+            <div class="surface-panel p-5 text-center">
+                <i class="bi bi-cup-straw fs-1 text-muted"></i>
+                <p class="mt-3 text-muted mx-auto mb-0">Our ovens and espresso machine are warming up—check back shortly.</p>
             </div>
         <?php else: ?>
             <div class="row row-cols-2 row-cols-md-4 g-4">
