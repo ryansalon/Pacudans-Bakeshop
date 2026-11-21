@@ -95,77 +95,66 @@
                             <button class="nav-link rounded-pill px-3 py-1 small" id="bottom-tab" data-bs-toggle="pill" data-bs-target="#bottom-5" type="button">Bottom 5</button>
                         </li>
                     </ul>
-                    <div class="tab-content" id="popularityTabContent">
-                        <div class="tab-pane fade show active" id="top-5">
-                            <canvas id="topProductsChart" height="200"></canvas>
-                        </div>
-                        <div class="tab-pane fade" id="bottom-5">
-                            <canvas id="bottomProductsChart" height="200"></canvas>
-                        </div>
+                </div>
+                <div class="tab-content" id="popularityTabContent">
+                    <div class="tab-pane fade show active" id="top-5">
+                        <canvas id="topProductsChart" height="205"></canvas>
+                    </div>
+                    <div class="tab-pane fade" id="bottom-5">
+                        <canvas id="bottomProductsChart" height="205"></canvas>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="row g-5">
-            <!-- Quick Actions -->
-            <div class="col-lg-4 reveal" style="transition-delay: 0.2s;">
-                <div class="card p-4 border-0 shadow-sm bg-white rounded-4 mb-4">
-                    <h5 class="fw-bold mb-4">Quick Actions</h5>
-                    <div class="d-grid gap-3">
-                        <a href="<?= base_url('admin/products/add') ?>" class="btn btn-primary rounded-pill py-3">
-                            <i class="bi bi-plus-circle me-2"></i> Add New Product
-                        </a>
-                        <a href="<?= base_url('admin/products') ?>" class="btn btn-outline-dark rounded-pill py-3">
-                            <i class="bi bi-list-ul me-2"></i> Manage Inventory
-                        </a>
-                        <a href="<?= base_url('admin/orders') ?>" class="btn btn-outline-dark rounded-pill py-3">
-                            <i class="bi bi-receipt me-2"></i> View All Orders
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recent Orders Table -->
-            <div class="col-lg-8 reveal" style="transition-delay: 0.4s;">
-                <div class="card p-4 border-0 shadow-sm bg-white rounded-4">
-                    <h5 class="fw-bold mb-4">Recent Orders</h5>
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle">
-                            <thead class="text-muted small text-uppercase">
-                                <tr>
-                                    <th>Order ID</th>
-                                    <th>Customer Name</th>
-                                    <th>Status</th>
-                                    <th>Amount</th>
-                                    <th>Date</th>
-                                    <th class="text-end">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($recent_orders as $order): ?>
-                                    <tr>
-                                        <td class="fw-bold text-primary">#<?= $order['order_id'] ?></td>
-                                        <td>
-                                            <div class="small fw-bold"><?= esc($order['customer_name']) ?></div>
-                                        </td>
-                                        <td>
-                                            <span class="badge rounded-pill bg-<?= $order['status'] == 'pending' ? 'warning text-dark' : ($order['status'] == 'completed' ? 'success' : 'danger') ?> px-3 py-2">
-                                                <?= ucfirst($order['status']) ?>
-                                            </span>
-                                        </td>
-                                        <td class="fw-bold">₱<?= number_format($order['total_amount'], 2) ?></td>
-                                        <td class="small text-muted"><?= date('M d, Y h:i A', strtotime($order['created_at'])) ?></td>
-                                        <td class="text-end">
-                                            <a href="<?= base_url('admin/orders/' . $order['order_id']) ?>" class="btn btn-light btn-sm rounded-pill px-3 shadow-sm border">Details</a>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+    <!-- Recent Orders Table -->
+    <div class="surface-panel p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h5 fw-bold mb-0">Recent Orders</h2>
+            <a href="<?= base_url('admin/orders') ?>" class="btn btn-outline-primary btn-sm rounded-pill px-3">View All Orders</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="text-muted small text-uppercase">
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Status</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th class="text-end">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($recent_orders)): ?>
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-4">No orders have been placed yet.</td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($recent_orders as $order): ?>
+                            <?php
+                                $st = strtolower($order['status']);
+                                $badgeClass = $st === 'pending' ? 'bg-warning text-dark' : ($st === 'completed' ? 'bg-success' : 'bg-danger');
+                            ?>
+                            <tr>
+                                <td class="fw-bold text-primary tabular-nums">#<?= $order['order_id'] ?></td>
+                                <td class="fw-semibold"><?= esc($order['customer_name']) ?></td>
+                                <td>
+                                    <span class="badge rounded-pill <?= $badgeClass ?> px-3 py-2">
+                                        <?= esc(ucfirst($order['status'])) ?>
+                                    </span>
+                                </td>
+                                <td class="fw-bold tabular-nums">₱<?= number_format($order['total_amount'], 2) ?></td>
+                                <td class="small text-muted tabular-nums"><?= date('M d, Y · h:i A', strtotime($order['created_at'])) ?></td>
+                                <td class="text-end">
+                                    <a href="<?= base_url('admin/orders/' . $order['order_id']) ?>" class="btn btn-outline-primary btn-sm rounded-pill px-3">View Order</a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -175,19 +164,18 @@
 <?= $this->section('scripts') ?>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Revenue Chart
     const revCtx = document.getElementById('revenueChart').getContext('2d');
     new Chart(revCtx, {
         type: 'line',
         data: {
-            labels: ['Weekly', 'Monthly', 'Yearly'],
+            labels: ['7 Days', '30 Days', '365 Days'],
             datasets: [{
                 label: 'Revenue (₱)',
-                data: [<?= $revenue['weekly'] ?>, <?= $revenue['monthly'] ?>, <?= $revenue['yearly'] ?>],
-                borderColor: '#b08d57',
-                backgroundColor: 'rgba(176, 141, 87, 0.1)',
+                data: [<?= (float) $revenue['weekly'] ?>, <?= (float) $revenue['monthly'] ?>, <?= (float) $revenue['yearly'] ?>],
+                borderColor: '#D97706',
+                backgroundColor: 'rgba(217, 119, 6, 0.14)',
                 fill: true,
-                tension: 0.4
+                tension: 0.35
             }]
         },
         options: {
@@ -197,17 +185,17 @@
         }
     });
 
-    // Top Products Chart
-    const topCtx = document.getElementById('topProductsChart').getContext('2d');
-    new Chart(topCtx, {
+    const topLabels = <?= json_encode(array_column($top_products, 'name')) ?>;
+    const topData = <?= json_encode(array_map('intval', array_column($top_products, 'total_sold'))) ?>;
+    new Chart(document.getElementById('topProductsChart').getContext('2d'), {
         type: 'bar',
         data: {
-            labels: [<?= implode(',', array_map(fn($p) => "'".esc($p['name'])."'", $top_products)) ?>],
+            labels: topLabels,
             datasets: [{
                 label: 'Quantity Sold',
-                data: [<?= implode(',', array_column($top_products, 'total_sold')) ?>],
-                backgroundColor: '#3d2b1f',
-                borderRadius: 10
+                data: topData,
+                backgroundColor: '#143B31',
+                borderRadius: 8
             }]
         },
         options: {
@@ -217,17 +205,17 @@
         }
     });
 
-    // Bottom Products Chart
-    const bottomCtx = document.getElementById('bottomProductsChart').getContext('2d');
-    new Chart(bottomCtx, {
+    const bottomLabels = <?= json_encode(array_column($bottom_products, 'name')) ?>;
+    const bottomData = <?= json_encode(array_map('intval', array_column($bottom_products, 'total_sold'))) ?>;
+    new Chart(document.getElementById('bottomProductsChart').getContext('2d'), {
         type: 'bar',
         data: {
-            labels: [<?= implode(',', array_map(fn($p) => "'".esc($p['name'])."'", $bottom_products)) ?>],
+            labels: bottomLabels,
             datasets: [{
                 label: 'Quantity Sold',
-                data: [<?= implode(',', array_column($bottom_products, 'total_sold')) ?>],
-                backgroundColor: '#b08d57',
-                borderRadius: 10
+                data: bottomData,
+                backgroundColor: '#D97706',
+                borderRadius: 8
             }]
         },
         options: {
@@ -237,7 +225,6 @@
         }
     });
 
-    // Admin Notification (Task 2)
     let lastAdminCheck = '<?= date('Y-m-d H:i:s') ?>';
     setInterval(() => {
         fetch('<?= base_url('admin/notifications') ?>?last_check=' + encodeURIComponent(lastAdminCheck))
@@ -245,24 +232,22 @@
             .then(data => {
                 if (data.new_orders > 0) {
                     Swal.fire({
-                        title: 'New Order Alert!',
-                        text: `You have ${data.new_orders} new order(s).`,
+                        title: 'New Order Received',
+                        text: `You have ${data.new_orders} new order(s) waiting for review.`,
                         icon: 'info',
                         toast: true,
                         position: 'top-end',
                         showConfirmButton: true,
-                        confirmButtonText: 'Refresh Dashboard',
+                        confirmButtonText: 'Refresh',
                         timer: 10000,
                         timerProgressBar: true
                     }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.reload();
-                        }
+                        if (result.isConfirmed) window.location.reload();
                     });
                     lastAdminCheck = new Date(Date.now() - (new Date().getTimezoneOffset() * 60000)).toISOString().slice(0, 19).replace('T', ' ');
                 }
             })
             .catch(err => console.error('Admin notification check failed', err));
-    }, 15000); // Check every 15 seconds
+    }, 15000);
 </script>
 <?= $this->endSection() ?>
