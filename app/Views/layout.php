@@ -678,76 +678,57 @@
                 <div class="d-flex align-items-center justify-content-center justify-content-lg-start mb-3">
                     <img src="<?= base_url('assets/images/logo_and_bg/pacudans_logo.jpg') ?>" alt="Pacudan's Logo" width="46" height="46" style="object-fit: cover; border-radius: 50%; margin-right: 14px; border: 2px solid rgba(252, 211, 77, 0.55);">
                     <div class="d-flex flex-column text-start" style="line-height: 1.1;">
-                        <span class="fw-bold fs-4" style="letter-spacing: -0.5px;">PACUDAN'S</span>
-                        <small class="opacity-75" style="font-size: 0.7rem; font-weight: 400; text-transform: uppercase; letter-spacing: 1px;">Bakeshop & Coffee Bar</small>
+                        <span class="brand-title display-font fw-bold fs-4">PACUDAN'S</span>
+                        <small style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em;">Bakeshop &amp; Coffee Bar</small>
                     </div>
                 </div>
-                <p class="opacity-75 small mb-4">Where every cup is brewed with passion and every pastry is baked with love. Your neighborhood spot for fresh daily treats.</p>
-                <div class="d-flex justify-content-center justify-content-lg-start gap-3">
-                    <a href="https://www.fb.com/pacudanscoffee" target="_blank" class="btn btn-outline-light rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;"><i class="bi bi-facebook"></i></a>
-                    <a href="https://instagram.com/pacudanscoffee" target="_blank" class="btn btn-outline-light rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;"><i class="bi bi-instagram"></i></a>
+                <p class="small mb-4">Fresh morning breads, celebration cakes, and hot &amp; iced espresso pulled to order in Mambajao, Camiguin. Free local Cash on Delivery.</p>
+                <div class="d-flex justify-content-center justify-content-lg-start gap-2">
+                    <a href="https://www.fb.com/pacudanscoffee" target="_blank" rel="noopener" class="btn btn-ghost-jade rounded-circle p-2 d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px;" aria-label="Pacudan's Facebook"><i class="bi bi-facebook"></i></a>
+                    <a href="https://instagram.com/pacudanscoffee" target="_blank" rel="noopener" class="btn btn-ghost-jade rounded-circle p-2 d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px;" aria-label="Pacudan's Instagram"><i class="bi bi-instagram"></i></a>
                 </div>
             </div>
-            <div class="col-lg-4 text-center">
-                <h5 class="fw-bold mb-4">Quick Links</h5>
-                <ul class="list-unstyled opacity-75 small">
-                    <li class="mb-2"><a href="<?= base_url() ?>" class="text-white text-decoration-none">Home</a></li>
-                    <li class="mb-2"><a href="<?= base_url('menu') ?>" class="text-white text-decoration-none">Our Menu</a></li>
-                    <li class="mb-2"><a href="<?= base_url() ?>#about" class="text-white text-decoration-none">Our Story</a></li>
-                    <li class="mb-2"><a href="<?= base_url() ?>#location" class="text-white text-decoration-none">Visit Us</a></li>
+            <div class="col-sm-6 col-lg-3 text-center text-sm-start">
+                <h5 class="fw-bold mb-3">Counter Links</h5>
+                <ul class="list-unstyled small d-grid gap-2">
+                    <li><a href="<?= base_url() ?>" class="text-decoration-none">Home</a></li>
+                    <li><a href="<?= base_url('menu') ?>" class="text-decoration-none">Full Menu</a></li>
+                    <li><a href="<?= base_url() ?>#about" class="text-decoration-none">Our Story</a></li>
+                    <li><a href="<?= base_url() ?>#location" class="text-decoration-none">Location &amp; Hours</a></li>
                 </ul>
             </div>
-            <div class="col-lg-4 text-center text-lg-end">
-                <h5 class="fw-bold mb-4">Contact Info</h5>
-                <ul class="list-unstyled opacity-75 small">
-                    <li class="mb-2"><i class="bi bi-geo-alt me-2"></i> Mambajao, Camiguin Island</li>
-                    <li class="mb-2"><i class="bi bi-telephone me-2"></i> 0963 921 6585</li>
-                    <li class="mb-2"><i class="bi bi-envelope me-2"></i> pacudanscoffee@gmail.com</li>
-                    <li class="mb-2"><i class="bi bi-clock me-2"></i> 8:00 AM - 9:00 PM</li>
+            <div class="col-sm-6 col-lg-4 text-center text-sm-start">
+                <h5 class="fw-bold mb-3">Visit the Café</h5>
+                <ul class="list-unstyled small d-grid gap-2">
+                    <li><i class="bi bi-geo-alt me-2"></i>Mambajao, Camiguin Island</li>
+                    <li><i class="bi bi-telephone me-2"></i><a href="tel:09639216585" class="text-decoration-none tabular-nums">0963 921 6585</a></li>
+                    <li><i class="bi bi-envelope me-2"></i><a href="mailto:pacudanscoffee@gmail.com" class="text-decoration-none">pacudanscoffee@gmail.com</a></li>
+                    <li><i class="bi bi-clock me-2"></i>Daily, 8:00 AM – 9:00 PM</li>
                 </ul>
             </div>
         </div>
-        <hr class="my-5 opacity-10">
-        <p class="text-center opacity-25 small mb-0">&copy; <?= date('Y') ?> Pacudan's Bakeshop & Coffee Bar. All rights reserved.</p>
+        <hr class="my-4" style="border-color: rgba(203, 224, 216, 0.18);">
+        <p class="text-center small mb-0 mx-auto">&copy; <?= date('Y') ?> Pacudan's Bakeshop &amp; Coffee Bar · Mambajao, Camiguin.</p>
     </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
-    // Generate Circular Text for Preloader
-    const text = "PACUDAN\'S BAKESHOP & COFFEE BAR • ";
-    const container = document.getElementById('rotatingText');
-    if (container) {
-        for (let i = 0; i < text.length; i++) {
-            let span = document.createElement('span');
-            span.innerHTML = text[i];
-            span.style.transform = `rotate(${i * (360 / text.length)}deg)`;
-            container.appendChild(span);
-        }
+    const navEl = document.getElementById('mainNav');
+    const syncNavScroll = () => {
+        if (window.scrollY > 24) navEl.classList.add('scrolled');
+        else navEl.classList.remove('scrolled');
+    };
+    window.addEventListener('scroll', syncNavScroll, { passive: true });
+    syncNavScroll();
+
+    function updateBagCounters(count) {
+        const d = document.getElementById('cart-counter');
+        const m = document.getElementById('cart-counter-mobile');
+        if (d) d.textContent = count;
+        if (m) m.textContent = count;
     }
 
-    AOS.init({ duration: 800, once: true });
-    
-    function hidePreloader() {
-        const preloader = document.getElementById('preloader');
-        if (preloader) {
-            preloader.style.opacity = '0';
-            setTimeout(() => { preloader.style.visibility = 'hidden'; }, 500);
-        }
-    }
-
-    window.addEventListener('load', hidePreloader);
-    // Fallback: hide preloader after 3 seconds even if load event doesn't fire
-    setTimeout(hidePreloader, 3000);
-
-    window.addEventListener('scroll', function() {
-        const nav = document.getElementById('mainNav');
-        if (window.scrollY > 50) nav.classList.add('scrolled');
-        else nav.classList.remove('scrolled');
-    });
-
-    // Global Flash Message Handler
     const Toast = Swal.mixin({
         toast: true,
         position: 'top',
@@ -757,41 +738,34 @@
         customClass: {
             popup: 'premium-toast'
         },
-        showClass: {
-            popup: 'sileo-show'
-        },
-        hideClass: {
-            popup: 'swal2-hide'
-        },
         didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer)
-            toast.addEventListener('mouseleave', Swal.resumeTimer)
+            toast.addEventListener('mouseenter', Swal.stopTimer);
+            toast.addEventListener('mouseleave', Swal.resumeTimer);
         }
     });
 
     <?php if (session()->getFlashdata('msg')): ?>
         Toast.fire({
             icon: 'success',
-            title: '<?= addslashes(session()->getFlashdata('msg')) ?>'
+            title: <?= json_encode((string) session()->getFlashdata('msg')) ?>
         });
     <?php endif; ?>
 
     <?php if (session()->getFlashdata('error')): ?>
         Toast.fire({
             icon: 'error',
-            title: '<?= addslashes(session()->getFlashdata('error')) ?>'
+            title: <?= json_encode((string) session()->getFlashdata('error')) ?>
         });
     <?php endif; ?>
 
-    // Success Modal (Task 3)
     <?php if (session()->getFlashdata('popup_msg')): ?>
         Swal.fire({
-            title: 'Order Placed Successfully!',
-            text: '<?= addslashes(session()->getFlashdata('popup_msg')) ?>',
+            title: 'Order Placed Successfully',
+            text: <?= json_encode((string) session()->getFlashdata('popup_msg')) ?>,
             icon: 'success',
             showCancelButton: true,
-            confirmButtonText: 'Order Again',
-            cancelButtonText: 'Go to Home',
+            confirmButtonText: 'Browse Menu',
+            cancelButtonText: 'View My Orders',
             reverseButtons: true,
             customClass: {
                 popup: 'premium-swal',
@@ -802,82 +776,83 @@
             if (result.isConfirmed) {
                 window.location.href = '<?= base_url('menu') ?>';
             } else if (result.dismiss === Swal.DismissReason.cancel) {
-                window.location.href = '<?= base_url() ?>';
+                window.location.href = '<?= base_url('profile') ?>';
             }
         });
     <?php endif; ?>
 
-    // Dynamic Event-Based Notifications (Task 5)
     <?php if (session()->get('isLoggedIn')): ?>
         let seenNotifications = [];
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str || '';
+            return div.innerHTML;
+        }
 
         function fetchNotifications() {
             fetch('<?= base_url('api/notifications/unread') ?>')
                 .then(response => response.json())
                 .then(result => {
-                    if (result.status === 'success') {
-                        const counter = document.getElementById('notif-counter');
-                        const list = document.getElementById('notif-list');
-                        const count = result.count;
-                        
-                        if (count > 0) {
-                            counter.textContent = count;
-                            counter.classList.remove('d-none');
-                            
-                            let html = '';
-                            result.data.forEach(notif => {
-                                // Show toast for new notifications
-                                if (!seenNotifications.includes(notif.id)) {
-                                    Toast.fire({
-                                        icon: 'info',
-                                        title: notif.message,
-                                        showCloseButton: true,
-                                        timer: 10000 
-                                    });
-                                    seenNotifications.push(notif.id);
-                                }
+                    if (result.status !== 'success') return;
+                    const counter = document.getElementById('notif-counter');
+                    const list = document.getElementById('notif-list');
+                    const count = Number(result.count || 0);
 
-                                // Build list item
-                                html += `
-                                    <div class="dropdown-item p-3 border-bottom notif-item" onclick="handleNotifClick(event, ${notif.id}, '${notif.link || '#'}')">
-                                        <div class="d-flex justify-content-between align-items-start">
-                                            <div class="me-3">
-                                                <p class="mb-1 small">${notif.message}</p>
-                                                <small class="text-muted" style="font-size: 0.7rem;">${new Date(notif.created_at).toLocaleString()}</small>
-                                            </div>
-                                            <button class="btn btn-link btn-sm text-danger p-0" onclick="deleteNotif(event, ${notif.id})">
-                                                <i class="bi bi-x-lg"></i>
-                                            </button>
+                    if (count > 0) {
+                        counter.textContent = count;
+                        counter.classList.remove('d-none');
+
+                        let html = '';
+                        result.data.forEach(notif => {
+                            const notifId = Number(notif.id);
+                            if (!seenNotifications.includes(notifId)) {
+                                Toast.fire({
+                                    icon: 'info',
+                                    title: notif.message,
+                                    timer: 6500
+                                });
+                                seenNotifications.push(notifId);
+                            }
+
+                            const safeMsg = escapeHtml(notif.message);
+                            const safeLink = encodeURIComponent(notif.link || '#');
+                            const timeLabel = escapeHtml(new Date(notif.created_at).toLocaleString());
+
+                            html += `
+                                <div class="dropdown-item p-3 border-bottom notif-item" onclick="handleNotifClick(event, ${notifId}, '${safeLink}')">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div class="me-3">
+                                            <p class="mb-1 small text-dark">${safeMsg}</p>
+                                            <small class="text-muted tabular-nums" style="font-size: 0.72rem;">${timeLabel}</small>
                                         </div>
+                                        <button type="button" class="btn btn-link btn-sm text-danger p-0" onclick="deleteNotif(event, ${notifId})" aria-label="Dismiss notification">
+                                            <i class="bi bi-x-lg"></i>
+                                        </button>
                                     </div>
-                                `;
-                            });
-                            list.innerHTML = html;
-                        } else {
-                            counter.classList.add('d-none');
-                            list.innerHTML = `
-                                <div class="notif-empty">
-                                    <i class="bi bi-bell-slash fs-2 mb-2 d-block"></i>
-                                    <span class="small">No new notifications</span>
                                 </div>
                             `;
-                        }
+                        });
+                        list.innerHTML = html;
+                    } else {
+                        counter.classList.add('d-none');
+                        list.innerHTML = `
+                            <div class="notif-empty">
+                                <i class="bi bi-bell-slash fs-3 mb-2 d-block"></i>
+                                <span class="small">No unread notifications</span>
+                            </div>
+                        `;
                     }
                 })
                 .catch(err => console.error('Error fetching notifications:', err));
         }
 
-        function handleNotifClick(event, id, url) {
-            // Mark as read and redirect
+        function handleNotifClick(event, id, encodedUrl) {
+            const url = decodeURIComponent(encodedUrl || '#');
             fetch('<?= base_url('api/notifications/mark-read/') ?>' + id, { method: 'POST' })
                 .then(() => {
                     if (url && url !== '#') {
-                        // If it's a relative URL, prepend base_url
-                        if (!url.startsWith('http')) {
-                            window.location.href = '<?= base_url() ?>' + url;
-                        } else {
-                            window.location.href = url;
-                        }
+                        window.location.href = url.startsWith('http') ? url : '<?= base_url() ?>' + url.replace(/^\//, '');
                     } else {
                         fetchNotifications();
                     }
@@ -885,7 +860,7 @@
         }
 
         function deleteNotif(event, id) {
-            event.stopPropagation(); // Don't trigger the item click
+            event.stopPropagation();
             fetch('<?= base_url('api/notifications/delete/') ?>' + id, { method: 'POST' })
                 .then(() => fetchNotifications());
         }
@@ -893,22 +868,15 @@
         function markAllAsRead() {
             fetch('<?= base_url('api/notifications/mark-all-read') ?>', { method: 'POST' })
                 .then(() => {
-                    fetchNotifications();
                     document.getElementById('notif-counter').classList.add('d-none');
+                    fetchNotifications();
                 });
         }
 
-        // Clear badge when dropdown is shown
-        document.getElementById('notifDropdown').addEventListener('show.bs.dropdown', function () {
-            document.getElementById('notif-counter').classList.add('d-none');
-        });
-
-        // Initial fetch and set interval
         fetchNotifications();
-        setInterval(fetchNotifications, 20000); // Check every 20 seconds
+        setInterval(fetchNotifications, 20000);
     <?php endif; ?>
 </script>
 <?= $this->renderSection('scripts') ?>
 </body>
 </html>
-
