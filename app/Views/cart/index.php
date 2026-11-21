@@ -86,41 +86,62 @@
                         <div class="mt-3 text-end">
                             <button type="submit" class="btn btn-outline-primary rounded-pill px-4">Update Quantities</button>
                         </div>
-                    </form>
-                </div>
+                    </noscript>
+                </form>
+            </div>
 
-                <div class="col-lg-4">
-                    <div class="card p-5 border-0 shadow-lg rounded-5 bg-white sticky-top" style="top: 100px;">
-                        <h5 class="fw-bold mb-4">Order Summary</h5>
-                        <div class="d-flex justify-content-between mb-3 text-muted">
-                            <span>Subtotal</span>
-                            <span>₱<?= number_format($total, 2) ?></span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-3 text-muted">
-                            <span>Delivery</span>
-                            <span class="text-success fw-bold">FREE</span>
-                        </div>
-                        <hr class="opacity-10 my-4">
-                        <div class="d-flex justify-content-between align-items-end mb-5">
-                            <span class="h5 mb-0 fw-bold">Grand Total</span>
-                            <span class="h3 mb-0 text-primary fw-bold">₱<?= number_format($total, 2) ?></span>
-                        </div>
-                        <div class="d-grid">
-                            <a href="<?= base_url('checkout') ?>" class="btn btn-primary btn-lg rounded-pill py-3 shadow-lg">
-                                Checkout Now <i class="bi bi-chevron-right ms-2"></i>
-                            </a>
-                        </div>
+            <div class="col-lg-4">
+                <div class="surface-panel p-4 p-md-5 sticky-top" style="top: 96px;">
+                    <h2 class="h5 fw-bold mb-4">Order Summary</h2>
+                    <div class="d-flex justify-content-between mb-3 text-muted">
+                        <span>Subtotal</span>
+                        <span class="tabular-nums">₱<?= number_format($total, 2) ?></span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3 text-muted">
+                        <span>Mambajao Delivery</span>
+                        <span class="text-success fw-bold">FREE</span>
+                    </div>
+                    <hr class="my-4" style="border-color: var(--border-tile);">
+                    <div class="d-flex justify-content-between align-items-baseline mb-4">
+                        <span class="h6 mb-0 fw-bold">Grand Total</span>
+                        <span class="h3 mb-0 text-primary fw-bold tabular-nums">₱<?= number_format($total, 2) ?></span>
+                    </div>
+                    <div class="d-grid">
+                        <a href="<?= base_url('checkout') ?>" class="btn btn-amber btn-lg rounded-pill py-3">
+                            Proceed to Checkout <i class="bi bi-arrow-right ms-2"></i>
+                        </a>
                     </div>
                 </div>
             </div>
-        <?php endif; ?>
-    </div>
+        </div>
+    <?php endif; ?>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const removeButtons = document.querySelectorAll('.remove-item');
-        removeButtons.forEach(button => {
+        const cartForm = document.getElementById('updateCartForm');
+        let submitTimer = null;
+
+        function scheduleCartUpdate() {
+            if (!cartForm) return;
+            clearTimeout(submitTimer);
+            submitTimer = setTimeout(() => cartForm.submit(), 350);
+        }
+
+        document.querySelectorAll('.qty-step').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const input = this.parentElement.querySelector('.cart-qty-input');
+                const dir = parseInt(this.getAttribute('data-dir'), 10);
+                input.value = Math.max(0, (parseInt(input.value, 10) || 1) + dir);
+                scheduleCartUpdate();
+            });
+        });
+
+        document.querySelectorAll('.cart-qty-input').forEach(input => {
+            input.addEventListener('change', scheduleCartUpdate);
+        });
+
+        document.querySelectorAll('.remove-item').forEach(button => {
             button.addEventListener('click', function(e) {
                 e.preventDefault();
                 const url = this.getAttribute('href');
@@ -128,11 +149,11 @@
 
                 Swal.fire({
                     title: 'Remove Item?',
-                    text: `Are you sure you want to remove ${name} from your cart?`,
+                    text: `Remove ${name} from your order bag?`,
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: 'Yes, remove it!',
-                    cancelButtonText: 'No, keep it',
+                    confirmButtonText: 'Remove',
+                    cancelButtonText: 'Keep Item',
                     customClass: {
                         popup: 'premium-swal',
                         confirmButton: 'premium-confirm',
@@ -140,9 +161,7 @@
                     },
                     buttonsStyling: false
                 }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = url;
-                    }
+                    if (result.isConfirmed) window.location.href = url;
                 });
             });
         });
