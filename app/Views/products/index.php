@@ -113,66 +113,107 @@
                 </div>
             <?php endforeach; ?>
         </div>
+
+        <div id="noSearchMatches" class="text-center py-5 surface-panel d-none mt-4">
+            <i class="bi bi-search fs-2 text-muted"></i>
+            <h3 class="h5 mt-3">No matching items found</h3>
+            <p class="text-muted mx-auto mb-0">Try searching for another coffee, cake, or pastry name.</p>
+        </div>
     <?php endif; ?>
 </div>
 
 <script>
+    // Keep sticky category bar seated flush under the fixed navbar across breakpoints
+    const stickyBar = document.getElementById('stickyCategoryBar');
+    const siteNavbar = document.getElementById('mainNav');
+    function syncStickyOffset() {
+        if (!stickyBar || !siteNavbar) return;
+        stickyBar.style.top = siteNavbar.offsetHeight + 'px';
+    }
+    syncStickyOffset();
+    window.addEventListener('resize', syncStickyOffset, { passive: true });
+
+    // Keep the active category pill scrolled into view on narrow screens
+    const activeCatPill = document.querySelector('#stickyCategoryBar a.btn-primary');
+    if (activeCatPill) {
+        activeCatPill.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'instant' });
+    }
+
+    const searchInput = document.getElementById('menuSearchInput');
+    const itemCols = document.querySelectorAll('.menu-item-col');
+    const countBadge = document.getElementById('menuItemCount');
+    const noMatchesEl = document.getElementById('noSearchMatches');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            const q = this.value.trim().toLowerCase();
+            let visible = 0;
+            itemCols.forEach(col => {
+                const match = !q || (col.getAttribute('data-name') || '').includes(q);
+                col.classList.toggle('d-none', !match);
+                if (match) visible++;
+            });
+            if (countBadge) countBadge.textContent = visible + (visible === 1 ? ' item' : ' items');
+            if (noMatchesEl) noMatchesEl.classList.toggle('d-none', visible > 0);
+        });
+    }
+
     document.querySelectorAll('.direct-add-form').forEach(form => {
         form.addEventListener('submit', function(e) {
+            e.preventDefault();
             const btn = this.querySelector('.action-btn');
-            if (btn) {
-                btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>PROCEEDING...';
-                btn.disabled = true;
-            }
+            const originalHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>Adding...';
+
+            fetch(this.action, {
+                method: 'POST',
+                body: new FormData(this),
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    updateBagCounters(data.cart_count);
+                    Toast.fire({ icon: 'success', title: data.message || 'Added to bag!' });
+                    btn.innerHTML = '<i class="bi bi-check2 me-1"></i>Added';
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btn.innerHTML = originalHtml;
+                    }, 1200);
+                } else {
+                    Toast.fire({ icon: 'error', title: data.message || 'Could not add item.' });
+                    btn.disabled = false;
+                    btn.innerHTML = originalHtml;
+                }
+            })
+            .catch(() => {
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            });
         });
     });
 </script>
 
 <style>
-    .active-drawer-link {
-        background: rgba(255, 255, 255, 0.1);
-        font-weight: bold;
+    .sticky-category-bar {
+        position: sticky;
+        top: 68px;
+        z-index: 1020;
+        background: rgba(246, 242, 233, 0.96);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border-tile);
     }
-
-    .price-badge-glass {
-        background: rgba(253, 249, 243, 0.85);
-        backdrop-filter: blur(10px);
-        color: var(--accent-color);
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        border: 1px solid rgba(255,255,255,0.2);
+    .product-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 14px 32px rgba(20, 59, 49, 0.1);
     }
-
-    .product-card-interactive {
-        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    .product-img {
+        transition: transform 0.35s ease;
     }
-
-    .product-card-interactive:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 20px 40px rgba(74, 49, 33, 0.12) !important;
-    }
-
-    .interaction-overlay {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: rgba(253, 249, 243, 0.98);
-        backdrop-filter: blur(10px);
-        transform: translateY(100%);
-        transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-        border-top: 1px solid rgba(74, 49, 33, 0.05);
-    }
-
-    .product-card-interactive:hover .interaction-overlay {
-        transform: translateY(0);
-    }
-
-    .action-btn {
-        letter-spacing: 1px;
-    }
-
-    @media (max-width: 767.98px) {
-        .display-5 { font-size: 2rem !important; }
+    .product-card:hover .product-img {
+        transform: scale(1.04);
     }
 </style>
 
