@@ -467,154 +467,216 @@
             font-size: 1.55rem !important;
         }
 
-        .testimonial-card:hover {
-            border-color: var(--accent-gold);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(176, 141, 87, 0.1);
+        .swal2-html-container {
+            font-family: 'Hanken Grotesk', sans-serif !important;
+            color: var(--ink-muted) !important;
+            font-size: 1rem !important;
         }
 
-        .testimonial-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
+        .swal2-confirm.premium-confirm {
+            background: var(--jade-deep) !important;
+            color: var(--plaster-bg) !important;
+            border-radius: 999px !important;
+            padding: 11px 28px !important;
+            font-weight: 700 !important;
+            border: none !important;
         }
 
-        .testimonial-avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-right: 12px;
-            border: 2px solid var(--cream-foam);
+        .swal2-cancel.premium-cancel {
+            background: var(--stone-soft) !important;
+            color: var(--ink-main) !important;
+            border-radius: 999px !important;
+            padding: 11px 28px !important;
+            font-weight: 700 !important;
+            border: 1px solid var(--border-tile) !important;
         }
 
-        .testimonial-user-info {
-            line-height: 1.2;
+        .swal2-popup.swal2-toast.premium-toast {
+            background: #ffffff !important;
+            border-radius: 999px !important;
+            padding: 10px 22px !important;
+            box-shadow: 0 12px 30px rgba(20, 59, 49, 0.16) !important;
+            border: 1px solid var(--border-tile-strong) !important;
+            margin-top: 14px !important;
+            display: flex !important;
+            align-items: center !important;
         }
 
-        .testimonial-name {
-            font-weight: 700;
-            font-size: 1rem;
-            color: var(--text-dark);
-            margin-bottom: 2px;
+        .swal2-toast .swal2-title {
+            color: var(--ink-main) !important;
+            font-size: 0.92rem !important;
+            font-weight: 700 !important;
+            margin: 0 10px !important;
+            font-family: 'Hanken Grotesk', sans-serif !important;
         }
 
-        .testimonial-handle {
-            font-size: 0.85rem;
-            color: #657786;
+        /* Horizontal category strip with mobile right-edge plaster fade */
+        .cat-strip-wrap {
+            position: relative;
         }
 
-        .testimonial-content {
-            font-size: 1rem;
-            color: #1c1c1c;
-            line-height: 1.5;
+        @media (max-width: 991.98px) {
+            .cat-strip-wrap::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 8px;
+                width: 44px;
+                background: linear-gradient(to left, var(--plaster-bg) 15%, rgba(246, 242, 233, 0) 100%);
+                pointer-events: none;
+            }
         }
 
-        .testimonial-content .highlight {
-            color: var(--accent-gold);
-            font-weight: 600;
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
         }
 
-        .testimonial-timestamp {
-            font-size: 0.8rem;
-            color: #657786;
-            margin-top: 1rem;
-            display: block;
+        @media (max-width: 991.98px) {
+            .site-navbar .navbar-collapse {
+                background: var(--jade-raised);
+                margin-top: 12px;
+                border-radius: 16px;
+                padding: 14px;
+                border: 1px solid rgba(246, 242, 233, 0.14);
+            }
+            .main-content {
+                padding-top: 86px;
+            }
+            body.is-home .main-content {
+                padding-top: 0;
+            }
         }
     </style>
 </head>
-<body class="<?= (service('request')->getUri()->getPath() == '' || service('request')->getUri()->getPath() == '/') ? 'is-home' : '' ?>">
+<?php
+    $currentPath = preg_replace('#^index\.php/?#', '', trim(uri_string(), '/'));
+    $isHome = ($currentPath === '');
+    $cart_count = 0;
+    if (session()->get('cart')) {
+        foreach (session()->get('cart') as $item) {
+            $cart_count += (int) $item['quantity'];
+        }
+    }
+    $fav_count = 0;
+    if (session()->get('isLoggedIn')) {
+        $fav_count = (new \App\Models\FavoritesModel())
+            ->where('user_id', session()->get('user_id'))
+            ->countAllResults();
+    }
+?>
+<body class="<?= $isHome ? 'is-home' : '' ?>">
 
-<!-- Branded Circular Preloader -->
-<div id="preloader">
-    <div class="loader-wrapper">
-        <img src="<?= base_url('assets/images/logo_and_bg/pacudans_logo.jpg') ?>" class="loader-logo" alt="Logo">
-        <div class="rotating-text" id="rotatingText">
-            <!-- Text generated by JS -->
-        </div>
-    </div>
-</div>
-
-<nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
+<nav class="navbar navbar-expand-lg fixed-top site-navbar" id="mainNav" aria-label="Main navigation">
     <div class="container">
         <a class="navbar-brand" href="<?= base_url() ?>">
-            <img src="<?= base_url('assets/images/logo_and_bg/pacudans_logo.jpg') ?>" alt="Logo" style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%; margin-right: 10px;">
-            <div class="d-flex flex-column" style="line-height: 1;">
-                <span style="font-size: 1.2rem;">PACUDAN'S</span>
-                <small style="font-size: 0.6rem; font-weight: 400; text-transform: uppercase; letter-spacing: 1px;">Bakeshop & Coffee Bar</small>
+            <img src="<?= base_url('assets/images/logo_and_bg/pacudans_logo.jpg') ?>" alt="Pacudan's Logo" width="40" height="40" style="object-fit: cover; border-radius: 50%; border: 2px solid rgba(252, 211, 77, 0.6);">
+            <div class="d-flex flex-column" style="line-height: 1.05;">
+                <span style="font-size: 1.15rem;">PACUDAN'S</span>
+                <span class="brand-sub">Mambajao · Camiguin</span>
             </div>
         </a>
-        <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="bi bi-list fs-1 text-dark"></span>
-        </button>
+
+        <div class="d-flex align-items-center gap-2 d-lg-none">
+            <a href="<?= base_url('cart') ?>" class="nav-bag-pill py-1 px-3" aria-label="Shopping Bag">
+                <i class="bi bi-bag-fill"></i>
+                <span id="cart-counter-mobile" class="tabular-nums"><?= $cart_count ?></span>
+            </a>
+            <button class="navbar-toggler border-0 shadow-none text-white p-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="bi bi-list fs-2"></span>
+            </button>
+        </div>
+
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto align-items-center">
-                <li class="nav-item"><a class="nav-link" href="<?= base_url() ?>">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="<?= base_url('menu') ?>">Menu</a></li>
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
                 <li class="nav-item">
-                    <a class="nav-link position-relative me-lg-2" href="<?= base_url('cart') ?>">
-                        <i class="bi bi-bag"></i>
-                        <?php 
-                            $cart_count = 0;
-                            if(session()->get('cart')) {
-                                foreach(session()->get('cart') as $item) $cart_count += $item['quantity'];
-                            }
-                        ?>
-                        <span id="cart-counter" class="position-absolute top-0 start-100 translate-middle <?= $cart_count > 0 ? '' : 'd-none' ?>"><?= $cart_count ?></span>
-                    </a>
+                    <a class="nav-link <?= $isHome ? 'active' : '' ?>" href="<?= base_url() ?>">Home</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link <?= (strpos($currentPath, 'menu') === 0 || strpos($currentPath, 'category') === 0) ? 'active' : '' ?>" href="<?= base_url('menu') ?>">Full Menu</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= base_url() ?>#location">Visit Shop</a>
+                </li>
+
+                <?php if (session()->get('role') === 'admin'): ?>
+                    <li class="nav-item">
+                        <a class="nav-link <?= strpos($currentPath, 'admin') === 0 ? 'active' : '' ?>" href="<?= base_url('admin') ?>">Admin</a>
+                    </li>
+                <?php endif; ?>
+
                 <?php if (session()->get('isLoggedIn')): ?>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link position-relative me-lg-2 dropdown-toggle hide-caret" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Notifications">
-                            <i class="bi bi-bell"></i>
-                            <span id="notif-counter" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none" style="font-size: 0.55rem; padding: 3px 6px; border: 2px solid #fff;">0</span>
+                    <li class="nav-item">
+                        <a class="nav-link nav-icon-btn position-relative" href="<?= base_url('favorites') ?>" title="Saved Favorites" aria-label="Saved Favorites">
+                            <i class="bi bi-heart"></i>
+                            <span id="fav-counter" class="position-absolute top-0 start-100 translate-middle counter-badge <?= $fav_count > 0 ? '' : 'd-none' ?>"><?= $fav_count ?></span>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-end notif-dropdown border-0" aria-labelledby="notifDropdown">
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link nav-icon-btn position-relative dropdown-toggle" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Notifications" aria-label="Notifications">
+                            <i class="bi bi-bell"></i>
+                            <span id="notif-counter" class="position-absolute top-0 start-100 translate-middle counter-badge bg-danger text-white d-none">0</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end notif-dropdown" aria-labelledby="notifDropdown">
                             <div class="px-3 py-2 border-bottom d-flex justify-content-between align-items-center">
-                                <span class="fw-bold small">Notifications</span>
-                                <button class="btn btn-link btn-sm text-decoration-none p-0 small text-muted" onclick="markAllAsRead()">Mark all as read</button>
+                                <span class="fw-bold small text-dark">Notifications</span>
+                                <button type="button" class="btn btn-link btn-sm text-decoration-none p-0 small text-muted" onclick="markAllAsRead()">Mark all read</button>
                             </div>
                             <div id="notif-list">
-                                <!-- Notifications will be loaded here -->
                                 <div class="notif-empty">
-                                    <i class="bi bi-bell-slash fs-2 mb-2 d-block"></i>
-                                    <span class="small">No new notifications</span>
+                                    <i class="bi bi-bell-slash fs-3 mb-2 d-block"></i>
+                                    <span class="small">No unread notifications</span>
                                 </div>
                             </div>
                         </div>
                     </li>
+
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle ms-lg-3" href="#" role="button" data-bs-toggle="dropdown">
-                            <?= explode(' ', session()->get('name'))[0] ?>
+                        <a class="nav-link dropdown-toggle d-inline-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle"></i>
+                            <span><?= esc(explode(' ', (string) session()->get('name'))[0]) ?></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4 p-2">
-                            <li><a class="dropdown-item rounded-3" href="<?= base_url('profile') ?>">My Profile</a></li>
-                            <li><a class="dropdown-item rounded-3" href="<?= base_url('favorites') ?>">My Favorites</a></li>
-                            <?php if (session()->get('role') == 'admin'): ?>
-                                <li><a class="dropdown-item rounded-3 fw-bold text-primary" href="<?= base_url('admin') ?>">Admin Panel</a></li>
+                            <li><a class="dropdown-item rounded-3 py-2" href="<?= base_url('profile') ?>"><i class="bi bi-person me-2"></i>My Profile &amp; Orders</a></li>
+                            <li><a class="dropdown-item rounded-3 py-2" href="<?= base_url('favorites') ?>"><i class="bi bi-heart me-2"></i>Saved Favorites</a></li>
+                            <?php if (session()->get('role') === 'admin'): ?>
+                                <li><a class="dropdown-item rounded-3 py-2 fw-bold text-primary" href="<?= base_url('admin') ?>"><i class="bi bi-speedometer2 me-2"></i>Admin Dashboard</a></li>
                             <?php endif; ?>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item rounded-3 text-danger" href="<?= base_url('logout') ?>">Logout</a></li>
+                            <li><a class="dropdown-item rounded-3 py-2 text-danger" href="<?= base_url('logout') ?>"><i class="bi bi-box-arrow-right me-2"></i>Sign Out</a></li>
                         </ul>
                     </li>
                 <?php else: ?>
-                    <li class="nav-item"><a class="btn btn-primary rounded-pill ms-lg-3 px-4 shadow-sm" href="<?= base_url('login') ?>">Sign In</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= $currentPath === 'login' ? 'active' : '' ?>" href="<?= base_url('login') ?>">Sign In</a>
+                    </li>
                 <?php endif; ?>
+
+                <li class="nav-item ms-lg-2 d-none d-lg-block">
+                    <a class="nav-bag-pill" href="<?= base_url('cart') ?>">
+                        <i class="bi bi-bag-fill"></i>
+                        <span>Bag (<span id="cart-counter" class="tabular-nums"><?= $cart_count ?></span>)</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
 </nav>
 
-<div class="main-content">
+<main class="main-content">
     <?= $this->renderSection('content') ?>
-</div>
+</main>
 
 <footer class="footer">
     <div class="container">
         <div class="row g-5">
-            <div class="col-lg-4 text-center text-lg-start">
-                <div class="d-flex align-items-center justify-content-center justify-content-lg-start mb-4">
-                    <img src="<?= base_url('assets/images/logo_and_bg/pacudans_logo.jpg') ?>" alt="Logo" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; margin-right: 15px;">
+            <div class="col-lg-5 text-center text-lg-start">
+                <div class="d-flex align-items-center justify-content-center justify-content-lg-start mb-3">
+                    <img src="<?= base_url('assets/images/logo_and_bg/pacudans_logo.jpg') ?>" alt="Pacudan's Logo" width="46" height="46" style="object-fit: cover; border-radius: 50%; margin-right: 14px; border: 2px solid rgba(252, 211, 77, 0.55);">
                     <div class="d-flex flex-column text-start" style="line-height: 1.1;">
                         <span class="fw-bold fs-4" style="letter-spacing: -0.5px;">PACUDAN'S</span>
                         <small class="opacity-75" style="font-size: 0.7rem; font-weight: 400; text-transform: uppercase; letter-spacing: 1px;">Bakeshop & Coffee Bar</small>
