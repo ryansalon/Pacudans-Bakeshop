@@ -172,18 +172,22 @@ class Cart extends BaseController
 
         if ($isDirect) {
             $item = $session->get('direct_order');
-            if (!$item) return redirect()->to(base_url('menu'));
+            if (!$item) {
+                return redirect()->to(base_url('menu'));
+            }
             $cart = ['direct' => $item];
         } else {
             $cart = $session->get('cart') ?? [];
-            if (empty($cart)) return redirect()->to(base_url('menu'));
+            if (empty($cart)) {
+                return redirect()->to(base_url('menu'));
+            }
         }
 
-        $userModel = new \App\Models\UserModel();
+        $userModel = new UserModel();
         $user = $userModel->find(session()->get('user_id'));
 
         return view('cart/checkout', [
-            'title'    => 'Checkout', 
+            'title'    => 'Checkout',
             'cart'     => $cart,
             'user'     => $user,
             'isDirect' => $isDirect
@@ -201,21 +205,30 @@ class Cart extends BaseController
 
         if ($isDirect) {
             $item = $session->get('direct_order');
-            if (!$item) return redirect()->to(base_url('menu'));
+            if (!$item) {
+                return redirect()->to(base_url('menu'));
+            }
             $cart = ['direct' => $item];
         } else {
             $cart = $session->get('cart') ?? [];
-            if (empty($cart)) return redirect()->to(base_url('menu'));
+            if (empty($cart)) {
+                return redirect()->to(base_url('menu'));
+            }
         }
 
         $orderModel = new OrderModel();
         $orderItemModel = new OrderItemModel();
-        $userModel = new \App\Models\UserModel();
+        $productModel = new ProductModel();
+        $inventoryLogModel = new InventoryLogModel();
+        $userModel = new UserModel();
 
-        // Update user info
         $userId = $session->get('user_id');
-        $phone = $this->request->getPost('phone');
-        $address = $this->request->getPost('address');
+        $phone = trim((string) $this->request->getPost('phone'));
+        $address = trim((string) $this->request->getPost('address'));
+
+        if ($phone === '' || $address === '') {
+            return redirect()->back()->withInput()->with('error', 'Please provide both contact number and delivery address.');
+        }
 
         $userModel->update($userId, [
             'phone'   => $phone,
@@ -242,6 +255,18 @@ class Cart extends BaseController
                 'quantity'   => $item['quantity'],
                 'price'      => $item['price']
             ]);
+
+            $product = $productModel->find($item['id']);
+            if ($product) {
+                $newStock = max(0, (int) $product['stock_quantity'] - (int) $item['quantity']);
+                $productModel->update($item['id'], ['stock_quantity' => $newStock]);
+                $inventoryLogModel->insert([
+                    'product_id'      => $item['id'],
+                    'change_quantity' => -((int) $item['quantity']),
+                    'reason'          => 'Order #' . $orderId,
+                    'log_date'        => date('Y-m-d H:i:s')
+                ]);
+            }
         }
 
         if ($isDirect) {
@@ -250,14 +275,17 @@ class Cart extends BaseController
             $session->remove('cart');
         }
 
-        // Task: Trigger Logic - Admin Notification
-        $notifModel = new \App\Models\NotificationModel();
-        $notifModel->insert([
-            'user_id' => 2, // Admin ID from users table
-            'message' => "New Order Received! Order #$orderId is waiting for your approval.",
-            'link'    => 'admin/orders/' . $orderId
-        ]);
+        // Notify all admin users dynamically instead of hardcoding user_id = 2
+        $notifModel = new NotificationModel();
+        $admins = $userModel->where('role', 'admin')->findAll();
+        foreach ($admins as $admin) {
+            $notifModel->insert([
+                'user_id' => $admin['user_id'],
+                'message' => "New Order #$orderId received and waiting for approval.",
+                'link'    => 'admin/orders/' . $orderId
+            ]);
+        }
 
-        return redirect()->to(base_url('menu'))->with('popup_msg', 'Your order has been placed! Sit back and relax while we prepare your favorite treats with love. We\'ll notify you once it\'s on the way!');
+        return redirect()->to(base_url('menu'))->with('popup_msg', 'Your order has been placed! Sit back and relax while we prepare your treats. We will notify you once it is on the way.');
     }
 }
