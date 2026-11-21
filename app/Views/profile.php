@@ -54,52 +54,60 @@
             </div>
         </div>
 
-            <!-- Order History Section -->
-            <div class="col-lg-8 reveal" style="transition-delay: 0.2s;">
-                <h4 class="fw-bold mb-4"><i class="bi bi-clock-history me-2 text-primary"></i>My Order History</h4>
-                
-                <?php if (empty($orders)): ?>
-                    <div class="card p-5 border-0 shadow-sm rounded-5 bg-white text-center">
-                        <i class="bi bi-bag-x display-1 opacity-10"></i>
-                        <h4 class="mt-4">No orders yet</h4>
-                        <p class="text-muted">Treat yourself to something sweet from our menu today!</p>
-                        <a href="<?= base_url('menu') ?>" class="btn btn-primary rounded-pill px-5 mt-3">Browse Menu</a>
-                    </div>
-                <?php else: ?>
-                    <div class="card p-4 border-0 shadow-lg rounded-5 bg-white">
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle">
-                                <thead class="text-muted small text-uppercase">
-                                    <tr>
-                                        <th>Order ID</th>
-                                        <th>Date</th>
-                                        <th>Total</th>
-                                        <th>Status</th>
-                                        <th class="text-end">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($orders as $order): ?>
-                                        <tr>
-                                            <td class="fw-bold text-primary">#<?= $order['order_id'] ?></td>
-                                            <td class="small text-muted"><?= date('M d, Y', strtotime($order['created_at'])) ?></td>
-                                            <td class="fw-bold">₱<?= number_format($order['total_amount'], 2) ?></td>
-                                            <td>
-                                                <span class="badge rounded-pill px-3 py-2 bg-<?= strtolower($order['status']) == 'pending' ? 'warning text-dark' : (strtolower($order['status']) == 'completed' ? 'success' : 'danger') ?>">
-                                                    <?= ucfirst($order['status']) ?>
-                                                </span>
-                                            </td>
-                                            <td class="text-end">
-                                                <a href="<?= base_url('profile/order/' . $order['order_id']) ?>" class="btn btn-light btn-sm rounded-pill px-3 shadow-sm border">Details</a>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                <?php endif; ?>
+        <div class="col-lg-8">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <div>
+                    <h2 class="h3 fw-bold mb-1">Order History</h2>
+                    <p class="text-muted small mb-0">Track active deliveries and review past purchases.</p>
+                </div>
+                <a href="<?= base_url('menu') ?>" class="btn btn-amber btn-sm rounded-pill px-3">New Order</a>
             </div>
+
+            <?php if (empty($orders)): ?>
+                <div class="surface-panel p-5 text-center">
+                    <i class="bi bi-bag-x display-4 text-muted"></i>
+                    <h3 class="h4 mt-3">No orders yet</h3>
+                    <p class="text-muted mx-auto mb-4">Treat yourself to freshly brewed coffee or warm pastries from our menu.</p>
+                    <a href="<?= base_url('menu') ?>" class="btn btn-primary rounded-pill px-5">Browse Menu</a>
+                </div>
+            <?php else: ?>
+                <div class="surface-panel p-4">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="text-muted small text-uppercase">
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Date</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th class="text-end">Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($orders as $order): ?>
+                                    <?php
+                                        $st = strtolower($order['status']);
+                                        $badgeClass = $st === 'pending' ? 'bg-warning text-dark' : ($st === 'completed' ? 'bg-success' : 'bg-danger');
+                                    ?>
+                                    <tr>
+                                        <td class="fw-bold text-primary tabular-nums">#<?= $order['order_id'] ?></td>
+                                        <td class="small text-muted tabular-nums"><?= date('M d, Y · h:i A', strtotime($order['created_at'])) ?></td>
+                                        <td class="fw-bold tabular-nums">₱<?= number_format($order['total_amount'], 2) ?></td>
+                                        <td>
+                                            <span class="badge rounded-pill px-3 py-2 <?= $badgeClass ?>">
+                                                <?= esc(ucfirst($order['status'])) ?>
+                                            </span>
+                                        </td>
+                                        <td class="text-end">
+                                            <a href="<?= base_url('profile/order/' . $order['order_id']) ?>" class="btn btn-outline-primary btn-sm rounded-pill px-3">View Order</a>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>
