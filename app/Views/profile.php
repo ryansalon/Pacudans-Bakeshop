@@ -2,27 +2,57 @@
 
 <?= $this->section('content') ?>
 
-<div class="section-padding">
-    <div class="container">
-        <div class="row g-5">
-            <!-- Profile Info Card -->
-            <div class="col-lg-4 reveal">
-                <div class="card p-5 border-0 shadow-lg rounded-5 bg-white text-center">
-                    <div class="bg-primary rounded-circle mx-auto mb-4 d-flex align-items-center justify-content-center text-white fw-bold shadow-lg" style="width: 100px; height: 100px; font-size: 2.5rem;">
-                        <?= strtoupper(substr($user['name'], 0, 1)) ?>
+<div class="container py-4">
+    <div class="row g-5 align-items-start">
+        <div class="col-lg-4">
+            <div class="surface-panel p-4 p-md-5 text-center">
+                <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center text-white fw-bold" style="width: 84px; height: 84px; font-size: 2.1rem; background-color: var(--jade-deep);">
+                    <?= esc(strtoupper(substr((string) $user['name'], 0, 1))) ?>
+                </div>
+                <h1 class="h3 fw-bold mb-1"><?= esc($user['name']) ?></h1>
+                <p class="text-muted small mb-3"><?= esc($user['email']) ?></p>
+                <span class="badge rounded-pill bg-soft text-primary border px-3 py-2 mb-4 text-uppercase fw-bold"><?= esc($user['role']) ?> Account</span>
+
+                <div class="text-start surface-subtle p-3 mb-4 small">
+                    <div class="mb-2">
+                        <span class="text-muted d-block">Phone</span>
+                        <strong class="tabular-nums"><?= esc(!empty($user['phone']) ? $user['phone'] : 'Not set yet') ?></strong>
                     </div>
-                    <h3 class="fw-bold mb-1"><?= esc($user['name']) ?></h3>
-                    <p class="text-muted small mb-4"><?= esc($user['email']) ?></p>
-                    <span class="badge rounded-pill bg-light text-primary border px-4 py-2 mb-4 text-uppercase fw-bold" style="letter-spacing: 1px;"><?= $user['role'] ?> Account</span>
-                    
-                    <hr class="opacity-10 my-4">
-                    
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-outline-primary rounded-pill">Edit Profile</button>
-                        <a href="<?= base_url('logout') ?>" class="btn btn-outline-danger rounded-pill">Logout</a>
+                    <div>
+                        <span class="text-muted d-block">Default Delivery Address</span>
+                        <strong><?= esc(!empty($user['address']) ? $user['address'] : 'Not set yet') ?></strong>
                     </div>
                 </div>
+
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-primary rounded-pill" type="button" data-bs-toggle="collapse" data-bs-target="#editProfileCollapse" aria-expanded="false" aria-controls="editProfileCollapse">
+                        <i class="bi bi-pencil-square me-2"></i>Edit Profile &amp; Address
+                    </button>
+                    <a href="<?= base_url('logout') ?>" class="btn btn-outline-danger rounded-pill">
+                        <i class="bi bi-box-arrow-right me-2"></i>Sign Out
+                    </a>
+                </div>
+
+                <div class="collapse mt-4 text-start" id="editProfileCollapse">
+                    <form action="<?= base_url('profile/update') ?>" method="post" class="pt-3 border-top" style="border-color: var(--border-tile) !important;">
+                        <?= csrf_field() ?>
+                        <div class="mb-3">
+                            <label for="profile-name" class="form-label small fw-bold">Full Name</label>
+                            <input type="text" id="profile-name" name="name" class="form-control bg-soft border-0 rounded-pill px-3 py-2" value="<?= esc($user['name']) ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="profile-phone" class="form-label small fw-bold">Phone Number</label>
+                            <input type="tel" id="profile-phone" name="phone" class="form-control bg-soft border-0 rounded-pill px-3 py-2 tabular-nums" value="<?= esc($user['phone'] ?? '') ?>" placeholder="0963 921 6585">
+                        </div>
+                        <div class="mb-3">
+                            <label for="profile-address" class="form-label small fw-bold">Delivery Address</label>
+                            <textarea id="profile-address" name="address" class="form-control bg-soft border-0 rounded-4 px-3 py-2" rows="2" placeholder="Street, Barangay, Mambajao"><?= esc($user['address'] ?? '') ?></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary rounded-pill w-100 py-2">Save Changes</button>
+                    </form>
+                </div>
             </div>
+        </div>
 
             <!-- Order History Section -->
             <div class="col-lg-8 reveal" style="transition-delay: 0.2s;">
