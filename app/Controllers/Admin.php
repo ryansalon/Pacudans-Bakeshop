@@ -6,6 +6,7 @@ use App\Models\ProductModel;
 use App\Models\CategoryModel;
 use App\Models\OrderModel;
 use App\Models\OrderItemModel;
+use App\Models\NotificationModel;
 
 class Admin extends BaseController
 {
@@ -14,8 +15,7 @@ class Admin extends BaseController
         $orderModel = new OrderModel();
         $productModel = new ProductModel();
         $orderItemModel = new OrderItemModel();
-        
-        // Product Popularity (Top 5)
+
         $topProducts = $orderItemModel->select('products.name, SUM(order_items.quantity) as total_sold')
                                       ->join('products', 'products.product_id = order_items.product_id')
                                       ->groupBy('order_items.product_id')
@@ -23,7 +23,6 @@ class Admin extends BaseController
                                       ->limit(5)
                                       ->findAll();
 
-        // Product Popularity (Bottom 5)
         $bottomProducts = $orderItemModel->select('products.name, SUM(order_items.quantity) as total_sold')
                                          ->join('products', 'products.product_id = order_items.product_id')
                                          ->groupBy('order_items.product_id')
@@ -31,16 +30,18 @@ class Admin extends BaseController
                                          ->limit(5)
                                          ->findAll();
 
-        // Revenue Board
         $revenueWeekly = $orderModel->selectSum('total_amount')
+                                    ->where('status !=', 'cancelled')
                                     ->where('created_at >=', date('Y-m-d', strtotime('-7 days')))
                                     ->first()['total_amount'] ?? 0;
 
         $revenueMonthly = $orderModel->selectSum('total_amount')
+                                     ->where('status !=', 'cancelled')
                                      ->where('created_at >=', date('Y-m-d', strtotime('-30 days')))
                                      ->first()['total_amount'] ?? 0;
 
         $revenueYearly = $orderModel->selectSum('total_amount')
+                                    ->where('status !=', 'cancelled')
                                     ->where('created_at >=', date('Y-m-d', strtotime('-365 days')))
                                     ->first()['total_amount'] ?? 0;
 
@@ -68,6 +69,7 @@ class Admin extends BaseController
     public function products()
     {
         $productModel = new ProductModel();
+        $categoryModel = new CategoryModel();
         $data = [
             'title'    => 'Manage Inventory',
             'products' => $productModel->select('products.*, categories.name as category_name')
