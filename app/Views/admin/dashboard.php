@@ -2,81 +2,97 @@
 
 <?= $this->section('content') ?>
 
-<div class="section-padding">
-    <div class="container">
-        <div class="d-flex justify-content-between align-items-end mb-5 reveal">
-            <div>
-                <h6 class="text-primary fw-bold text-uppercase mb-2 tracking-widest" style="letter-spacing: 2px;">Management</h6>
-                <h2 class="display-5 mb-0 fw-bold">Admin Dashboard</h2>
+<div class="container py-4">
+    <?= $this->include('admin/_nav') ?>
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-2 mb-4">
+        <div>
+            <h1 class="display-5 mb-1 fw-bold">Admin Dashboard</h1>
+            <p class="text-muted mb-0">Welcome back, <?= esc(session()->get('name')) ?>. Live store metrics and pending fulfillment.</p>
+        </div>
+        <a href="<?= base_url('admin/products/add') ?>" class="btn btn-amber rounded-pill px-4 align-self-start align-self-md-end">
+            <i class="bi bi-plus-circle me-2"></i>Add Product
+        </a>
+    </div>
+
+    <!-- Store Summary Strip -->
+    <div class="surface-panel p-4 mb-4">
+        <div class="row g-4 text-center text-md-start">
+            <div class="col-md-4 border-end-md" style="border-color: var(--border-warm) !important;">
+                <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-3">
+                    <div class="bg-soft rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 52px; height: 52px;">
+                        <i class="bi bi-cart-check fs-4 text-primary"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted small">Total Orders</div>
+                        <div class="h3 fw-bold mb-0 tabular-nums"><?= (int) $total_orders ?></div>
+                    </div>
+                </div>
             </div>
-            <div class="text-muted">Welcome back, <?= session()->get('name') ?></div>
+            <div class="col-md-4 border-end-md" style="border-color: var(--border-warm) !important;">
+                <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-3">
+                    <div class="bg-soft rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 52px; height: 52px;">
+                        <i class="bi bi-hourglass-split fs-4 text-warning"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted small">Pending Approval</div>
+                        <div class="h3 fw-bold mb-0 tabular-nums"><?= (int) $pending_orders ?></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-3">
+                    <div class="bg-soft rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 52px; height: 52px;">
+                        <i class="bi bi-cup-hot fs-4 text-success"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted small">Active Menu Items</div>
+                        <div class="h3 fw-bold mb-0 tabular-nums"><?= (int) $total_products ?></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analytics Section -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+            <div class="surface-panel p-4 h-100">
+                <h2 class="h5 fw-bold mb-3">Revenue Board (Excluding Cancelled)</h2>
+                <div class="row g-2 mb-4">
+                    <div class="col-4">
+                        <div class="text-center p-3 surface-subtle">
+                            <div class="small text-muted mb-1">7 Days</div>
+                            <div class="fw-bold text-primary tabular-nums">₱<?= number_format($revenue['weekly'], 2) ?></div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-center p-3 surface-subtle">
+                            <div class="small text-muted mb-1">30 Days</div>
+                            <div class="fw-bold text-primary tabular-nums">₱<?= number_format($revenue['monthly'], 2) ?></div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-center p-3 surface-subtle">
+                            <div class="small text-muted mb-1">365 Days</div>
+                            <div class="fw-bold text-primary tabular-nums">₱<?= number_format($revenue['yearly'], 2) ?></div>
+                        </div>
+                    </div>
+                </div>
+                <canvas id="revenueChart" height="190"></canvas>
+            </div>
         </div>
 
-        <!-- Stats Grid -->
-        <div class="row g-4 mb-5 reveal">
-            <div class="col-md-4">
-                <div class="card p-4 border-0 shadow-sm text-center bg-white h-100">
-                    <div class="bg-light rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                        <i class="bi bi-cart-check fs-3 text-primary"></i>
-                    </div>
-                    <h3 class="fw-bold mb-1"><?= $total_orders ?></h3>
-                    <p class="text-muted small mb-0">Total Orders</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card p-4 border-0 shadow-sm text-center bg-white h-100">
-                    <div class="bg-light rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                        <i class="bi bi-hourglass-split fs-3 text-warning"></i>
-                    </div>
-                    <h3 class="fw-bold mb-1"><?= $pending_orders ?></h3>
-                    <p class="text-muted small mb-0">Pending Orders</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card p-4 border-0 shadow-sm text-center bg-white h-100">
-                    <div class="bg-light rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                        <i class="bi bi-cup-hot fs-3 text-success"></i>
-                    </div>
-                    <h3 class="fw-bold mb-1"><?= $total_products ?></h3>
-                    <p class="text-muted small mb-0">Active Menu Items</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Analytics Section -->
-        <div class="row g-4 mb-5 reveal">
-            <!-- Revenue Board -->
-            <div class="col-lg-6">
-                <div class="card p-4 border-0 shadow-sm bg-white h-100">
-                    <h5 class="fw-bold mb-4">Revenue Board</h5>
-                    <div class="d-flex justify-content-between mb-4">
-                        <div class="text-center p-3 border rounded-4 flex-fill me-2">
-                            <div class="small text-muted mb-1">Weekly</div>
-                            <div class="fw-bold text-primary">₱<?= number_format($revenue['weekly'], 2) ?></div>
-                        </div>
-                        <div class="text-center p-3 border rounded-4 flex-fill mx-2 bg-light">
-                            <div class="small text-muted mb-1">Monthly</div>
-                            <div class="fw-bold text-primary">₱<?= number_format($revenue['monthly'], 2) ?></div>
-                        </div>
-                        <div class="text-center p-3 border rounded-4 flex-fill ms-2">
-                            <div class="small text-muted mb-1">Yearly</div>
-                            <div class="fw-bold text-primary">₱<?= number_format($revenue['yearly'], 2) ?></div>
-                        </div>
-                    </div>
-                    <canvas id="revenueChart" height="200"></canvas>
-                </div>
-            </div>
-
-            <!-- Product Popularity -->
-            <div class="col-lg-6">
-                <div class="card p-4 border-0 shadow-sm bg-white h-100">
-                    <h5 class="fw-bold mb-4">Product Popularity</h5>
-                    <ul class="nav nav-pills nav-fill mb-4 bg-light p-1 rounded-pill" id="popularityTab" role="tablist">
+        <div class="col-lg-6">
+            <div class="surface-panel p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="h5 fw-bold mb-0">Product Popularity</h2>
+                    <ul class="nav nav-pills bg-soft p-1 rounded-pill" id="popularityTab" role="tablist">
                         <li class="nav-item">
-                            <button class="nav-link active rounded-pill px-4" id="top-tab" data-bs-toggle="pill" data-bs-target="#top-5" type="button">Top 5</button>
+                            <button class="nav-link active rounded-pill px-3 py-1 small" id="top-tab" data-bs-toggle="pill" data-bs-target="#top-5" type="button">Top 5</button>
                         </li>
                         <li class="nav-item">
-                            <button class="nav-link rounded-pill px-4" id="bottom-tab" data-bs-toggle="pill" data-bs-target="#bottom-5" type="button">Bottom 5</button>
+                            <button class="nav-link rounded-pill px-3 py-1 small" id="bottom-tab" data-bs-toggle="pill" data-bs-target="#bottom-5" type="button">Bottom 5</button>
                         </li>
                     </ul>
                     <div class="tab-content" id="popularityTabContent">
