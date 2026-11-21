@@ -22,7 +22,9 @@ $routes->get('cart/remove/(:any)', 'Cart::remove/$1');
 $routes->post('cart/update', 'Cart::update');
 $routes->get('checkout', 'Cart::checkout');
 $routes->post('checkout/process', 'Cart::processCheckout');
+
 $routes->get('profile', 'Auth::profile');
+$routes->post('profile/update', 'Auth::updateProfile');
 $routes->get('profile/order/(:num)', 'Auth::orderDetail/$1');
 
 $routes->get('favorites', 'Favorites::index');
