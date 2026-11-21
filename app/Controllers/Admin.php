@@ -71,12 +71,13 @@ class Admin extends BaseController
         $productModel = new ProductModel();
         $categoryModel = new CategoryModel();
         $data = [
-            'title'    => 'Manage Inventory',
-            'products' => $productModel->select('products.*, categories.name as category_name')
-                                       ->join('categories', 'categories.category_id = products.category_id')
-                                       ->orderBy('categories.name', 'ASC')
-                                       ->orderBy('products.name', 'ASC')
-                                       ->findAll()
+            'title'      => 'Manage Inventory',
+            'categories' => $categoryModel->orderBy('name', 'ASC')->findAll(),
+            'products'   => $productModel->select('products.*, categories.name as category_name')
+                                         ->join('categories', 'categories.category_id = products.category_id')
+                                         ->orderBy('categories.name', 'ASC')
+                                         ->orderBy('products.name', 'ASC')
+                                         ->findAll()
         ];
         return view('admin/products/index', $data);
     }
@@ -84,35 +85,114 @@ class Admin extends BaseController
     public function addProduct()
     {
         $categoryModel = new CategoryModel();
-        $data = [
+        return view('admin/products/add', [
             'title'      => 'Add New Product',
             'categories' => $categoryModel->findAll()
-        ];
-        return view('admin/products/add', $data);
+        ]);
     }
 
     public function storeProduct()
     {
         $productModel = new ProductModel();
-        
+
         $rules = [
             'name'           => 'required|min_length[3]',
             'price'          => 'required|numeric',
-            'category_id'    => 'required'
+            'category_id'    => 'required|is_natural_no_zero',
+            'stock_quantity' => 'permit_empty|is_natural'
         ];
 
-        if ($this->validate($rules)) {
-            $productModel->save([
-                'name'           => $this->request->getPost('name'),
-                'description'    => $this->request->getPost('description'),
-                'price'          => $this->request->getPost('price'),
-                'category_id'    => $this->request->getPost('category_id'),
-                'image_url'      => $this->request->getPost('image_url')
-            ]);
-            return redirect()->to(base_url('admin/products'))->with('msg', 'Product added successfully.');
-        } else {
+        if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('validation', $this->validator);
         }
+
+        $imageUrl = trim((string) $this->request->getPost('image_url'));
+        $imageFile = $this->request->getFile('image_file');
+        if ($imageFile && $imageFile->isValid() && !$imageFile->hasMoved()) {
+            $uploadDir = FCPATH . 'assets/images/uploads';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0775, true);
+            }
+            $newName = $imageFile->getRandomName();
+            $imageFile->move($uploadDir, $newName);
+            $imageUrl = 'assets/images/uploads/' . $newName;
+        }
+
+        $stockQty = $this->request->getPost('stock_quantity');
+        $stockQty = ($stockQty === null || $stockQty === '') ? 100 : (int) $stockQty;
+
+        $productModel->save([
+            'name'           => trim((string) $this->request->getPost('name')),
+            'description'    => trim((string) $this->request->getPost('description')),
+            'price'          => $this->request->getPost('price'),
+            'category_id'    => $this->request->getPost('category_id'),
+            'stock_quantity' => $stockQty,
+            'image_url'      => $imageUrl
+        ]);
+
+        return redirect()->to(base_url('admin/products'))->with('msg', 'Product added to menu.');
+    }
+
+    public function updateProduct()
+    {
+        $productModel = new ProductModel();
+        $productId = (int) $this->request->getPost('product_id');
+
+        $product = $productModel->find($productId);
+        if (!$product) {
+            return redirect()->back()->with('error', 'Product not found.');
+        }
+
+        $rules = [
+            'name'           => 'required|min_length[3]',
+            'price'          => 'required|numeric',
+            'category_id'    => 'required|is_natural_no_zero',
+            'stock_quantity' => 'required|is_natural'
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->with('error', 'Please enter valid product details.');
+        }
+
+        $updateData = [
+            'name'           => trim((string) $this->request->getPost('name')),
+            'description'    => trim((string) $this->request->getPost('description')),
+            'price'          => $this->request->getPost('price'),
+            'category_id'    => (int) $this->request->getPost('category_id'),
+            'stock_quantity' => (int) $this->request->getPost('stock_quantity'),
+        ];
+
+        $imageUrl = trim((string) $this->request->getPost('image_url'));
+        if ($imageUrl !== '') {
+            $updateData['image_url'] = $imageUrl;
+        }
+
+        $imageFile = $this->request->getFile('image_file');
+        if ($imageFile && $imageFile->isValid() && !$imageFile->hasMoved()) {
+            $uploadDir = FCPATH . 'assets/images/uploads';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0775, true);
+            }
+            $newName = $imageFile->getRandomName();
+            $imageFile->move($uploadDir, $newName);
+            $updateData['image_url'] = 'assets/images/uploads/' . $newName;
+        }
+
+        $productModel->update($productId, $updateData);
+        return redirect()->to(base_url('admin/products'))->with('msg', 'Product "' . $updateData['name'] . '" updated.');
+    }
+
+    public function deleteProduct($id)
+    {
+        $productModel = new ProductModel();
+        $product = $productModel->find($id);
+
+        if (!$product) {
+            return redirect()->back()->with('error', 'Product not found.');
+        }
+
+        $productModel->delete($id);
+        return redirect()->to(base_url('admin/products'))->with('msg', 'Product "' . $product['name'] . '" removed.');
     }
 
     public function orders()
@@ -133,7 +213,7 @@ class Admin extends BaseController
         $orderModel = new OrderModel();
         $orderItemModel = new OrderItemModel();
 
-        $order = $orderModel->select('orders.*, users.name as customer_name, users.email as customer_email')
+        $order = $orderModel->select('orders.*, users.name as customer_name, users.email as customer_email, users.phone as customer_phone, users.address as customer_address')
                             ->join('users', 'users.user_id = orders.user_id')
                             ->find($id);
 
@@ -146,7 +226,7 @@ class Admin extends BaseController
                                 ->where('order_id', $id)
                                 ->findAll();
 
-        $data = [
+        return view('admin/orders/view', [
             'title' => 'Order Details #' . $id,
             'order' => $order,
             'items' => $items
