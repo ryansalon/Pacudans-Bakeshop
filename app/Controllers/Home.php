@@ -15,42 +15,44 @@ class Home extends BaseController
         $seed = date('Ymd');
         $dayName = date('l');
 
-    public function checkOrderStatus()
-    {
-        if (!session()->get('isLoggedIn')) {
-            return $this->response->setJSON(['updated' => 0]);
+        $featured = $productModel->select('products.*, categories.name as category_name, MIN(product_variants.price) as min_price, COUNT(product_variants.variant_id) as variant_count')
+                                 ->join('categories', 'categories.category_id = products.category_id', 'left')
+                                 ->join('product_variants', 'product_variants.product_id = products.product_id', 'left')
+                                 ->groupBy('products.product_id')
+                                 ->orderBy("RAND($seed)")
+                                 ->limit(4)
+                                 ->findAll();
+
+        // Pick a whole celebration cake (highest-priced cake with an image) for the masthead tile
+        $signature = $productModel->select('products.*, categories.name as category_name')
+                                  ->join('categories', 'categories.category_id = products.category_id', 'left')
+                                  ->where('categories.name', 'Cakes')
+                                  ->where('products.price >=', 100)
+                                  ->orderBy('products.price', 'DESC')
+                                  ->first();
+        if (!$signature) {
+            $signature = $productModel->select('products.*, categories.name as category_name')
+                                      ->join('categories', 'categories.category_id = products.category_id', 'left')
+                                      ->orderBy('products.price', 'DESC')
+                                      ->first();
         }
 
-        $userId = session()->get('user_id');
-        $lastCheck = $this->request->getGet('last_check');
-        $orderModel = new \App\Models\OrderModel();
+        // Compute live price ranges so page copy never contradicts actual DB catalog prices
+        $priceBounds = $productModel->selectMin('price', 'min_p')->selectMax('price', 'max_p')->first();
+        $categories = $categoryModel->orderBy('category_id', 'ASC')->findAll();
+        $totalProducts = $productModel->countAll();
 
-        $updatedOrders = $orderModel->where('user_id', $userId)
-                                    ->where('updated_at >', $lastCheck)
-                                    ->where('updated_at !=', 'created_at') // only actual updates
-                                    ->countAllResults();
+        $data = [
+            'featured_products' => $featured,
+            'signature_product' => $signature,
+            'categories'        => $categories,
+            'total_products'    => $totalProducts,
+            'min_price'         => (float) ($priceBounds['min_p'] ?? 0),
+            'max_price'         => (float) ($priceBounds['max_p'] ?? 0),
+            'current_day'       => $dayName,
+            'title'             => 'Pacudan\'s Bakeshop & Coffee Bar'
+        ];
 
-        return $this->response->setJSON(['updated' => $updatedOrders]);
-    }
-
-    public function getNotificationCount()
-    {
-        if (!session()->get('isLoggedIn')) {
-            return $this->response->setJSON(['count' => 0]);
-        }
-
-        $orderModel = new \App\Models\OrderModel();
-        
-        if (session()->get('role') === 'admin') {
-            // Count how many customers ordered (Pending orders)
-            $count = $orderModel->where('status', 'pending')->countAllResults();
-        } else {
-            // Count current active orders for user
-            $count = $orderModel->where('user_id', session()->get('user_id'))
-                                ->where('status', 'pending')
-                                ->countAllResults();
-        }
-
-        return $this->response->setJSON(['count' => $count]);
+        return view('home', $data);
     }
 }
