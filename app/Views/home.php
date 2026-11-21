@@ -258,64 +258,192 @@
                     <h2 class="display-6 fw-bold mb-3">Visit Our Shop in Mambajao</h2>
                     <p class="text-muted mb-4">Dine in for fresh espresso and warm pastries, pick up a celebration cake, or call the counter directly.</p>
 
-        <div class="row g-5 align-items-center mt-4">
-            <div class="col-lg-5 reveal" data-aos="fade-right">
-                <div class="card p-5 border-0 shadow-lg rounded-5 bg-white h-100">
-                    <div class="mb-5">
-                        <div class="d-flex align-items-start mb-4">
-                            <div class="bg-primary text-white rounded-circle p-3 me-4 shadow-sm">
-                                <i class="bi bi-geo-alt fs-4"></i>
-                            </div>
+                    <div class="d-grid gap-3 mb-4">
+                        <div class="d-flex align-items-start gap-3">
+                            <span class="rounded-circle d-inline-flex align-items-center justify-content-center text-white flex-shrink-0" style="width: 42px; height: 42px; background: var(--jade-deep);">
+                                <i class="bi bi-geo-alt"></i>
+                            </span>
                             <div>
-                                <h5 class="fw-bold mb-1">Our Location</h5>
-                                <p class="text-muted mb-0">Mambajao, Camiguin Island, Philippines</p>
+                                <h3 class="h6 fw-bold mb-0">Address</h3>
+                                <p class="text-muted small mb-0">Mambajao, Camiguin Island, Philippines</p>
                             </div>
                         </div>
 
-                        <div class="d-flex align-items-start mb-4">
-                            <div class="bg-primary text-white rounded-circle p-3 me-4 shadow-sm">
-                                <i class="bi bi-clock fs-4"></i>
-                            </div>
+                        <div class="d-flex align-items-start gap-3">
+                            <span class="rounded-circle d-inline-flex align-items-center justify-content-center text-white flex-shrink-0" style="width: 42px; height: 42px; background: var(--jade-deep);">
+                                <i class="bi bi-clock"></i>
+                            </span>
                             <div>
-                                <h5 class="fw-bold mb-1">Operating Hours</h5>
-                                <p class="text-muted mb-0">Monday - Sunday<br>8:00 AM - 9:00 PM</p>
+                                <h3 class="h6 fw-bold mb-0">Hours</h3>
+                                <p class="text-muted small mb-0 tabular-nums">Monday – Sunday · 8:00 AM – 9:00 PM</p>
                             </div>
                         </div>
 
-                        <div class="d-flex align-items-start">
-                            <div class="bg-primary text-white rounded-circle p-3 me-4 shadow-sm">
-                                <i class="bi bi-envelope fs-4"></i>
-                            </div>
+                        <div class="d-flex align-items-start gap-3">
+                            <span class="rounded-circle d-inline-flex align-items-center justify-content-center text-white flex-shrink-0" style="width: 42px; height: 42px; background: var(--jade-deep);">
+                                <i class="bi bi-telephone"></i>
+                            </span>
                             <div>
-                                <h5 class="fw-bold mb-1">Contact Us</h5>
-                                <p class="text-muted mb-0">pacudanscoffee@gmail.com<br>0963 921 6585</p>
+                                <h3 class="h6 fw-bold mb-0">Direct Counter Line</h3>
+                                <p class="text-muted small mb-0">
+                                    <a href="tel:09639216585" class="text-decoration-none text-dark fw-bold tabular-nums">0963 921 6585</a><br>
+                                    <a href="mailto:pacudanscoffee@gmail.com" class="text-decoration-none text-muted">pacudanscoffee@gmail.com</a>
+                                </p>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="col-lg-7 reveal" data-aos="fade-left">
-                <div class="card p-2 border-0 shadow-lg rounded-5 bg-white overflow-hidden position-relative" style="height: 500px;">
-                    <!-- Embedded Google Map - With Pinpoint and Scroll Disabled -->
-                    <iframe 
-                        src="https://maps.google.com/maps?q=Pacudan's%20Bakeshop,%20Mambajao,%20Camiguin&t=&z=15&ie=UTF8&iwloc=&output=embed" 
-                        width="100%" 
-                        height="100%" 
-                        style="border:0; border-radius: 40px; pointer-events: none;" 
-                        allowfullscreen="" 
-                        loading="lazy">
-                    </iframe>
-                    <!-- Overlay to prevent accidental interactions but allow clicking 'View Larger Map' if the iframe had it (pointer-events: none on iframe is safer for scroll) -->
+                    <a href="https://maps.google.com/?q=Pacudan's+Bakeshop,+Mambajao,+Camiguin" target="_blank" rel="noopener" class="btn btn-outline-primary">
+                        <i class="bi bi-map me-2"></i>Open in Google Maps
+                    </a>
+                </div>
+
+                <div class="col-lg-7">
+                    <div class="overflow-hidden rounded-4 border" style="height: 400px; border-color: var(--border-tile) !important;">
+                        <iframe
+                            title="Pacudan's Bakeshop & Coffee Bar Map"
+                            src="https://maps.google.com/maps?q=Pacudan's%20Bakeshop,%20Mambajao,%20Camiguin&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                            width="100%"
+                            height="100%"
+                            style="border: 0;"
+                            allowfullscreen=""
+                            loading="lazy">
+                        </iframe>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+
+<script>
+    document.querySelectorAll('.home-quick-add').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = this.querySelector('.quick-add-btn');
+            const originalHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+
+            fetch(this.action, {
+                method: 'POST',
+                body: new FormData(this),
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    updateBagCounters(data.cart_count);
+                    Toast.fire({ icon: 'success', title: data.message || 'Added to bag!' });
+                    btn.innerHTML = '<i class="bi bi-check2 me-1"></i>Added';
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btn.innerHTML = originalHtml;
+                    }, 1200);
+                } else {
+                    Toast.fire({ icon: 'error', title: data.message || 'Could not add item.' });
+                    btn.disabled = false;
+                    btn.innerHTML = originalHtml;
+                }
+            })
+            .catch(() => {
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            });
+        });
+    });
+</script>
 
 <style>
-    .transition-transform { transition: transform 0.5s ease; }
-    .card:hover .transition-transform { transform: scale(1.05); }
+    /* Subtle volcanic-jade glazed ceramic tile grid texture */
+    .jade-masthead,
+    .jade-tile-surface {
+        background-color: var(--jade-deep);
+        background-image:
+            linear-gradient(to right, rgba(246, 242, 233, 0.045) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(246, 242, 233, 0.045) 1px, transparent 1px);
+        background-size: 64px 64px;
+    }
+
+    .jade-masthead {
+        color: var(--plaster-bg);
+        padding: 86px 0 36px;
+        border-bottom: 6px solid var(--amber-cta);
+    }
+
+    .masthead-title {
+        font-size: clamp(2rem, 4.1vw, 3.6rem);
+        line-height: 1.03;
+        letter-spacing: -0.03em;
+        color: var(--plaster-bg);
+    }
+
+    .masthead-sub {
+        font-size: 1.04rem;
+        color: var(--jade-tint);
+        max-width: 54ch;
+    }
+
+    /* Authored motion moment: signature glazed tile settles cleanly on load (stays visible by default) */
+    @keyframes tileSettle {
+        0% { transform: translateY(10px); }
+        100% { transform: translateY(0); }
+    }
+
+    .signature-tile {
+        background-color: var(--jade-raised);
+        border: 1px solid rgba(246, 242, 233, 0.22);
+        box-shadow: 0 18px 38px rgba(8, 25, 20, 0.28);
+        border-radius: 18px;
+        padding: 18px;
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        animation: tileSettle 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .signature-thumb-wrap {
+        display: block;
+        width: 118px;
+        height: 118px;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid rgba(246, 242, 233, 0.22);
+    }
+
+    .signature-thumb {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .signature-tile:hover .signature-thumb {
+        transform: scale(1.05);
+    }
+
+    .counter-thumb {
+        height: 158px;
+        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .counter-card:hover .counter-thumb {
+        transform: scale(1.04);
+    }
+
+    @media (max-width: 575.98px) {
+        .signature-tile {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .signature-thumb-wrap {
+            width: 100%;
+            height: 172px;
+        }
+        .counter-thumb {
+            height: 210px;
+        }
+    }
 </style>
 
 <?= $this->endSection() ?>
