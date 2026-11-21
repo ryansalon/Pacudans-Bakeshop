@@ -2,272 +2,214 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link id="favicon" rel="icon" type="image/x-icon" href="<?= base_url('assets/images/logo_and_bg/pacudans_logo.jpg') ?>">
-    <script>
-        window.addEventListener('load', function() {
-            const img = new Image();
-            img.onload = function() {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                canvas.width = 64;
-                canvas.height = 64;
-                
-                // Create circular clipping path
-                ctx.beginPath();
-                ctx.arc(32, 32, 32, 0, Math.PI * 2);
-                ctx.clip();
-                
-                // Draw image cropped to circle
-                ctx.drawImage(img, 0, 0, 64, 64);
-                
-                // Update favicon link
-                document.getElementById('favicon').href = canvas.toDataURL('image/png');
-            };
-            img.src = "<?= base_url('assets/images/logo_and_bg/pacudans_logo.jpg') ?>";
-        });
-    </script>
-    <title><?= $title ?? 'Pacudan\'s Bakeshop & Coffee Bar' ?></title>
+    <link id="favicon" rel="icon" type="image/jpeg" href="<?= base_url('assets/images/logo_and_bg/pacudans_logo.jpg') ?>">
+    <title><?= esc($title ?? "Pacudan's Bakeshop & Coffee Bar") ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
     <style>
         :root {
-            --primary-bg: #FDF9F3;
-            --accent-color: #4A3121;
-            --secondary-accent: #A67C52;
-            --text-main: #2D1B10;
-            --text-muted: #7A6A5E;
-            --glass-white: rgba(255, 255, 255, 0.92);
+            --jade-deep: #143B31;
+            --jade-raised: #1E4F42;
+            --jade-hover: #0E2B23;
+            --jade-tint: #CBE0D8;
+            --amber-cta: #D97706;
+            --amber-hover: #B45309;
+            --amber-light: #FCD34D;
+            --plaster-bg: #F6F2E9;
+            --stone-soft: #ECE6D9;
+            --card-bg: #FFFFFF;
+            --ink-main: #1D1815;
+            --ink-muted: #4E4942;
+            --border-tile: rgba(20, 59, 49, 0.15);
+            --border-tile-strong: rgba(20, 59, 49, 0.28);
+            --glass-plaster: rgba(246, 242, 233, 0.94);
+
+            /* Semantic aliases for Bootstrap & views */
+            --primary-bg: var(--plaster-bg);
+            --bg-soft: var(--stone-soft);
+            --accent-color: var(--jade-deep);
+            --secondary-accent: var(--amber-cta);
+            --text-main: var(--ink-main);
+            --text-muted: var(--ink-muted);
+            --border-warm: var(--border-tile);
         }
 
-        body { 
-            background-color: var(--primary-bg); 
-            color: var(--text-main); 
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
+        /* Browser surfaces */
+        ::selection {
+            background-color: var(--jade-deep);
+            color: var(--plaster-bg);
+        }
+
+        html {
+            scrollbar-width: thin;
+            scrollbar-color: var(--jade-deep) var(--stone-soft);
+            scroll-behavior: smooth;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--stone-soft);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--jade-deep);
+            border-radius: 999px;
+            border: 2px solid var(--stone-soft);
+        }
+
+        input, textarea, select {
+            caret-color: var(--amber-cta);
+        }
+
+        a {
+            text-underline-offset: 0.22em;
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--amber-cta) !important;
+            outline-offset: 2px !important;
+        }
+
+        .tabular-nums,
+        .price-tag,
+        .table td,
+        .table th,
+        .badge,
+        input[type="number"],
+        #main-price,
+        #cart-counter,
+        #notif-counter,
+        #fav-counter {
+            font-variant-numeric: tabular-nums;
+        }
+
+        html, body {
+            max-width: 100%;
+            overflow-x: clip;
+        }
+
+        main, section {
+            max-width: 100%;
+            overflow-x: clip;
+        }
+
+        body {
+            background-color: var(--plaster-bg);
+            color: var(--ink-main);
+            font-family: 'Hanken Grotesk', sans-serif;
             line-height: 1.6;
         }
 
-        h1, h2, h3, h4, h5, h6, .navbar-brand {
-            font-family: 'Playfair Display', serif;
-            font-weight: 600;
-        }
-
-        /* Premium Smooth Shadows */
-        .shadow-premium {
-            box-shadow: 0 20px 50px rgba(61, 43, 31, 0.08) !important;
-        }
-
-        /* Circular Branded Preloader */
-        #preloader {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-soft);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s;
-        }
-
-        .loader-wrapper {
-            position: relative;
-            width: 220px;
-            height: 220px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .loader-logo {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            object-fit: cover;
-            z-index: 10;
-            box-shadow: 0 15px 35px rgba(61, 43, 31, 0.15);
-            border: 3px solid #fff;
-            animation: pulse 2.5s infinite ease-in-out;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); filter: brightness(1); }
-            50% { transform: scale(1.03); filter: brightness(1.05); }
-        }
-
-        .rotating-text {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            animation: rotateText 12s linear infinite;
-        }
-
-        @keyframes rotateText {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .rotating-text span {
-            position: absolute;
-            left: 50%;
-            transform-origin: 0 110px; /* Radius of the circle */
-            font-family: 'Outfit', sans-serif;
-            font-weight: 700;
-            font-size: 0.75rem;
-            color: var(--accent-gold);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        /* Rest of UI Styles */
-        .navbar { 
-            padding: 1.8rem 0; 
-            transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1); 
-            background: transparent !important;
-            z-index: 1000;
-        }
-        
-        .navbar.scrolled {
-            background: rgba(255, 255, 255, 0.96) !important;
-            backdrop-filter: blur(20px);
-            padding: 1rem 0;
-            box-shadow: 0 10px 40px rgba(61, 43, 31, 0.06) !important;
-            border-bottom: 1px solid rgba(176, 141, 87, 0.1);
-        }
-
-        .navbar .nav-link,
-        .navbar .navbar-brand,
-        .navbar .navbar-brand small,
-        .navbar .bi-bag,
-        .navbar .bi-list {
-            color: var(--accent-color) !important;
-        }
-
-        body.is-home .navbar:not(.scrolled) .nav-link,
-        body.is-home .navbar:not(.scrolled) .navbar-brand,
-        body.is-home .navbar:not(.scrolled) .navbar-brand small,
-        body.is-home .navbar:not(.scrolled) .bi-bag,
-        body.is-home .navbar:not(.scrolled) .bi-list {
-            color: #fff !important;
-        }
-
-        .main-content { min-height: 80vh; padding-top: 200px; padding-bottom: 100px; }
-        body.is-home .main-content { padding-top: 0; }
-
-        .nav-link {
-            font-weight: 600;
-            letter-spacing: 0.3px;
-            transition: color 0.3s ease;
-        }
-
-        .nav-link:hover {
-            color: var(--accent-gold) !important;
-        }
-
-        .navbar-brand { 
-            font-family: 'Outfit', sans-serif; 
-            font-weight: 800; 
-            color: var(--primary-mocha) !important; 
-            letter-spacing: -0.5px;
-        }
-
-        .btn-primary { 
-            background: var(--accent-color); 
-            color: #FDF9F3 !important;
-            border: none; 
-            padding: 14px 32px; 
-            border-radius: 100px; 
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            box-shadow: 0 10px 25px rgba(61, 43, 31, 0.15);
-            transition: all 0.3s ease-in-out;
-        }
-
-        .btn-primary:hover, .btn-primary:active, .btn-primary:focus {
-            background: var(--secondary-accent) !important;
-            transform: translateY(-2px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15) !important;
-            color: #ffffff !important;
-        }
-
-        .badge {
-            transition: all 0.3s ease-in-out;
-        }
-
-        .badge:hover {
-            background: var(--secondary-accent) !important;
-            color: #ffffff !important;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-        }
-
-        .btn-outline-primary {
-            border: 2px solid var(--accent-color);
-            color: var(--accent-color);
-            border-radius: 100px;
-            font-weight: 700;
-            padding: 12px 30px;
-            transition: all 0.3s ease-in-out;
-        }
-
-        .btn-outline-primary:hover {
-            background: var(--secondary-accent) !important;
-            border-color: var(--secondary-accent) !important;
-            color: #ffffff !important;
-            transform: translateY(-2px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15) !important;
-        }
-
-        /* Fix Bootstrap Focus Outline */
-        .btn:focus, .btn-check:focus + .btn {
-            box-shadow: 0 0 0 0.25rem rgba(166, 124, 82, 0.25) !important;
-            outline: none !important;
-        }
-
-        .card { 
-            border: 1px solid rgba(176, 141, 87, 0.08); 
-            border-radius: 30px; 
-            background: #fff; 
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-        }
-
-        .main-content { min-height: 80vh; padding-top: 0; padding-bottom: 100px; }
-        .footer { 
-            background: var(--accent-color); 
-            border-radius: 80px 80px 0 0; 
-            padding: 100px 0 60px; 
-            color: #fff; 
-            margin-top: 80px; 
-        }
-        .section-padding { padding: 120px 0; }
-        #cart-counter { 
-            background: var(--secondary-accent); 
-            color: #fff; 
-            font-size: 0.65rem; 
-            padding: 3px 7px; 
-            border-radius: 50px; 
-            border: 2px solid #fff; 
+        h1, h2, h3, h4, h5, h6, .display-font {
+            font-family: 'Bricolage Grotesque', sans-serif;
             font-weight: 800;
+            color: var(--ink-main);
+            text-wrap: balance;
+            letter-spacing: -0.025em;
         }
 
-        .text-primary { color: var(--secondary-accent) !important; }
-        
-        .sidebar-card { 
-            border-radius: 30px; 
-            padding: 30px; 
-            background: #fff; 
-            box-shadow: 0 15px 45px rgba(61, 43, 31, 0.04);
-            border: 1px solid rgba(176, 141, 87, 0.1);
+        p, .prose {
+            max-width: 68ch;
         }
 
-        .sidebar-link {
-            display: flex; align-items: center; padding: 15px 25px; margin-bottom: 10px; border-radius: 20px;
-            text-decoration: none; color: var(--text-main); font-weight: bold; transition: all 0.3s ease-in-out;
-            border: 1px solid transparent;
+        .text-muted {
+            color: var(--ink-muted) !important;
+        }
+
+        .text-primary {
+            color: var(--jade-deep) !important;
+        }
+
+        .text-amber {
+            color: var(--amber-hover) !important;
+        }
+
+        .bg-soft {
+            background-color: var(--stone-soft) !important;
+        }
+
+        .bg-jade {
+            background-color: var(--jade-deep) !important;
+            color: var(--plaster-bg);
+        }
+
+        .surface-panel {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-tile);
+            border-radius: 18px;
+            box-shadow: 0 10px 28px rgba(20, 59, 49, 0.06);
+        }
+
+        .surface-subtle {
+            background-color: var(--stone-soft);
+            border: 1px solid var(--border-tile);
+            border-radius: 14px;
+        }
+
+        /* Volcanic-Jade Architectural Navbar */
+        .site-navbar {
+            background-color: var(--jade-deep);
+            padding: 0.75rem 0;
+            border-bottom: 6px solid var(--amber-cta);
+            z-index: 1030;
+            transition: box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+
+        body.is-home .site-navbar {
+            border-bottom: 0;
+        }
+
+        body.is-home .site-navbar.scrolled {
+            border-bottom: 6px solid var(--amber-cta);
+            box-shadow: 0 10px 28px rgba(14, 43, 35, 0.28);
+        }
+
+        .site-navbar .navbar-brand {
+            font-family: 'Bricolage Grotesque', sans-serif;
+            font-weight: 800;
+            color: var(--plaster-bg);
+            display: inline-flex;
+            align-items: center;
+            gap: 11px;
+            letter-spacing: -0.02em;
+        }
+
+        .site-navbar .navbar-brand:hover {
+            color: #ffffff;
+        }
+
+        .site-navbar .brand-sub {
+            font-family: 'Hanken Grotesk', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.09em;
+            text-transform: uppercase;
+            color: var(--jade-tint);
+        }
+
+        .site-navbar .nav-link {
+            color: var(--jade-tint);
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 0.48rem 0.9rem !important;
+            border-radius: 999px;
+            transition: color 0.2s ease, background-color 0.2s ease;
+        }
+
+        .site-navbar .nav-link:hover,
+        .site-navbar .nav-link.active {
+            color: #ffffff;
+            background-color: rgba(246, 242, 233, 0.1);
         }
 
         .sidebar-link:hover {
