@@ -2,86 +2,89 @@
 
 <?= $this->section('content') ?>
 
-<div class="container py-5">
-    <div class="mb-5" style="margin-top: 100px;">
-        <a href="<?= base_url('menu#menu-grid') ?>" class="btn btn-outline-primary rounded-pill px-4 fw-bold shadow-sm">
-            <i class="bi bi-arrow-left me-2"></i> Back to Menu
+<div class="container py-4">
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-end gap-3 mb-4">
+        <div>
+            <h1 class="display-5 mb-1 fw-bold">Your Order Bag</h1>
+            <p class="text-muted mb-0">Adjust quantities anytime—your totals stay automatically in sync.</p>
+        </div>
+        <a href="<?= base_url('menu') ?>" class="btn btn-outline-primary rounded-pill px-4 align-self-start align-self-sm-end">
+            <i class="bi bi-arrow-left me-2"></i>Continue Shopping
         </a>
     </div>
-    <h2 class="display-6 mb-5" style="font-family: 'Playfair Display', serif;"><i class="bi bi-cart3 me-3 text-primary"></i>Your Shopping Cart</h2>
 
-        <?php if (empty($cart)): ?>
-            <div class="text-center py-5 bg-white rounded-5 shadow-sm">
-                <i class="bi bi-cart-x display-1 opacity-25"></i>
-                <h3 class="mt-4">Your cart is feeling light...</h3>
-                <p class="text-muted mb-4">You haven't added any treats to your cart yet.</p>
-                <a href="<?= base_url('menu') ?>" class="btn btn-primary btn-lg rounded-pill px-5">Go to Menu</a>
-            </div>
-        <?php else: ?>
-            <div class="row g-5">
-                <div class="col-lg-8">
-                    <form action="<?= base_url('cart/update') ?>" method="post" id="updateCartForm">
-                        <div class="card p-4 border-0 shadow-sm rounded-4">
-                            <div class="table-responsive" style="overflow: visible;">
-                                <table class="table table-hover align-middle mb-0">
-                                    <thead>
-                                        <tr class="text-muted small text-uppercase">
-                                            <th>Product</th>
-                                            <th>Price</th>
-                                            <th>Quantity</th>
-                                            <th>Subtotal</th>
-                                            <th class="text-end">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php $total = 0; ?>
-                                        <?php foreach ($cart as $key => $item): ?>
-                                            <?php 
-                                                $subtotal = $item['price'] * $item['quantity']; 
-                                                $total += $subtotal;
-                                            ?>
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <?php if ($item['image']): ?>
-                                                            <img src="<?= base_url($item['image']) ?>" width="60" height="60" class="me-3 rounded-4" style="object-fit: cover;">
-                                                        <?php else: ?>
-                                                            <div class="bg-light text-muted text-center rounded-4 me-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                                                                <i class="bi bi-image fs-5 opacity-25"></i>
-                                                            </div>
-                                                        <?php endif; ?>
-                                                        <div>
-                                                            <span class="fw-semibold text-dark d-block"><?= esc($item['name']) ?></span>
-                                                            <?php if (!empty($item['size'])): ?>
-                                                                <span class="badge bg-soft text-primary border small rounded-pill px-2"><?= esc($item['size']) ?></span>
-                                                            <?php endif; ?>
+    <?php if (empty($cart)): ?>
+        <div class="text-center py-5 surface-panel">
+            <i class="bi bi-bag-x display-4 text-muted"></i>
+            <h2 class="h4 mt-3">Your bag is empty</h2>
+            <p class="text-muted mb-4 mx-auto">Explore our espresso bar, cold drinks, and freshly baked Camiguin cakes.</p>
+            <a href="<?= base_url('menu') ?>" class="btn btn-primary rounded-pill px-5">Browse Menu</a>
+        </div>
+    <?php else: ?>
+        <div class="row g-4 align-items-start">
+            <div class="col-lg-8">
+                <form action="<?= base_url('cart/update') ?>" method="post" id="updateCartForm">
+                    <?= csrf_field() ?>
+                    <div class="surface-panel p-3 p-md-4">
+                        <div class="table-responsive">
+                            <table class="table align-middle mb-0">
+                                <thead>
+                                    <tr class="text-muted small text-uppercase">
+                                        <th>Product</th>
+                                        <th>Price</th>
+                                        <th style="width: 155px;">Quantity</th>
+                                        <th>Subtotal</th>
+                                        <th class="text-end">Remove</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $total = 0; ?>
+                                    <?php foreach ($cart as $key => $item): ?>
+                                        <?php
+                                            $subtotal = $item['price'] * $item['quantity'];
+                                            $total += $subtotal;
+                                        ?>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <?php if ($item['image']): ?>
+                                                        <img src="<?= base_url($item['image']) ?>" width="58" height="58" class="me-3 rounded-3 object-fit-cover" alt="<?= esc($item['name']) ?>">
+                                                    <?php else: ?>
+                                                        <div class="bg-soft text-muted rounded-3 me-3 d-flex align-items-center justify-content-center" style="width: 58px; height: 58px;">
+                                                            <i class="bi bi-image"></i>
                                                         </div>
+                                                    <?php endif; ?>
+                                                    <div>
+                                                        <a href="<?= base_url('menu/' . $item['id']) ?>" class="fw-bold text-dark text-decoration-none d-block"><?= esc($item['name']) ?></a>
+                                                        <?php if (!empty($item['size'])): ?>
+                                                            <span class="badge bg-soft text-primary border small rounded-pill px-2"><?= esc($item['size']) ?></span>
+                                                        <?php endif; ?>
                                                     </div>
-                                                </td>
-                                                <td>₱<?= number_format($item['price'], 2) ?></td>
-                                                <td style="width: 120px;">
-                                                    <input type="number" name="quantity[<?= $key ?>]" value="<?= $item['quantity'] ?>" class="form-control rounded-pill text-center border-light bg-light" min="1">
-                                                </td>
-                                                <td class="fw-bold">₱<?= number_format($subtotal, 2) ?></td>
-                                                <td class="text-end">
-                                                    <a href="<?= base_url('cart/remove/' . $key) ?>" class="btn btn-light btn-sm rounded-circle text-danger p-2 shadow-sm border remove-item" title="Remove Item" data-name="<?= esc($item['name']) ?>">
-                                                        <i class="bi bi-x-lg"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
-                            </div>
+                                                </div>
+                                            </td>
+                                            <td class="tabular-nums">₱<?= number_format($item['price'], 2) ?></td>
+                                            <td>
+                                                <div class="input-group input-group-sm" style="width: 132px;">
+                                                    <button class="btn btn-outline-secondary rounded-start-pill qty-step" type="button" data-dir="-1" aria-label="Decrease quantity"><i class="bi bi-dash"></i></button>
+                                                    <input type="number" name="quantity[<?= esc($key) ?>]" value="<?= (int) $item['quantity'] ?>" class="form-control text-center border-secondary cart-qty-input tabular-nums" min="0" aria-label="Quantity for <?= esc($item['name']) ?>">
+                                                    <button class="btn btn-outline-secondary rounded-end-pill qty-step" type="button" data-dir="1" aria-label="Increase quantity"><i class="bi bi-plus"></i></button>
+                                                </div>
+                                            </td>
+                                            <td class="fw-bold tabular-nums">₱<?= number_format($subtotal, 2) ?></td>
+                                            <td class="text-end">
+                                                <a href="<?= base_url('cart/remove/' . $key) ?>" class="btn btn-light btn-sm rounded-circle text-danger p-2 border remove-item" title="Remove Item" data-name="<?= esc($item['name']) ?>" aria-label="Remove <?= esc($item['name']) ?>">
+                                                    <i class="bi bi-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
                         </div>
-
-                        <div class="mt-4 d-flex justify-content-between align-items-center">
-                            <a href="<?= base_url('menu#menu-grid') ?>" class="btn btn-outline-primary rounded-pill px-4 shadow-sm fw-bold">
-                                <i class="bi bi-arrow-left me-2"></i>Continue Shopping
-                            </a>
-                            <button type="submit" class="btn btn-outline-primary rounded-pill px-4 shadow-sm fw-bold">
-                                <i class="bi bi-arrow-repeat me-2"></i>Update Quantities
-                            </button>
+                    </div>
+                    <noscript>
+                        <div class="mt-3 text-end">
+                            <button type="submit" class="btn btn-outline-primary rounded-pill px-4">Update Quantities</button>
                         </div>
                     </form>
                 </div>
