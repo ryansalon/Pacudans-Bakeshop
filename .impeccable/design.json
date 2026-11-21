@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-21T13:51:00Z",
+  "title": "Design System: Pacudan's Bakeshop & Coffee Bar",
+  "extensions": {
+    "colorMeta": {
+      "jade-deep": {
+        "role": "primary",
+        "displayName": "Volcanic Jade",
+        "canonical": "#143B31",
+        "tonalRamp": ["#091D18", "#0E2B23", "#143B31", "#1E4F42", "#2F6D5C", "#548F7E", "#8FBBA9", "#CBE0D8"]
+      },
+      "jade-raised": {
+        "role": "primary",
+        "displayName": "Glazed Jade Tile",
+        "canonical": "#1E4F42",
+        "tonalRamp": ["#0B211B", "#13352C", "#1E4F42", "#2C6A59", "#468674", "#72AA9A", "#A8CEC3", "#DCEEE8"]
+      },
+      "amber-cta": {
+        "role": "secondary",
+        "displayName": "Calamansi Amber",
+        "canonical": "#D97706",
+        "tonalRamp": ["#451A03", "#78350F", "#B45309", "#D97706", "#F59E0B", "#FBBF24", "#FCD34D", "#FEF3C7"]
+      },
+      "plaster-bg": {
+        "role": "neutral",
+        "displayName": "Sun-Washed Plaster",
+        "canonical": "#F6F2E9",
+        "tonalRamp": ["#2D2821", "#4E4942", "#756E63", "#9F978A", "#C7C0B3", "#E2DCD0", "#ECE6D9", "#F6F2E9"]
+      },
+      "ink-main": {
+        "role": "neutral",
+        "displayName": "Espresso Charcoal",
+        "canonical": "#1D1815",
+        "tonalRamp": ["#120F0D", "#1D1815", "#352E29", "#4E4942", "#736B63", "#9E968D", "#CBC4BC", "#F2EFEA"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Masthead hero headline and primary brand statement." },
+      "headline": { "displayName": "Headline", "purpose": "Page titles and section headers." },
+      "title": { "displayName": "Title", "purpose": "Product card titles, modals, and summary headers." },
+      "body": { "displayName": "Body", "purpose": "Descriptions, café story, and checkout instructions (max 68ch)." },
+      "label": { "displayName": "Label", "purpose": "Navigation links, category pills, form labels, and buttons." }
+    },
+    "shadows": [
+      { "name": "card-rest", "value": "0 6px 20px rgba(20, 59, 49, 0.05)", "purpose": "Ambient lift for white counter cards on plaster ground." },
+      { "name": "panel-lift", "value": "0 10px 28px rgba(20, 59, 49, 0.06)", "purpose": "Checkout summaries, order tables, and auth panels." },
+      { "name": "tile-depth", "value": "0 18px 38px rgba(8, 25, 20, 0.28)", "purpose": "Elevated Signature Bake tile on deep volcanic jade." }
+    ],
+    "motion": [
+      { "name": "ease-out-expo", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Signature tile settle and product photograph hover scale." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "576px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "992px" },
+      { "name": "xl", "value": "1200px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Primary volcanic-jade pill action for adding items and saving changes.",
+      "html": "<button class=\"ds-btn-primary\">Add to Bag</button>",
+      "css": ".ds-btn-primary { font-family: 'Hanken Grotesk', sans-serif; background: #143B31; color: #F6F2E9; border: 2px solid #143B31; border-radius: 999px; padding: 11px 26px; font-weight: 700; cursor: pointer; transition: background-color 0.2s ease, transform 0.2s ease; } .ds-btn-primary:hover { background: #0E2B23; border-color: #0E2B23; transform: translateY(-1px); } .ds-btn-primary:focus-visible { outline: 2px solid #D97706; outline-offset: 2px; }"
+    },
+    {
+      "name": "Amber Conversion Button",
+      "kind": "button",
+      "refersTo": "button-amber",
+      "description": "High-contrast calamansi-amber CTA for browsing menu, Order Direct, and Checkout.",
+      "html": "<button class=\"ds-btn-amber\">Order Direct</button>",
+      "css": ".ds-btn-amber { font-family: 'Hanken Grotesk', sans-serif; background: #D97706; color: #1D1815; border: 2px solid #D97706; border-radius: 999px; padding: 12px 28px; font-weight: 800; cursor: pointer; transition: background-color 0.2s ease, transform 0.2s ease; } .ds-btn-amber:hover { background: #F59E0B; border-color: #F59E0B; transform: translateY(-1px); } .ds-btn-amber:focus-visible { outline: 2px solid #143B31; outline-offset: 2px; }"
+    },
+    {
+      "name": "Category Filter Pill",
+      "kind": "chip",
+      "refersTo": "button-outline",
+      "description": "Scrollable horizontal menu category filter pill.",
+      "html": "<div class=\"ds-chip-row\"><button class=\"ds-chip ds-chip-active\">All Delights</button><button class=\"ds-chip\">Hot Drinks</button><button class=\"ds-chip\">Cakes</button></div>",
+      "css": ".ds-chip-row { display: flex; gap: 8px; } .ds-chip { font-family: 'Hanken Grotesk', sans-serif; background: transparent; color: #143B31; border: 1.5px solid #143B31; border-radius: 999px; padding: 8px 18px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: background-color 0.2s ease, color 0.2s ease; } .ds-chip:hover, .ds-chip-active { background: #143B31; color: #F6F2E9; }"
+    },
+    {
+      "name": "Counter Product Card",
+      "kind": "card",
+      "refersTo": "card-counter",
+      "description": "Storefront menu card with heading-first layout, tabular Peso price, and always-visible add action.",
+      "html": "<article class=\"ds-card\"><div class=\"ds-thumb\"></div><h3 class=\"ds-title\">Matcha Latte</h3><p class=\"ds-desc\">Premium matcha with steamed milk.<span>Hot Drinks</span></p><div class=\"ds-foot\"><strong>From ₱95.00</strong><button class=\"ds-add\">+ Add</button></div></article>",
+      "css": ".ds-card { font-family: 'Hanken Grotesk', sans-serif; background: #FFFFFF; border: 1px solid rgba(20, 59, 49, 0.15); border-radius: 18px; padding: 16px; width: 260px; box-shadow: 0 6px 20px rgba(20, 59, 49, 0.05); } .ds-thumb { height: 140px; border-radius: 12px; background: #ECE6D9; margin-bottom: 12px; } .ds-title { font-family: 'Bricolage Grotesque', sans-serif; font-size: 1.15rem; font-weight: 800; color: #1D1815; margin: 0 0 4px; } .ds-desc { font-size: 0.85rem; color: #4E4942; margin: 0 0 12px; } .ds-desc span { display: block; color: #B45309; font-weight: 700; margin-top: 4px; } .ds-foot { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(20, 59, 49, 0.14); padding-top: 10px; } .ds-foot strong { color: #143B31; font-variant-numeric: tabular-nums; } .ds-add { background: #143B31; color: #F6F2E9; border: none; border-radius: 999px; padding: 6px 14px; font-weight: 700; cursor: pointer; }"
+    },
+    {
+      "name": "Warm Stone Search Input",
+      "kind": "input",
+      "refersTo": "input-search",
+      "description": "Live menu search input with count badge on white surface.",
+      "html": "<div class=\"ds-search\"><input type=\"search\" placeholder=\"Search coffee, cakes, pastries...\" /><span>38 items</span></div>",
+      "css": ".ds-search { font-family: 'Hanken Grotesk', sans-serif; display: flex; align-items: center; background: #FFFFFF; border: 1px solid rgba(20, 59, 49, 0.18); border-radius: 999px; padding: 6px 10px 6px 18px; gap: 10px; } .ds-search input { border: none; outline: none; flex: 1; font-size: 0.95rem; color: #1D1815; caret-color: #D97706; background: transparent; } .ds-search span { background: #ECE6D9; color: #1D1815; border-radius: 999px; padding: 4px 12px; font-size: 0.8rem; font-weight: 700; font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Volcanic-Jade Navbar",
+      "kind": "nav",
+      "refersTo": "nav-bar",
+      "description": "Site-wide top bar anchored by a 6px calamansi-amber sill and persistent Bag pill.",
+      "html": "<nav class=\"ds-nav\"><span class=\"ds-brand\">PACUDAN'S</span><div class=\"ds-links\"><a class=\"on\" href=\"#\">Home</a><a href=\"#\">Full Menu</a><a href=\"#\">Visit Shop</a></div><a class=\"ds-bag\" href=\"#\">Bag (2)</a></nav>",
+      "css": ".ds-nav { font-family: 'Hanken Grotesk', sans-serif; background: #143B31; border-bottom: 6px solid #D97706; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; } .ds-brand { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; color: #F6F2E9; letter-spacing: -0.02em; } .ds-links { display: flex; gap: 10px; } .ds-links a { color: #CBE0D8; text-decoration: none; font-weight: 600; font-size: 0.9rem; padding: 6px 14px; border-radius: 999px; } .ds-links a.on, .ds-links a:hover { background: rgba(246, 242, 233, 0.12); color: #FFFFFF; } .ds-bag { background: #D97706; color: #1D1815; text-decoration: none; font-weight: 800; font-size: 0.88rem; padding: 7px 16px; border-radius: 999px; font-variant-numeric: tabular-nums; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Camiguin Botanical Tile & Roast Bar",
+    "overview": "This design system translates the warmth of a Mambajao neighborhood bakeshop and espresso bar into a disciplined architectural grammar. Deep volcanic-jade glazed tilework frames the storefront's navigation, opening masthead, and footer, anchored by a bold calamansi-amber sill that separates dark architectural surfaces from sun-washed plaster ordering shelves below.\n\nRather than retreating into generic cream-and-brown café templates or passive full-bleed banner imagery, the system leads immediately with real product photography, transparent Peso pricing, and working ordering controls. The same token hierarchy scales seamlessly from appetite-driven storefront surfaces (Home, Menu, Product Detail) into calm, tabular operational surfaces (Cart, Checkout, Profile, and the Admin Panel).",
+    "keyCharacteristics": [
+      "Deep volcanic-jade architectural chrome (#143B31) textured with subtle 64px glazed tile hairlines",
+      "Signature 6px calamansi-amber architectural sill (#D97706) separating jade framing from plaster grounds",
+      "Sun-washed plaster (#F6F2E9) and warm stone (#ECE6D9) ordering grounds with crisp white bordered cards",
+      "Expressive Bricolage Grotesque display headings paired with legible Hanken Grotesk UI copy and tabular numerals",
+      "Real product photography leading every card, with zero fabricated testimonials and zero eyebrow labels above headings"
+    ],
+    "rules": [
+      {
+        "name": "The Jade-to-Plaster Sill Rule",
+        "body": "Every transition between a dark volcanic-jade structural band (navbar, Home masthead, footer) and a sun-washed plaster field is marked by a single 6px calamansi-amber sill (#D97706). On unscrolled Home, the navbar drops its sill so navbar and masthead read as one continuous tiled facade.",
+        "section": "colors"
+      },
+      {
+        "name": "The No-Gray-On-Jade Rule",
+        "body": "Secondary copy on #143B31 or #1E4F42 surfaces always uses sea-glass tint (#CBE0D8) or sunlit gold (#FCD34D), never muted neutral gray.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Peso Rule",
+        "body": "Every Philippine Peso price (₱), bag counter, stock count, order ID, and dashboard metric enforces font-variant-numeric: tabular-nums so prices align cleanly across product rows and order tables.",
+        "section": "typography"
+      },
+      {
+        "name": "The Heading-First Rule",
+        "body": "Never place an uppercase kicker or category eyebrow above a heading (h1–h5). Product titles lead directly below photography; category labels sit beneath the description.",
+        "section": "typography"
+      },
+      {
+        "name": "The Quiet-At-Rest Rule",
+        "body": "Cards sit framed by 1px jade-tinted borders and light ambient lift; motion is concentrated in a single authored exponential ease-out (cubic-bezier(0.16, 1, 0.3, 1)) settle on the masthead Signature Bake tile and subtle thumbnail zoom (scale(1.04)) on pointer hover, honoring prefers-reduced-motion.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep real product photography uncrowded with zero text or price badges pasted over the center of food photos.",
+      "Do use tabular-nums on every Peso amount, quantity stepper, order ID, and admin revenue table.",
+      "Do keep primary ordering actions (+ Add, Add to Bag, Order Now) permanently visible across desktop, touch, and keyboard sessions.",
+      "Do carry the exact volcanic-jade (#143B31) and calamansi-amber (#D97706) palette into Chart.js dashboards and admin sub-navigation.",
+      "Do theme browser surfaces (::selection, scrollbars, caret-color, :focus-visible) from the palette."
+    ],
+    "donts": [
+      "Don't add eyebrow or kicker labels above headings on hero sections, page headers, or product cards.",
+      "Don't invent customer testimonials, star ratings, or unverified marketing claims; surface verified shop hours, Mambajao COD terms, and live catalog data instead.",
+      "Don't use generic gray text on volcanic-jade surfaces—always tint secondary text with #CBE0D8.",
+      "Don't nest .card containers inside other .card containers or use watermarked promotional banners where clean photography belongs.",
+      "Don't hide category navigation behind a duplicate hamburger icon or hide product actions behind hover-only overlays."
+    ]
+  }
+}
