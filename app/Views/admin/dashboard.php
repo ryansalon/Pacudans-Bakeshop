@@ -172,8 +172,8 @@
             datasets: [{
                 label: 'Revenue (₱)',
                 data: [<?= (float) $revenue['weekly'] ?>, <?= (float) $revenue['monthly'] ?>, <?= (float) $revenue['yearly'] ?>],
-                borderColor: '#D97706',
-                backgroundColor: 'rgba(217, 119, 6, 0.14)',
+                borderColor: '#C84122',
+                backgroundColor: 'rgba(200, 65, 34, 0.14)',
                 fill: true,
                 tension: 0.35
             }]
@@ -194,7 +194,7 @@
             datasets: [{
                 label: 'Quantity Sold',
                 data: topData,
-                backgroundColor: '#143B31',
+                backgroundColor: '#331E14',
                 borderRadius: 8
             }]
         },
@@ -214,7 +214,7 @@
             datasets: [{
                 label: 'Quantity Sold',
                 data: bottomData,
-                backgroundColor: '#D97706',
+                backgroundColor: '#C84122',
                 borderRadius: 8
             }]
         },
