@@ -1,38 +1,44 @@
 ---
 name: "Pacudan's Bakeshop & Coffee Bar"
-description: "Camiguin Botanical Tile & Roast Bar — volcanic-jade tilework, sun-washed plaster, and calamansi-amber ordering triggers."
+description: "Espresso Roast, Warm Cream & Bold Terracotta Ember — rich espresso architecture, warm cream ordering grounds, and punchy terracotta-ember conversion triggers."
 colors:
-  jade-deep: "#143B31"
-  jade-raised: "#1E4F42"
-  jade-hover: "#0E2B23"
-  jade-tint: "#CBE0D8"
-  amber-cta: "#D97706"
-  amber-hover: "#B45309"
-  amber-light: "#FCD34D"
-  plaster-bg: "#F6F2E9"
-  stone-soft: "#ECE6D9"
+  espresso-deep: "#331E14"
+  espresso-raised: "#472B1D"
+  espresso-hover: "#24140D"
+  cream-tint: "#EBDCCF"
+  ember-bold: "#C84122"
+  ember-hover: "#A63218"
+  ember-light: "#FF9F7A"
+  cream-bg: "#FAF4EB"
+  cream-soft: "#EFE5D8"
   card-bg: "#FFFFFF"
-  ink-main: "#1D1815"
-  ink-muted: "#4E4942"
+  ink-main: "#24140D"
+  ink-muted: "#5C463A"
 typography:
   display:
-    fontFamily: "Bricolage Grotesque, sans-serif"
-    fontSize: "clamp(2rem, 4.1vw, 3.6rem)"
-    fontWeight: 800
-    lineHeight: 1.03
-    letterSpacing: "-0.03em"
-  headline:
-    fontFamily: "Bricolage Grotesque, sans-serif"
-    fontSize: "1.75rem"
-    fontWeight: 800
-    lineHeight: 1.15
-    letterSpacing: "-0.025em"
-  title:
-    fontFamily: "Bricolage Grotesque, sans-serif"
-    fontSize: "1.25rem"
-    fontWeight: 700
-    lineHeight: 1.25
+    fontFamily: "Young Serif, Georgia, serif"
+    fontSize: "clamp(2.4rem, 4.3vw, 3.95rem)"
+    fontWeight: 400
+    lineHeight: 1.08
     letterSpacing: "-0.02em"
+  accent:
+    fontFamily: "Instrument Serif, Georgia, serif"
+    fontSize: "1.14em"
+    fontWeight: 400
+    lineHeight: 1
+    letterSpacing: "0em"
+  headline:
+    fontFamily: "Young Serif, Georgia, serif"
+    fontSize: "clamp(1.85rem, 3vw, 2.55rem)"
+    fontWeight: 400
+    lineHeight: 1.14
+    letterSpacing: "-0.015em"
+  title:
+    fontFamily: "Young Serif, Georgia, serif"
+    fontSize: "1.25rem"
+    fontWeight: 400
+    lineHeight: 1.25
+    letterSpacing: "-0.015em"
   body:
     fontFamily: "Hanken Grotesk, sans-serif"
     fontSize: "1rem"
@@ -58,21 +64,21 @@ spacing:
   xl: "40px"
 components:
   button-primary:
-    backgroundColor: "{colors.jade-deep}"
-    textColor: "{colors.plaster-bg}"
+    backgroundColor: "{colors.espresso-deep}"
+    textColor: "{colors.cream-bg}"
     rounded: "{rounded.pill}"
     padding: "11px 26px"
   button-primary-hover:
-    backgroundColor: "{colors.jade-hover}"
+    backgroundColor: "{colors.espresso-hover}"
     textColor: "{colors.card-bg}"
-  button-amber:
-    backgroundColor: "{colors.amber-cta}"
-    textColor: "{colors.ink-main}"
+  button-ember:
+    backgroundColor: "{colors.ember-bold}"
+    textColor: "#FFFDF9"
     rounded: "{rounded.pill}"
     padding: "12px 28px"
   button-outline:
     backgroundColor: "transparent"
-    textColor: "{colors.jade-deep}"
+    textColor: "{colors.espresso-deep}"
     rounded: "{rounded.pill}"
     padding: "10px 24px"
   card-counter:
@@ -81,8 +87,8 @@ components:
     rounded: "{rounded.card}"
     padding: "16px"
   nav-bar:
-    backgroundColor: "{colors.jade-deep}"
-    textColor: "{colors.jade-tint}"
+    backgroundColor: "{colors.espresso-deep}"
+    textColor: "{colors.cream-tint}"
     padding: "12px 0"
 ---
 
