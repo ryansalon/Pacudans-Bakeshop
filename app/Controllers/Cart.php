@@ -112,7 +112,7 @@ class Cart extends BaseController
         $addedMsg = 'Added ' . $product['name'] . ($sizeName ? " ($sizeName)" : '') . ' to cart.';
 
         if ($this->request->isAJAX()) {
-            return $this->response->setJSON([
+            return $this->response->setStatusCode(200)->setJSON([
                 'success'    => true,
                 'message'    => $addedMsg,
                 'cart_count' => $totalCount
