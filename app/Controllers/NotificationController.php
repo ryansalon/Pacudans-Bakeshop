@@ -16,6 +16,8 @@ class NotificationController extends BaseController
         }
 
         $userId = session()->get('user_id');
+        // Release session lock immediately so polling never blocks concurrent button clicks
+        session_write_close();
         $model = new NotificationModel();
         $notifications = $model->getUnread($userId);
 
@@ -50,6 +52,8 @@ class NotificationController extends BaseController
         }
 
         $userId = session()->get('user_id');
+        // Release session lock immediately so polling never blocks concurrent button clicks
+        session_write_close();
         $model = new NotificationModel();
 
         $model->where('user_id', $userId)
