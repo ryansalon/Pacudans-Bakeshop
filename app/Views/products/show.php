@@ -15,7 +15,7 @@
         <div class="col-lg-6">
             <div class="surface-panel p-3 overflow-hidden">
                 <?php if ($product['image_url']): ?>
-                    <img src="<?= base_url($product['image_url']) ?>" class="img-fluid rounded-3 w-100 object-fit-cover" alt="<?= esc($product['name']) ?>" style="max-height: 480px; aspect-ratio: 1/1;">
+                    <img src="<?= base_url($product['image_url']) ?>" width="480" height="480" fetchpriority="high" decoding="async" class="img-fluid rounded-3 w-100 object-fit-cover" alt="<?= esc($product['name']) ?>" style="max-height: 480px; aspect-ratio: 1/1;">
                 <?php else: ?>
                     <div class="bg-soft text-muted text-center py-5 rounded-3 d-flex flex-column justify-content-center" style="min-height: 400px;">
                         <i class="bi bi-image fs-1"></i>
