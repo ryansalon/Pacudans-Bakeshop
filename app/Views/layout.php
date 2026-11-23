@@ -7,37 +7,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
         :root {
-            --jade-deep: #143B31;
-            --jade-raised: #1E4F42;
-            --jade-hover: #0E2B23;
-            --jade-tint: #CBE0D8;
-            --amber-cta: #D97706;
-            --amber-hover: #B45309;
-            --amber-light: #FCD34D;
-            --plaster-bg: #F6F2E9;
-            --stone-soft: #ECE6D9;
+            --espresso-deep: #331E14;
+            --espresso-raised: #472B1D;
+            --espresso-hover: #24140D;
+            --cream-tint: #EBDCCF;
+            --ember-bold: #C84122;
+            --ember-hover: #A63218;
+            --ember-ink: #A63218;
+            --ember-light: #FF9F7A;
+            --cream-bg: #FAF4EB;
+            --cream-soft: #EFE5D8;
             --card-bg: #FFFFFF;
-            --ink-main: #1D1815;
-            --ink-muted: #4E4942;
-            --border-tile: rgba(20, 59, 49, 0.15);
-            --border-tile-strong: rgba(20, 59, 49, 0.28);
-            --glass-plaster: rgba(246, 242, 233, 0.94);
+            --ink-main: #24140D;
+            --ink-muted: #5C463A;
+            --border-tile: rgba(51, 30, 20, 0.15);
+            --border-tile-strong: rgba(51, 30, 20, 0.28);
+            --glass-plaster: rgba(250, 244, 235, 0.95);
 
-            /* Semantic aliases for Bootstrap & views */
-            --primary-bg: var(--plaster-bg);
-            --bg-soft: var(--stone-soft);
-            --accent-color: var(--jade-deep);
-            --secondary-accent: var(--amber-cta);
+            /* Semantic aliases for views & components */
+            --jade-deep: var(--espresso-deep);
+            --jade-raised: var(--espresso-raised);
+            --jade-hover: var(--espresso-hover);
+            --jade-tint: var(--cream-tint);
+            --amber-cta: var(--ember-bold);
+            --amber-hover: var(--ember-ink);
+            --amber-light: var(--ember-light);
+            --plaster-bg: var(--cream-bg);
+            --stone-soft: var(--cream-soft);
+            --primary-bg: var(--cream-bg);
+            --bg-soft: var(--cream-soft);
+            --accent-color: var(--espresso-deep);
+            --secondary-accent: var(--ember-bold);
             --text-main: var(--ink-main);
             --text-muted: var(--ink-muted);
             --border-warm: var(--border-tile);
+        }
+
+        @view-transition {
+            navigation: auto;
+        }
+
+        /* Instant top progress hairline during page transitions */
+        #navProgressBar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            width: 0;
+            background: var(--ember-light);
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.18s ease;
+        }
+
+        #navProgressBar.is-loading {
+            opacity: 1;
+            width: 78%;
         }
 
         /* Browser surfaces */
@@ -49,7 +82,6 @@
         html {
             scrollbar-width: thin;
             scrollbar-color: var(--jade-deep) var(--stone-soft);
-            scroll-behavior: smooth;
         }
 
         ::-webkit-scrollbar {
@@ -111,11 +143,18 @@
         }
 
         h1, h2, h3, h4, h5, h6, .display-font {
-            font-family: 'Bricolage Grotesque', sans-serif;
-            font-weight: 800;
+            font-family: 'Young Serif', Georgia, serif;
+            font-weight: 400;
             color: var(--ink-main);
             text-wrap: balance;
-            letter-spacing: -0.025em;
+            letter-spacing: -0.015em;
+        }
+
+        .coffee-italic {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-style: italic;
+            font-weight: 400;
+            letter-spacing: 0;
         }
 
         p, .prose {
@@ -147,7 +186,7 @@
             background-color: var(--card-bg);
             border: 1px solid var(--border-tile);
             border-radius: 18px;
-            box-shadow: 0 10px 28px rgba(20, 59, 49, 0.06);
+            box-shadow: 0 10px 28px rgba(51, 30, 20, 0.06);
         }
 
         .surface-subtle {
@@ -156,32 +195,27 @@
             border-radius: 14px;
         }
 
-        /* Volcanic-Jade Architectural Navbar */
+        /* Espresso Architectural Navbar */
         .site-navbar {
-            background-color: var(--jade-deep);
+            background-color: var(--espresso-deep);
             padding: 0.75rem 0;
-            border-bottom: 6px solid var(--amber-cta);
+            border-bottom: 6px solid var(--ember-bold);
             z-index: 1030;
-            transition: box-shadow 0.25s ease, border-color 0.25s ease;
+            transition: box-shadow 0.25s ease;
         }
 
-        body.is-home .site-navbar {
-            border-bottom: 0;
-        }
-
-        body.is-home .site-navbar.scrolled {
-            border-bottom: 6px solid var(--amber-cta);
-            box-shadow: 0 10px 28px rgba(14, 43, 35, 0.28);
+        .site-navbar.scrolled {
+            box-shadow: 0 10px 28px rgba(36, 20, 13, 0.28);
         }
 
         .site-navbar .navbar-brand {
-            font-family: 'Bricolage Grotesque', sans-serif;
-            font-weight: 800;
+            font-family: 'Young Serif', Georgia, serif;
+            font-weight: 400;
             color: var(--plaster-bg);
             display: inline-flex;
             align-items: center;
             gap: 11px;
-            letter-spacing: -0.02em;
+            letter-spacing: 0.01em;
         }
 
         .site-navbar .navbar-brand:hover {
@@ -228,32 +262,44 @@
         }
 
         .nav-bag-pill {
-            background-color: var(--amber-cta);
-            color: var(--ink-main) !important;
+            background-color: var(--ember-bold);
+            color: #FFFDF9 !important;
             font-weight: 700;
             font-size: 0.9rem;
-            padding: 0.5rem 1.1rem;
+            padding: 0.5rem 1.15rem;
             border-radius: 999px;
             display: inline-flex;
             align-items: center;
             gap: 0.45rem;
             text-decoration: none;
+            box-shadow: 0 6px 16px rgba(200, 65, 34, 0.28);
             transition: background-color 0.2s ease, transform 0.2s ease;
         }
 
         .nav-bag-pill:hover {
-            background-color: #F59E0B;
-            color: var(--ink-main) !important;
+            background-color: var(--ember-hover);
+            color: #FFFDF9 !important;
             transform: translateY(-1px);
         }
 
+        @keyframes bagBump {
+            0% { transform: scale(1); }
+            35% { transform: scale(1.14); }
+            70% { transform: scale(0.96); }
+            100% { transform: scale(1); }
+        }
+
+        .nav-bag-pill.is-bumping {
+            animation: bagBump 0.42s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
         .counter-badge {
-            background: var(--amber-cta);
-            color: var(--ink-main);
+            background: var(--ember-bold);
+            color: #FFFDF9;
             font-size: 0.68rem;
             padding: 2px 6px;
             border-radius: 999px;
-            border: 2px solid var(--jade-deep);
+            border: 2px solid var(--espresso-deep);
             font-weight: 800;
             line-height: 1.1;
         }
@@ -261,12 +307,12 @@
         /* Layout Spacing */
         .main-content {
             min-height: 78vh;
-            padding-top: 96px;
+            padding-top: 92px;
             padding-bottom: 72px;
         }
 
         body.is-home .main-content {
-            padding-top: 0;
+            padding-top: 76px;
         }
 
         /* Buttons & Controls */
@@ -287,24 +333,25 @@
             border-color: var(--jade-hover) !important;
             color: #ffffff !important;
             transform: translateY(-1px);
-            box-shadow: 0 8px 18px rgba(20, 59, 49, 0.22) !important;
+            box-shadow: 0 8px 18px rgba(51, 30, 20, 0.24) !important;
         }
 
         .btn-amber {
-            background-color: var(--amber-cta);
-            color: var(--ink-main) !important;
-            border: 2px solid var(--amber-cta);
+            background-color: var(--ember-bold);
+            color: #FFFDF9 !important;
+            border: 2px solid var(--ember-bold);
             padding: 12px 28px;
             border-radius: 999px;
             font-weight: 800;
+            box-shadow: 0 8px 20px rgba(200, 65, 34, 0.24);
             transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
         }
 
         .btn-amber:hover,
         .btn-amber:focus {
-            background-color: #F59E0B !important;
-            border-color: #F59E0B !important;
-            color: var(--ink-main) !important;
+            background-color: var(--ember-hover) !important;
+            border-color: var(--ember-hover) !important;
+            color: #FFFDF9 !important;
             transform: translateY(-1px);
         }
 
@@ -328,7 +375,7 @@
         }
 
         .btn-ghost-jade {
-            border: 1.5px solid rgba(203, 224, 216, 0.55);
+            border: 1.5px solid rgba(235, 220, 207, 0.55);
             color: var(--plaster-bg) !important;
             background: transparent;
             border-radius: 999px;
@@ -338,7 +385,7 @@
         }
 
         .btn-ghost-jade:hover {
-            background-color: rgba(246, 242, 233, 0.12);
+            background-color: rgba(250, 244, 235, 0.12);
             border-color: var(--plaster-bg);
             color: #ffffff !important;
         }
@@ -347,15 +394,15 @@
         .btn-check:focus + .btn,
         .form-control:focus,
         .form-select:focus {
-            box-shadow: 0 0 0 0.22rem rgba(217, 119, 6, 0.25) !important;
-            border-color: var(--amber-cta) !important;
+            box-shadow: 0 0 0 0.22rem rgba(200, 65, 34, 0.25) !important;
+            border-color: var(--ember-bold) !important;
         }
 
         .card {
             border: 1px solid var(--border-tile);
             border-radius: 18px;
             background: var(--card-bg);
-            box-shadow: 0 6px 20px rgba(20, 59, 49, 0.05);
+            box-shadow: 0 6px 20px rgba(51, 30, 20, 0.05);
             transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, border-color 0.25s ease;
         }
 
@@ -389,8 +436,8 @@
         }
 
         .admin-subnav a:hover {
-            background: rgba(20, 59, 49, 0.1);
-            color: var(--jade-deep);
+            background: rgba(51, 30, 20, 0.1);
+            color: var(--espresso-deep);
         }
 
         .admin-subnav a.active {
@@ -429,7 +476,7 @@
             max-height: 400px;
             overflow-y: auto;
             border-radius: 16px !important;
-            box-shadow: 0 18px 42px rgba(20, 59, 49, 0.18) !important;
+            box-shadow: 0 18px 42px rgba(51, 30, 20, 0.18) !important;
             border: 1px solid var(--border-tile) !important;
             margin-top: 10px !important;
             background: #ffffff;
@@ -457,12 +504,12 @@
             padding: 2rem 1.5rem !important;
             background: #ffffff !important;
             border: 1px solid var(--border-tile) !important;
-            box-shadow: 0 24px 64px rgba(20, 59, 49, 0.2) !important;
+            box-shadow: 0 24px 64px rgba(51, 30, 20, 0.2) !important;
         }
 
         .swal2-title {
-            font-family: 'Bricolage Grotesque', sans-serif !important;
-            font-weight: 800 !important;
+            font-family: 'Young Serif', Georgia, serif !important;
+            font-weight: 400 !important;
             color: var(--ink-main) !important;
             font-size: 1.55rem !important;
         }
@@ -495,7 +542,7 @@
             background: #ffffff !important;
             border-radius: 999px !important;
             padding: 10px 22px !important;
-            box-shadow: 0 12px 30px rgba(20, 59, 49, 0.16) !important;
+            box-shadow: 0 12px 30px rgba(51, 30, 20, 0.16) !important;
             border: 1px solid var(--border-tile-strong) !important;
             margin-top: 14px !important;
             display: flex !important;
@@ -523,7 +570,7 @@
                 right: 0;
                 bottom: 8px;
                 width: 44px;
-                background: linear-gradient(to left, var(--plaster-bg) 15%, rgba(246, 242, 233, 0) 100%);
+                background: linear-gradient(to left, var(--cream-bg) 15%, rgba(250, 244, 235, 0) 100%);
                 pointer-events: none;
             }
         }
@@ -547,7 +594,7 @@
                 padding-top: 86px;
             }
             body.is-home .main-content {
-                padding-top: 0;
+                padding-top: 72px;
             }
         }
     </style>
@@ -563,17 +610,29 @@
     }
     $fav_count = 0;
     if (session()->get('isLoggedIn')) {
-        $fav_count = (new \App\Models\FavoritesModel())
-            ->where('user_id', session()->get('user_id'))
-            ->countAllResults();
+        if (!session()->has('fav_count')) {
+            $fav_count = (new \App\Models\FavoritesModel())
+                ->where('user_id', session()->get('user_id'))
+                ->countAllResults();
+            session()->set('fav_count', $fav_count);
+        } else {
+            $fav_count = (int) session()->get('fav_count');
+        }
     }
 ?>
 <body class="<?= $isHome ? 'is-home' : '' ?>">
+<div id="navProgressBar" aria-hidden="true"></div>
 
 <nav class="navbar navbar-expand-lg fixed-top site-navbar" id="mainNav" aria-label="Main navigation">
     <div class="container">
         <a class="navbar-brand" href="<?= base_url() ?>">
-            <img src="<?= base_url('assets/images/logo_and_bg/pacudans_logo.jpg') ?>" alt="Pacudan's Logo" width="40" height="40" style="object-fit: cover; border-radius: 50%; border: 2px solid rgba(252, 211, 77, 0.6);">
+            <svg width="40" height="40" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pacudan's Logo" style="flex-shrink: 0;">
+                <circle cx="24" cy="24" r="22.5" fill="#472B1D" stroke="#FF9F7A" stroke-width="2"/>
+                <path d="M15 21H30V28C30 32.1421 26.6421 35.5 22.5 35.5C18.3579 35.5 15 32.1421 15 28V21Z" fill="#FAF4EB"/>
+                <path d="M30 23H32.5C34.433 23 36 24.567 36 26.5C36 28.433 34.433 30 32.5 30H30" stroke="#FAF4EB" stroke-width="2.4" stroke-linecap="round"/>
+                <path d="M19.5 17C19.5 15.2 21 14.5 21 12.8M25 17C25 15.2 26.5 14.5 26.5 12.8" stroke="#FF9F7A" stroke-width="2" stroke-linecap="round"/>
+                <path d="M14 38H31" stroke="#C84122" stroke-width="2.4" stroke-linecap="round"/>
+            </svg>
             <div class="d-flex flex-column" style="line-height: 1.05;">
                 <span style="font-size: 1.15rem;">PACUDAN'S</span>
                 <span class="brand-sub">Mambajao · Camiguin</span>
@@ -676,7 +735,13 @@
         <div class="row g-5">
             <div class="col-lg-5 text-center text-lg-start">
                 <div class="d-flex align-items-center justify-content-center justify-content-lg-start mb-3">
-                    <img src="<?= base_url('assets/images/logo_and_bg/pacudans_logo.jpg') ?>" alt="Pacudan's Logo" width="46" height="46" style="object-fit: cover; border-radius: 50%; margin-right: 14px; border: 2px solid rgba(252, 211, 77, 0.55);">
+                    <svg width="46" height="46" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pacudan's Logo" style="margin-right: 14px; flex-shrink: 0;">
+                        <circle cx="24" cy="24" r="22.5" fill="#472B1D" stroke="#FF9F7A" stroke-width="2"/>
+                        <path d="M15 21H30V28C30 32.1421 26.6421 35.5 22.5 35.5C18.3579 35.5 15 32.1421 15 28V21Z" fill="#FAF4EB"/>
+                        <path d="M30 23H32.5C34.433 23 36 24.567 36 26.5C36 28.433 34.433 30 32.5 30H30" stroke="#FAF4EB" stroke-width="2.4" stroke-linecap="round"/>
+                        <path d="M19.5 17C19.5 15.2 21 14.5 21 12.8M25 17C25 15.2 26.5 14.5 26.5 12.8" stroke="#FF9F7A" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M14 38H31" stroke="#C84122" stroke-width="2.4" stroke-linecap="round"/>
+                    </svg>
                     <div class="d-flex flex-column text-start" style="line-height: 1.1;">
                         <span class="brand-title display-font fw-bold fs-4">PACUDAN'S</span>
                         <small style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em;">Bakeshop &amp; Coffee Bar</small>
@@ -707,14 +772,16 @@
                 </ul>
             </div>
         </div>
-        <hr class="my-4" style="border-color: rgba(203, 224, 216, 0.18);">
+        <hr class="my-4" style="border-color: rgba(235, 220, 207, 0.2);">
         <p class="text-center small mb-0 mx-auto">&copy; <?= date('Y') ?> Pacudan's Bakeshop &amp; Coffee Bar · Mambajao, Camiguin.</p>
     </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     const navEl = document.getElementById('mainNav');
+    const navBar = document.getElementById('navProgressBar');
     const syncNavScroll = () => {
         if (window.scrollY > 24) navEl.classList.add('scrolled');
         else navEl.classList.remove('scrolled');
@@ -722,11 +789,30 @@
     window.addEventListener('scroll', syncNavScroll, { passive: true });
     syncNavScroll();
 
+    document.addEventListener('click', (e) => {
+        if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+        const a = e.target.closest && e.target.closest('a[href]');
+        if (!a || a.origin !== location.origin || a.target === '_blank' || a.hasAttribute('download')) return;
+        const href = a.getAttribute('href') || '';
+        if (href.startsWith('#') || href.startsWith('javascript:')) return;
+        if (a.pathname === location.pathname && a.search === location.search) return;
+        if (navBar) navBar.classList.add('is-loading');
+    });
+
+    window.addEventListener('pageshow', () => {
+        if (navBar) navBar.classList.remove('is-loading');
+    });
+
     function updateBagCounters(count) {
         const d = document.getElementById('cart-counter');
         const m = document.getElementById('cart-counter-mobile');
         if (d) d.textContent = count;
         if (m) m.textContent = count;
+        document.querySelectorAll('.nav-bag-pill').forEach(pill => {
+            pill.classList.remove('is-bumping');
+            void pill.offsetWidth;
+            pill.classList.add('is-bumping');
+        });
     }
 
     const Toast = Swal.mixin({
@@ -873,8 +959,15 @@
                 });
         }
 
-        fetchNotifications();
-        setInterval(fetchNotifications, 20000);
+        // Defer initial notification check so first paint & navigation never compete with polling
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(() => fetchNotifications(), { timeout: 1200 });
+        } else {
+            setTimeout(fetchNotifications, 600);
+        }
+        setInterval(() => {
+            if (!document.hidden) fetchNotifications();
+        }, 25000);
     <?php endif; ?>
 </script>
 <?= $this->renderSection('scripts') ?>
