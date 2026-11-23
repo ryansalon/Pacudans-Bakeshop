@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\UserModel;
 use App\Models\OrderModel;
 use App\Models\OrderItemModel;
+use App\Models\FavoritesModel;
 
 class Auth extends BaseController
 {
@@ -26,11 +27,13 @@ class Auth extends BaseController
         $user = $model->where('email', $email)->first();
 
         if ($user && password_verify($password, $user['password'])) {
+            $favCount = (new FavoritesModel())->where('user_id', $user['user_id'])->countAllResults();
             $session->set([
                 'user_id'    => $user['user_id'],
                 'name'       => $user['name'],
                 'email'      => $user['email'],
                 'role'       => $user['role'],
+                'fav_count'  => $favCount,
                 'isLoggedIn' => true,
             ]);
             return redirect()->to(base_url())->with('msg', 'Welcome back, ' . explode(' ', $user['name'])[0] . '!');
