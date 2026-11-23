@@ -28,7 +28,7 @@
                         <div class="position-relative overflow-hidden rounded-3 mb-3">
                             <a href="<?= base_url('menu/' . $product['product_id']) ?>" class="d-block">
                                 <?php if ($product['image_url']): ?>
-                                    <img src="<?= base_url($product['image_url']) ?>" class="w-100 object-fit-cover rounded-3" alt="<?= esc($product['name']) ?>" style="height: 225px;">
+                                    <img src="<?= base_url($product['image_url']) ?>" width="360" height="225" loading="lazy" decoding="async" class="w-100 object-fit-cover rounded-3" alt="<?= esc($product['name']) ?>" style="height: 225px;">
                                 <?php else: ?>
                                     <div class="bg-soft text-muted text-center py-5 d-flex flex-column justify-content-center" style="height: 225px;">
                                         <i class="bi bi-image fs-1"></i>
