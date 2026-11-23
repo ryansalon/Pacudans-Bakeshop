@@ -48,7 +48,7 @@
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <?php if ($item['image']): ?>
-                                                        <img src="<?= base_url($item['image']) ?>" width="58" height="58" class="me-3 rounded-3 object-fit-cover" alt="<?= esc($item['name']) ?>">
+                                                        <img src="<?= base_url($item['image']) ?>" width="58" height="58" loading="lazy" decoding="async" class="me-3 rounded-3 object-fit-cover" alt="<?= esc($item['name']) ?>">
                                                     <?php else: ?>
                                                         <div class="bg-soft text-muted rounded-3 me-3 d-flex align-items-center justify-content-center" style="width: 58px; height: 58px;">
                                                             <i class="bi bi-image"></i>
