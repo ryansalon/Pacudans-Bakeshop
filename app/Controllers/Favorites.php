@@ -22,6 +22,8 @@ class Favorites extends BaseController
                              ->where('favorites.user_id', session()->get('user_id'))
                              ->findAll();
 
+        session()->set('fav_count', count($favorites));
+
         $data = [
             'title'     => 'My Favorites',
             'favorites' => $favorites
@@ -61,6 +63,7 @@ class Favorites extends BaseController
         }
 
         $count = $favModel->where('user_id', $userId)->countAllResults();
+        session()->set('fav_count', $count);
 
         return $this->response->setJSON([
             'success'   => true,
@@ -75,9 +78,12 @@ class Favorites extends BaseController
         if (!session()->get('isLoggedIn')) return redirect()->to(base_url('login'));
 
         $favModel = new FavoritesModel();
-        $favModel->where('user_id', session()->get('user_id'))
+        $userId = session()->get('user_id');
+        $favModel->where('user_id', $userId)
                  ->where('product_id', $productId)
                  ->delete();
+
+        session()->set('fav_count', $favModel->where('user_id', $userId)->countAllResults());
 
         return redirect()->to(base_url('favorites'))->with('msg', 'Item removed from favorites.');
     }
